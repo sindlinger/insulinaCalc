@@ -60,6 +60,8 @@
             font-size: 14px;
             color: var(--light-text);
             margin-bottom: 10px;
+            display: flex;
+            justify-content: center;
         }
         
         .header-credits a {
@@ -69,6 +71,10 @@
         
         .header-credits a:hover {
             text-decoration: underline;
+        }
+        
+        .header-credits-item {
+            margin: 0 10px;
         }
         
         /* Tabs Navigation */
@@ -251,22 +257,22 @@
         <header>
             <h1>Calculadora de Insulina</h1>
             <div class="header-credits">
-                Desenvolvido por <strong>Eduardo Candeia Gonçalves</strong> (<a href="https://github.com/sindlinger" target="_blank">github.com/sindlinger</a>)<br>
-                Metodologia de cálculo por <strong>Dr. George Ibiapina</strong>
+                <span class="header-credits-item">Desenvolvido por <strong>Eduardo Candeia Gonçalves</strong></span>
+                <span class="header-credits-item">(<a href="https://github.com/sindlinger" target="_blank">github.com/sindlinger</a>)</span>
             </div>
             <p>Auxílio no cálculo de doses de insulina com base em diferentes métodos</p>
         </header>
         <ul class="tabs-nav">
-            <li><a href="#peso" class="active" onclick="openTab(event, 'peso')"><i class="fas fa-weight"></i> Cálculo por Peso</a></li>
-            <li><a href="#regras" onclick="openTab(event, 'regras')"><i class="fas fa-calculator"></i> Regras 500/1800</a></li>
-            <li><a href="#bolus" onclick="openTab(event, 'bolus')"><i class="fas fa-syringe"></i> Cálculo de Bolus</a></li>
-            <li><a href="#medicalInfo" onclick="openTab(event, 'medicalInfo')"><i class="fas fa-book-medical"></i> Guia Médico</a></li>
-            <li><a href="#algoritmo" onclick="openTab(event, 'algoritmo')"><i class="fas fa-chart-line"></i> Algoritmos</a></li>
+            <li><a href="#peso" class="tab-link active" data-tab="peso"><i class="fas fa-weight"></i> Cálculo por Peso</a></li>
+            <li><a href="#regras" class="tab-link" data-tab="regras"><i class="fas fa-calculator"></i> Regras 500/1800</a></li>
+            <li><a href="#bolus" class="tab-link" data-tab="bolus"><i class="fas fa-syringe"></i> Cálculo de Bolus</a></li>
+            <li><a href="#medicalInfo" class="tab-link" data-tab="medicalInfo"><i class="fas fa-book-medical"></i> Guia Médico</a></li>
+            <li><a href="#algoritmo" class="tab-link" data-tab="algoritmo"><i class="fas fa-chart-line"></i> Algoritmos</a></li>
         </ul>
-
         <!-- Aba 1: Cálculo por Peso -->
         <div id="peso" class="tab-content active">
             <h2>Cálculo baseado no Peso</h2>
+            <p><small>Metodologia de cálculo por <strong>Dr. George Ibiapina</strong></small></p>
             
             <div class="form-group">
                 <label for="inputPeso">Peso (kg):</label>
@@ -380,6 +386,64 @@
                 <p><strong>Distribuição diária:</strong> Tipicamente 2/3 da dose pela manhã e 1/3 à noite.</p>
                 <p><strong>Esquema Basal-Bolus:</strong> Alternativa com 50% da dose como insulina basal e 50% como bolus distribuídos nas refeições.</p>
                 <p>Esta calculadora é uma ferramenta educativa. Ajustes individualizados devem ser feitos com base nos diversos fatores clínicos e resposta do paciente.</p>
+            </div>
+        </div>
+        <!-- Aba 2: Regras 500/1800 -->
+        <div id="regras" class="tab-content">
+            <h2>Regras 500/1800</h2>
+            
+            <div class="form-group">
+                <label for="inputDoseTotal">Dose Total Diária (U):</label>
+                <input type="number" id="inputDoseTotal" placeholder="Digite a dose total diária" min="1" max="200" step="0.1">
+            </div>
+            
+            <button onclick="calcularRegras()"><i class="fas fa-calculator"></i> Calcular Fatores</button>
+            
+            <div id="resultadosRegras" class="results">
+                <h3>Resultados</h3>
+                
+                <h4 class="section-title">Razão Insulina/Carboidrato:</h4>
+                
+                <div class="result-item">
+                    <span class="result-label">Regra dos 500:</span> 
+                    <span class="result-value"><span id="razaoIC500">--</span> g de carboidrato por 1U de insulina</span>
+                </div>
+                
+                <div class="result-item">
+                    <span class="result-label">Regra dos 450:</span> 
+                    <span class="result-value"><span id="razaoIC450">--</span> g de carboidrato por 1U de insulina</span>
+                </div>
+                
+                <h4 class="section-title">Fator de Sensibilidade à Insulina (FSI):</h4>
+                
+                <div class="result-item">
+                    <span class="result-label">Regra dos 1800:</span> 
+                    <span class="result-value"><span id="fsi1800">--</span> mg/dL reduzidos por 1U de insulina</span>
+                </div>
+                
+                <div class="result-item">
+                    <span class="result-label">Regra dos 1500:</span> 
+                    <span class="result-value"><span id="fsi1500">--</span> mg/dL reduzidos por 1U de insulina</span>
+                </div>
+            </div>
+            
+            <div class="info-box">
+                <h4>Explicação:</h4>
+                <p><strong>Regra dos 500 (Razão Insulina/Carboidrato):</strong> Determina quantos gramas de carboidrato são cobertos por 1 unidade de insulina.</p>
+                <p><strong>Fórmula:</strong> 500 ÷ Dose Total Diária = g de carboidrato por 1U de insulina</p>
+                
+                <p><strong>Base fisiológica:</strong> A quantidade de carboidratos metabolizada por unidade de insulina está inversamente relacionada à dose total diária. Pacientes que precisam de mais insulina diária (mais resistentes à insulina) têm uma razão menor, onde cada unidade de insulina cobre menos carboidratos.</p>
+                
+                <p><strong>Regra dos 1800 (Fator de Sensibilidade):</strong> Determina quantos mg/dL a glicemia será reduzida por 1 unidade de insulina.</p>
+                <p><strong>Fórmula:</strong> 1800 ÷ Dose Total Diária = mg/dL reduzidos por 1U de insulina</p>
+                
+                <p><strong>Base fisiológica:</strong> Quantifica a potência da insulina em diferentes indivíduos. Quanto maior a dose total diária, menor o impacto de cada unidade na glicemia.</p>
+                
+                <p><strong>Aplicação prática:</strong>
+                <br>• Bolus alimentar = Carboidratos (g) ÷ Razão IC
+                <br>• Bolus correção = (Glicemia atual - Glicemia alvo) ÷ FSI</p>
+                
+                <p><strong>Observação:</strong> Estas regras são aproximações e devem ser ajustadas com base na resposta glicêmica individual de cada paciente.</p>
             </div>
         </div>
         <!-- Aba 2: Regras 500/1800 -->
@@ -678,8 +742,7 @@
                     padding: 15px 10px;
                 }
             }
-            </style>
-            <!-- Aba 4: Guia Médico -->
+           </style>
         <div id="medicalInfo" class="tab-content">
             <h2>Guia Médico - Insulinoterapia</h2>
             
@@ -851,7 +914,7 @@
                     
                     <h4>Gravidez:</h4>
                     <ul>
-                        <li>Controle rigoroso: jejum &lt;95 mg/dL, 1h pós-prandial &lt;140 mg/dL, 2h &lt;120 mg/dL</li>
+                        <li>Controle rigoroso: jejum <95 mg/dL, 1h pós-prandial <140 mg/dL, 2h <120 mg/dL</li>
                         <li>Esquema basal-bolus preferencial</li>
                         <li>Necessidade crescente de insulina ao longo da gestação</li>
                     </ul>
@@ -1081,11 +1144,12 @@ Peso + 1 = Dose total
                         <path d="M 200 150 L 200 250 A 100 100 0 0 1 114 200 Z" fill="#ffd0d0" stroke="#333" stroke-width="1"/>
                         
                         <!-- Legendas -->
-                        <text x="160" y="100" font-size="16" font-weight="bold">70%</text>
-                        <text x="162" y="120" font-size="14">NPH</text>
+                        <!-- Movendo as legendas principais para fora do círculo -->
+                        <text x="140" y="80" font-size="16" font-weight="bold">70%</text>
+                        <text x="140" y="100" font-size="14">NPH</text>
                         
-                        <text x="250" y="150" font-size="16" font-weight="bold">30%</text>
-                        <text x="248" y="170" font-size="14">Regular</text>
+                        <text x="260" y="120" font-size="16" font-weight="bold">30%</text>
+                        <text x="260" y="140" font-size="14">Regular</text>
                         
                         <!-- Subdivisão NPH -->
                         <text x="226" y="90" font-size="12" font-weight="bold">70%</text>
@@ -1157,42 +1221,44 @@ Subdivisões:
             <p>Ao migrar de um esquema para outro, considere sobreposição para evitar hiperglicemia ou hipoglicemia durante a transição.</p>
         </div>
     </div>
-
     <script>
         // Função para alternar entre as abas
-        function openTab(evt, tabName) {
-            // Previne comportamento padrão de link
-            if (evt.preventDefault) {
-                evt.preventDefault();
-            }
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabLinks = document.querySelectorAll('.tab-link');
             
-            var i, tabcontent, tablinks;
+            // Adiciona evento de clique a todos os links de abas
+            tabLinks.forEach(function(link) {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const tabId = this.getAttribute('data-tab');
+                    openTab(tabId);
+                });
+            });
             
+            // Inicializar a primeira aba como ativa
+            openTab('peso');
+        });
+        
+        function openTab(tabName) {
             // Esconde todas as abas
-            tabcontent = document.getElementsByClassName("tab-content");
-            for (i = 0; i < tabcontent.length; i++) {
-                tabcontent[i].style.display = "none";
-            }
+            const tabContent = document.querySelectorAll('.tab-content');
+            tabContent.forEach(function(tab) {
+                tab.style.display = 'none';
+                tab.classList.remove('active');
+            });
             
-            // Remove a classe "active" de todos os botões
-            tablinks = document.getElementsByClassName("tablinks");
-            for (i = 0; i < tablinks.length; i++) {
-                tablinks[i].classList.remove("active");
-            }
+            // Remove a classe "active" de todos os links
+            const tabLinks = document.querySelectorAll('.tab-link');
+            tabLinks.forEach(function(link) {
+                link.classList.remove('active');
+            });
             
-            // Mostra a aba atual e adiciona a classe "active" ao botão
-            document.getElementById(tabName).style.display = "block";
+            // Mostra a aba atual e adiciona a classe "active" ao link
+            document.getElementById(tabName).style.display = 'block';
+            document.getElementById(tabName).classList.add('active');
             
-            // Encontra o link clicado e adiciona a classe active
-            var clickedLink;
-            if (evt.target.tagName === 'I') {
-                // Se o ícone foi clicado
-                clickedLink = evt.target.parentElement;
-            } else {
-                // Se o texto ou o link foi clicado
-                clickedLink = evt.target;
-            }
-            clickedLink.classList.add("active");
+            // Ativa o link correspondente
+            document.querySelector(`.tab-link[data-tab="${tabName}"]`).classList.add('active');
         }
         
         // Mostrar/esconder o campo de fator personalizado
@@ -1350,23 +1416,21 @@ Subdivisões:
         }
         
         // Configurar os botões colapsáveis para o guia médico
-        var coll = document.getElementsByClassName("collapsible");
-        for (var i = 0; i < coll.length; i++) {
-            coll[i].addEventListener("click", function() {
-                this.classList.toggle("active-collapse");
-                var content = this.nextElementSibling;
-                if (content.style.maxHeight) {
-                    content.style.maxHeight = null;
-                } else {
-                    content.style.maxHeight = content.scrollHeight + "px";
-                }
-            });
-        }
+        document.addEventListener('DOMContentLoaded', function() {
+            var coll = document.getElementsByClassName("collapsible");
+            for (var i = 0; i < coll.length; i++) {
+                coll[i].addEventListener("click", function() {
+                    this.classList.toggle("active-collapse");
+                    var content = this.nextElementSibling;
+                    if (content.style.maxHeight) {
+                        content.style.maxHeight = null;
+                    } else {
+                        content.style.maxHeight = content.scrollHeight + "px";
+                    }
+                });
+            }
+        });
     </script>
 </body>
 </html>
-
-
-        
-
 
