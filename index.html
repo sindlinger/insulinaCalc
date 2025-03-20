@@ -48,6 +48,7 @@
             padding: 20px;
             background-color: var(--white);
             border-bottom: 1px solid var(--border-color);
+            position: relative;
         }
         
         header h1 {
@@ -56,19 +57,102 @@
             font-weight: 600;
         }
         
-        .header-credits {
-            font-size: 14px;
-            color: var(--light-text);
-            margin-bottom: 10px;
+        .header-description {
+            margin-bottom: 5px;
         }
         
-        .header-credits a {
+        /* Botão Sobre - Mais discreto e à direita */
+        .about-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: transparent;
+            color: var(--light-text);
+            border: none;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            width: auto;
+            padding: 5px 10px;
+            margin: 0;
+        }
+        
+        .about-btn i {
+            margin-right: 4px;
+            font-size: 14px;
+        }
+        
+        .about-btn:hover {
+            color: var(--primary-color);
+            background-color: transparent;
+        }
+        
+        /* Modal Sobre */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        
+        .modal-content {
+            background-color: var(--white);
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            max-width: 500px;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        .modal-title {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            text-align: center;
+            font-size: 22px;
+            font-weight: 600;
+        }
+        
+        .credits-section {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+            text-align: center;
+        }
+        
+        .credits-item {
+            margin: 10px 0;
+            line-height: 1.5;
+        }
+        
+        .credits-item a {
             color: var(--primary-color);
             text-decoration: none;
         }
         
-        .header-credits a:hover {
+        .credits-item a:hover {
             text-decoration: underline;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            color: var(--light-text);
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        
+        .close-modal:hover {
+            color: var(--primary-color);
         }
         
         /* Tabs Navigation */
@@ -79,12 +163,14 @@
             border-bottom: 1px solid var(--border-color);
             overflow-x: auto;
             padding: 0 10px;
+            flex-wrap: nowrap; /* Garante que as abas fiquem na mesma linha */
         }
         
         .tabs-nav li {
             flex: 1;
             min-width: 140px;
             text-align: center;
+            white-space: nowrap; /* Evita quebra de texto */
         }
         
         .tabs-nav a {
@@ -244,26 +330,315 @@
             margin-bottom: 15px;
             font-weight: 600;
         }
+        
+        /* Elementos colapsáveis */
+        .medical-notes {
+            margin-top: 25px;
+            padding: 20px;
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            border-left: 4px solid var(--primary-color);
+            box-shadow: var(--shadow);
+        }
+        
+        .medical-notes h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .medical-notes h4 {
+            color: var(--text-color);
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        pre {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            overflow-x: auto;
+            border-left: 3px solid var(--primary-color);
+            font-family: Consolas, Monaco, 'Andale Mono', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        /* Collapsible sections */
+        .collapsible {
+            background-color: var(--white);
+            color: var(--text-color);
+            cursor: pointer;
+            padding: 15px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: var(--border-radius);
+            margin-bottom: 10px;
+            transition: all 0.3s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        .collapsible:after {
+            content: '\f078';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            font-size: 14px;
+            color: var(--light-text);
+            transition: all 0.3s;
+        }
+        
+        .collapsible.active-collapse:after {
+            transform: rotate(180deg);
+        }
+        
+        .active-collapse, .collapsible:hover {
+            background-color: var(--primary-light);
+        }
+        
+        .collapse-content {
+            padding: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background-color: var(--white);
+            border-radius: 0 0 var(--border-radius) var(--border-radius);
+            margin-bottom: 10px;
+        }
+        
+        .collapse-content-inner {
+            padding: 20px;
+        }
+        
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        th {
+            background-color: var(--primary-light);
+            color: var(--primary-dark);
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        td {
+            padding: 12px;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        tr:nth-child(even) {
+            background-color: var(--bg-light);
+        }
+        
+        /* Diagrama melhorado para algoritmo - estilo barra horizontal */
+        .diagram-container {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0;
+        }
+        
+        .distribution-diagram {
+            width: 100%;
+            max-width: 800px;
+        }
+        
+        .diagram-row {
+            display: flex;
+            margin-bottom: 15px;
+            align-items: center;
+            height: 40px;
+        }
+        
+        .diagram-label {
+            width: 120px;
+            font-weight: 600;
+            text-align: right;
+            padding-right: 10px;
+            flex-shrink: 0;
+        }
+        
+        .diagram-bar {
+            flex-grow: 1;
+            height: 100%;
+            border-radius: 4px;
+            display: flex;
+            overflow: hidden;
+        }
+        
+        .bar-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-color);
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .nph-color {
+            background-color: #c0d9ff;
+        }
+        
+        .regular-color {
+            background-color: #ffccd5;
+        }
+        
+        .diagram-legend {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 0 15px;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            margin-right: 8px;
+        }
+        
+        /* Mobile Responsiveness */
+        @media screen and (max-width: 768px) {
+            .tabs-nav {
+                overflow-x: auto;
+            }
+            
+            .tab-content {
+                padding: 20px 15px;
+            }
+            
+            .collapsible {
+                padding: 12px;
+                font-size: 15px;
+            }
+            
+            header h1 {
+                font-size: 24px;
+                padding-right: 60px; /* Espaço para o botão Sobre */
+            }
+            
+            header p {
+                font-size: 14px;
+            }
+            
+            .diagram-label {
+                width: 90px;
+                font-size: 12px;
+            }
+            
+            .bar-section {
+                font-size: 12px;
+            }
+        }
+        
+        @media screen and (max-width: 480px) {
+            .tabs-nav a {
+                font-size: 14px;
+                padding: 10px 5px;
+            }
+            
+            .tabs-nav a i {
+                font-size: 16px;
+            }
+            
+            header {
+                padding: 15px 10px;
+            }
+            
+            header h1 {
+                font-size: 22px;
+            }
+            
+            .tab-content {
+                padding: 15px 10px;
+            }
+            
+            .modal-content {
+                width: 90%;
+                margin: 20% auto;
+            }
+            
+            .about-btn {
+                top: 10px;
+                right: 10px;
+                font-size: 11px;
+            }
+            
+            .about-btn i {
+                font-size: 12px;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
             <h1>Calculadora de Insulina</h1>
-            <div class="header-credits">
-                Desenvolvido por <strong>Eduardo Candeia Gonçalves</strong> (<a href="https://github.com/sindlinger" target="_blank">github.com/sindlinger</a>)<br>
-                Metodologia de cálculo por <strong>Dr. George Ibiapina</strong>
-            </div>
-            <p>Auxílio no cálculo de doses de insulina com base em diferentes métodos</p>
+            <p class="header-description">Auxílio no cálculo de doses de insulina com base em diferentes métodos</p>
+            <button class="about-btn" onclick="openModal()"><i class="fas fa-info-circle"></i> Sobre</button>
         </header>
+        
+        <!-- Modal Sobre -->
+        <div id="aboutModal" class="modal">
+            <div class="modal-content">
+                <span class="close-modal" onclick="closeModal()">&times;</span>
+                <h2 class="modal-title">Sobre a Calculadora de Insulina</h2>
+                
+                <div class="credits-section">
+                    <div class="credits-item">
+                        <strong>Desenvolvido por:</strong> Eduardo Candeia Gonçalves
+                    </div>
+                    <div class="credits-item">
+                        <a href="https://github.com/sindlinger" target="_blank">github.com/sindlinger</a>
+                    </div>
+                </div>
+                
+                <div class="credits-section">
+                    <div class="credits-item">
+                        <strong>Metodologia de cálculo por peso:</strong> Dr. George Ibiapina
+                    </div>
+                    <div class="credits-item">
+                        Sinceros agradecimentos ao Dr. George Ibiapina pela metodologia de cálculo e orientação científica.
+                    </div>
+                </div>
+                
+                <div class="credits-section" style="border-bottom: none;">
+                    <div class="credits-item">
+                        <strong>Versão:</strong> 1.0
+                    </div>
+                    <div class="credits-item">
+                        Esta aplicação é uma ferramenta educativa e não substitui a orientação médica profissional.
+                    </div>
+                </div>
+            </div>
+        </div>
+        
         <ul class="tabs-nav">
-            <li><a href="#peso" class="active" onclick="openTab(event, 'peso')"><i class="fas fa-weight"></i> Cálculo por Peso</a></li>
-            <li><a href="#regras" onclick="openTab(event, 'regras')"><i class="fas fa-calculator"></i> Regras 500/1800</a></li>
-            <li><a href="#bolus" onclick="openTab(event, 'bolus')"><i class="fas fa-syringe"></i> Cálculo de Bolus</a></li>
-            <li><a href="#medicalInfo" onclick="openTab(event, 'medicalInfo')"><i class="fas fa-book-medical"></i> Guia Médico</a></li>
-            <li><a href="#algoritmo" onclick="openTab(event, 'algoritmo')"><i class="fas fa-chart-line"></i> Algoritmos</a></li>
+            <li><a href="#peso" class="tab-link active" data-tab="peso"><i class="fas fa-weight"></i> Cálculo por Peso</a></li>
+            <li><a href="#regras" class="tab-link" data-tab="regras"><i class="fas fa-calculator"></i> Regras 500/1800</a></li>
+            <li><a href="#bolus" class="tab-link" data-tab="bolus"><i class="fas fa-syringe"></i> Cálculo de Bolus</a></li>
+            <li><a href="#medicalInfo" class="tab-link" data-tab="medicalInfo"><i class="fas fa-book-medical"></i> Guia Médico</a></li>
+            <li><a href="#algoritmo" class="tab-link" data-tab="algoritmo"><i class="fas fa-chart-line"></i> Algoritmos</a></li>
         </ul>
-
+        
         <!-- Aba 1: Cálculo por Peso -->
         <div id="peso" class="tab-content active">
             <h2>Cálculo baseado no Peso</h2>
@@ -382,6 +757,7 @@
                 <p>Esta calculadora é uma ferramenta educativa. Ajustes individualizados devem ser feitos com base nos diversos fatores clínicos e resposta do paciente.</p>
             </div>
         </div>
+        
         <!-- Aba 2: Regras 500/1800 -->
         <div id="regras" class="tab-content">
             <h2>Regras 500/1800</h2>
@@ -432,767 +808,664 @@
                 <p><strong>Fórmula:</strong> 1800 ÷ Dose Total Diária = mg/dL reduzidos por 1U de insulina</p>
                 
                 <p><strong>Base fisiológica:</strong> Quantifica a potência da insulina em diferentes indivíduos. Quanto maior a dose total diária, menor o impacto de cada unidade na glicemia.</p>
-                
                 <p><strong>Aplicação prática:</strong>
-                <br>• Bolus alimentar = Carboidratos (g) ÷ Razão IC
-                <br>• Bolus correção = (Glicemia atual - Glicemia alvo) ÷ FSI</p>
-                
-                <p><strong>Observação:</strong> Estas regras são aproximações e devem ser ajustadas com base na resposta glicêmica individual de cada paciente.</p>
-            </div>
-        </div>
-        <!-- Aba 3: Cálculo de Bolus -->
-        <div id="bolus" class="tab-content">
-            <h2>Cálculo de Bolus</h2>
-            
-            <div class="form-group">
-                <label for="inputGlicemiaAtual">Glicemia Atual (mg/dL):</label>
-                <input type="number" id="inputGlicemiaAtual" placeholder="Digite a glicemia atual" min="40" max="600">
-            </div>
-            
-            <div class="form-group">
-                <label for="inputGlicemiaAlvo">Glicemia Alvo (mg/dL):</label>
-                <input type="number" id="inputGlicemiaAlvo" placeholder="Digite a glicemia alvo" min="70" max="180" value="100">
-            </div>
-            
-            <div class="form-group">
-                <label for="inputCarboidratos">Carboidratos a serem consumidos (g):</label>
-                <input type="number" id="inputCarboidratos" placeholder="Digite a quantidade de carboidratos" min="0" max="300" step="0.1">
-            </div>
-            
-            <div class="form-group">
-                <label for="inputRazaoIC">Razão Insulina/Carboidrato:</label>
-                <input type="number" id="inputRazaoIC" placeholder="g de carboidrato por 1U de insulina" min="1" max="100" step="0.1">
-            </div>
-            
-            <div class="form-group">
-                <label for="inputFSI">Fator de Sensibilidade (FSI):</label>
-                <input type="number" id="inputFSI" placeholder="mg/dL reduzidos por 1U de insulina" min="1" max="100" step="0.1">
-            </div>
-            
-            <button onclick="calcularBolus()"><i class="fas fa-syringe"></i> Calcular Bolus</button>
-            
-            <div id="resultadosBolus" class="results">
-                <h3>Resultados do Cálculo de Bolus</h3>
-                
-                <div class="result-item">
-                    <span class="result-label">Diferença de Glicemia (atual - alvo):</span> 
-                    <span class="result-value"><span id="diferencaGlicemia">--</span> mg/dL</span>
-                </div>
-                
-                <div class="result-item">
-                    <span class="result-label">Bolus de Correção:</span> 
-                    <span class="result-value"><span id="bolusCorrecao">--</span> U</span>
-                </div>
-                
-                <div class="result-item">
-                    <span class="result-label">Bolus Alimentar:</span> 
-                    <span class="result-value"><span id="bolusAlimentar">--</span> U</span>
-                </div>
-                
-                <div class="result-item">
-                    <span class="result-label">Bolus Total:</span> 
-                    <span class="result-value"><span id="bolusTotalFinal">--</span> U</span>
-                </div>
-            </div>
-            
-            <div class="info-box">
-                <h4>Como o cálculo é feito:</h4>
-                <p><strong>Bolus de Correção:</strong> Corrige a glicemia elevada</p>
-                <p><em>Fórmula:</em> (Glicemia Atual - Glicemia Alvo) ÷ FSI = Unidades de insulina</p>
-                <p><strong>Bolus Alimentar:</strong> Cobre os carboidratos a serem consumidos</p>
-                <p><em>Fórmula:</em> Quantidade de Carboidratos ÷ Razão IC = Unidades de insulina</p>
-                <p><strong>Bolus Total:</strong> Bolus de Correção + Bolus Alimentar</p>
-                <p><strong>Observação:</strong> Se a glicemia estiver abaixo do alvo, considere reduzir o bolus alimentar ou consumir carboidratos extras.</p>
-            </div>
-        </div>
-        <style>
-            /* Elementos colapsáveis */
-            .medical-notes {
-                margin-top: 25px;
-                padding: 20px;
-                background-color: var(--white);
-                border-radius: var(--border-radius);
-                border-left: 4px solid var(--primary-color);
-                box-shadow: var(--shadow);
-            }
-            
-            .medical-notes h3 {
-                color: var(--primary-color);
-                margin-bottom: 15px;
-                font-weight: 600;
-            }
-            
-            .medical-notes h4 {
-                color: var(--text-color);
-                margin-top: 20px;
-                margin-bottom: 10px;
-                font-weight: 600;
-            }
-            
-            pre {
-                background-color: #f8f9fa;
-                padding: 15px;
-                border-radius: var(--border-radius);
-                overflow-x: auto;
-                border-left: 3px solid var(--primary-color);
-                font-family: Consolas, Monaco, 'Andale Mono', monospace;
-                font-size: 14px;
-                line-height: 1.5;
-            }
-            
-            /* Collapsible sections */
-            .collapsible {
-                background-color: var(--white);
-                color: var(--text-color);
-                cursor: pointer;
-                padding: 15px;
-                width: 100%;
-                border: none;
-                text-align: left;
-                outline: none;
-                font-size: 16px;
-                font-weight: 600;
-                border-radius: var(--border-radius);
-                margin-bottom: 10px;
-                transition: all 0.3s;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            }
-            
-            .collapsible:after {
-                content: '\f078';
-                font-family: 'Font Awesome 6 Free';
-                font-weight: 900;
-                font-size: 14px;
-                color: var(--light-text);
-                transition: all 0.3s;
-            }
-            
-            .collapsible.active-collapse:after {
-                transform: rotate(180deg);
-            }
-            
-            .active-collapse, .collapsible:hover {
-                background-color: var(--primary-light);
-            }
-            
-            .collapse-content {
-                padding: 0;
-                max-height: 0;
-                overflow: hidden;
-                transition: max-height 0.3s ease-out;
-                background-color: var(--white);
-                border-radius: 0 0 var(--border-radius) var(--border-radius);
-                margin-bottom: 10px;
-            }
-            
-            .collapse-content-inner {
-                padding: 20px;
-            }
-            
-            /* Tables */
-            table {
-                width: 100%;
-                border-collapse: collapse;
-                margin: 15px 0;
-                border-radius: var(--border-radius);
-                overflow: hidden;
-                box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            }
-            
-            th {
-                background-color: var(--primary-light);
-                color: var(--primary-dark);
-                padding: 12px;
-                text-align: left;
-                font-weight: 600;
-            }
-            
-            td {
-                padding: 12px;
-                border-top: 1px solid var(--border-color);
-            }
-            
-            tr:nth-child(even) {
-                background-color: var(--bg-light);
-            }
-            
-            /* SVG Diagram */
-            .diagram-container {
-                display: flex;
-                justify-content: center;
-                margin: 20px 0;
-            }
-            
-            /* Mobile Responsiveness */
-            @media screen and (max-width: 768px) {
-                .tabs-nav {
-                    flex-wrap: wrap;
-                    justify-content: center;
-                }
-                
-                .tabs-nav li {
-                    flex: 0 0 33.33%;
-                    min-width: unset;
-                }
-                
-                .tab-content {
-                    padding: 20px 15px;
-                }
-                
-                .collapsible {
-                    padding: 12px;
-                    font-size: 15px;
-                }
-                
-                header h1 {
-                    font-size: 24px;
-                }
-                
-                header p {
-                    font-size: 14px;
-                }
-            }
-            
-            @media screen and (max-width: 480px) {
-                .tabs-nav li {
-                    flex: 0 0 50%;
-                }
-                
-                .tabs-nav a {
-                    font-size: 14px;
-                    padding: 10px 5px;
-                }
-                
-                header {
-                    padding: 15px 10px;
-                }
-                
-                header h1 {
-                    font-size: 22px;
-                }
-                
-                .tab-content {
-                    padding: 15px 10px;
-                }
-            }
-            </style>
-            <!-- Aba 4: Guia Médico -->
-        <div id="medicalInfo" class="tab-content">
-            <h2>Guia Médico - Insulinoterapia</h2>
-            
-            <button class="collapsible">Tipos de Insulina e Farmacocinética</button>
-            <div class="collapse-content">
-                <div class="collapse-content-inner">
-                    <table>
-                        <tr>
-                            <th>Tipo</th>
-                            <th>Início de ação</th>
-                            <th>Pico</th>
-                            <th>Duração</th>
-                        </tr>
-                        <tr>
-                            <td>Ultra-rápida (Lispro, Aspart, Glulisina)</td>
-                            <td>10-15 min</td>
-                            <td>1-2h</td>
-                            <td>3-5h</td>
-                        </tr>
-                        <tr>
-                            <td>Rápida (Regular)</td>
-                            <td>30 min</td>
-                            <td>2-3h</td>
-                            <td>5-8h</td>
-                        </tr>
-                        <tr>
-                            <td>Intermediária (NPH)</td>
-                            <td>2-4h</td>
-                            <td>4-10h</td>
-                            <td>10-16h</td>
-                        </tr>
-                        <tr>
-                            <td>Longa (Glargina)</td>
-                            <td>2-4h</td>
-                            <td>Sem pico</td>
-                            <td>20-24h</td>
-                        </tr>
-                        <tr>
-                            <td>Ultra-longa (Degludeca)</td>
-                            <td>1-2h</td>
-                            <td>Sem pico</td>
-                            <td>>42h</td>
-                        </tr>
-                    </table>
-                    <p><strong>Observação:</strong> A insulina NPH apresenta grande variabilidade entre pacientes e mesmo no mesmo paciente em dias diferentes.</p>
-                </div>
-            </div>
-            
-            <button class="collapsible">Esquemas de Tratamento</button>
-            <div class="collapse-content">
-                <div class="collapse-content-inner">
-                    <h4>1. Esquema Convencional (70/30 ou 2 doses)</h4>
-                    <p>Mais simples, menos flexível, geralmente 2 injeções por dia (manhã e noite).</p>
-                    <ul>
-                        <li><strong>2/3 da dose pela manhã:</strong> 70% NPH + 30% Regular (antes do café)</li>
-                        <li><strong>1/3 da dose à noite:</strong> 70% NPH + 30% Regular (antes do jantar)</li>
-                    </ul>
-                    <p><strong>Indicações:</strong> Pacientes com rotina regular, idosos, dificuldade de adesão a esquemas complexos.</p>
+                    <br>• Bolus alimentar = Carboidratos (g) ÷ Razão IC
+                    <br>• Bolus correção = (Glicemia atual - Glicemia alvo) ÷ FSI</p>
                     
-                    <h4>2. Esquema Basal-Bolus (múltiplas doses)</h4>
-                    <p>Mais fisiológico, flexível, geralmente 4 injeções por dia.</p>
-                    <ul>
-                        <li><strong>Basal (50% da dose total):</strong> Insulina de ação longa 1x/dia (Glargina, Degludeca) ou NPH 2x/dia</li>
-                        <li><strong>Bolus (50% da dose total):</strong> Insulina de ação rápida antes das refeições
+                    <p><strong>Observação:</strong> Estas regras são aproximações e devem ser ajustadas com base na resposta glicêmica individual de cada paciente.</p>
+                </div>
+            </div>
+            
+            <!-- Aba 3: Cálculo de Bolus -->
+            <div id="bolus" class="tab-content">
+                <h2>Cálculo de Bolus</h2>
+                
+                <div class="form-group">
+                    <label for="inputGlicemiaAtual">Glicemia Atual (mg/dL):</label>
+                    <input type="number" id="inputGlicemiaAtual" placeholder="Digite a glicemia atual" min="40" max="600">
+                </div>
+                
+                <div class="form-group">
+                    <label for="inputGlicemiaAlvo">Glicemia Alvo (mg/dL):</label>
+                    <input type="number" id="inputGlicemiaAlvo" placeholder="Digite a glicemia alvo" min="70" max="180" value="100">
+                </div>
+                
+                <div class="form-group">
+                    <label for="inputCarboidratos">Carboidratos a serem consumidos (g):</label>
+                    <input type="number" id="inputCarboidratos" placeholder="Digite a quantidade de carboidratos" min="0" max="300" step="0.1">
+                </div>
+                
+                <div class="form-group">
+                    <label for="inputRazaoIC">Razão Insulina/Carboidrato:</label>
+                    <input type="number" id="inputRazaoIC" placeholder="g de carboidrato por 1U de insulina" min="1" max="100" step="0.1">
+                </div>
+                
+                <div class="form-group">
+                    <label for="inputFSI">Fator de Sensibilidade (FSI):</label>
+                    <input type="number" id="inputFSI" placeholder="mg/dL reduzidos por 1U de insulina" min="1" max="100" step="0.1">
+                </div>
+                
+                <button onclick="calcularBolus()"><i class="fas fa-syringe"></i> Calcular Bolus</button>
+                
+                <div id="resultadosBolus" class="results">
+                    <h3>Resultados do Cálculo de Bolus</h3>
+                    
+                    <div class="result-item">
+                        <span class="result-label">Diferença de Glicemia (atual - alvo):</span> 
+                        <span class="result-value"><span id="diferencaGlicemia">--</span> mg/dL</span>
+                    </div>
+                    
+                    <div class="result-item">
+                        <span class="result-label">Bolus de Correção:</span> 
+                        <span class="result-value"><span id="bolusCorrecao">--</span> U</span>
+                    </div>
+                    
+                    <div class="result-item">
+                        <span class="result-label">Bolus Alimentar:</span> 
+                        <span class="result-value"><span id="bolusAlimentar">--</span> U</span>
+                    </div>
+                    
+                    <div class="result-item">
+                        <span class="result-label">Bolus Total:</span> 
+                        <span class="result-value"><span id="bolusTotalFinal">--</span> U</span>
+                    </div>
+                </div>
+                
+                <div class="info-box">
+                    <h4>Como o cálculo é feito:</h4>
+                    <p><strong>Bolus de Correção:</strong> Corrige a glicemia elevada</p>
+                    <p><em>Fórmula:</em> (Glicemia Atual - Glicemia Alvo) ÷ FSI = Unidades de insulina</p>
+                    <p><strong>Bolus Alimentar:</strong> Cobre os carboidratos a serem consumidos</p>
+                    <p><em>Fórmula:</em> Quantidade de Carboidratos ÷ Razão IC = Unidades de insulina</p>
+                    <p><strong>Bolus Total:</strong> Bolus de Correção + Bolus Alimentar</p>
+                    <p><strong>Observação:</strong> Se a glicemia estiver abaixo do alvo, considere reduzir o bolus alimentar ou consumir carboidratos extras.</p>
+                </div>
+            </div>
+            
+            <!-- Aba 4: Guia Médico -->
+            <div id="medicalInfo" class="tab-content">
+                <h2>Guia Médico - Insulinoterapia</h2>
+                
+                <button class="collapsible">Tipos de Insulina e Farmacocinética</button>
+                <div class="collapse-content">
+                    <div class="collapse-content-inner">
+                        <table>
+                            <tr>
+                                <th>Tipo</th>
+                                <th>Início de ação</th>
+                                <th>Pico</th>
+                                <th>Duração</th>
+                            </tr>
+                            <tr>
+                                <td>Ultra-rápida (Lispro, Aspart, Glulisina)</td>
+                                <td>10-15 min</td>
+                                <td>1-2h</td>
+                                <td>3-5h</td>
+                            </tr>
+                            <tr>
+                                <td>Rápida (Regular)</td>
+                                <td>30 min</td>
+                                <td>2-3h</td>
+                                <td>5-8h</td>
+                            </tr>
+                            <tr>
+                                <td>Intermediária (NPH)</td>
+                                <td>2-4h</td>
+                                <td>4-10h</td>
+                                <td>10-16h</td>
+                            </tr>
+                            <tr>
+                                <td>Longa (Glargina)</td>
+                                <td>2-4h</td>
+                                <td>Sem pico</td>
+                                <td>20-24h</td>
+                            </tr>
+                            <tr>
+                                <td>Ultra-longa (Degludeca)</td>
+                                <td>1-2h</td>
+                                <td>Sem pico</td>
+                                <td>>42h</td>
+                            </tr>
+                        </table>
+                        <p><strong>Observação:</strong> A insulina NPH apresenta grande variabilidade entre pacientes e mesmo no mesmo paciente em dias diferentes.</p>
+                    </div>
+                </div>
+                
+                <button class="collapsible">Esquemas de Tratamento</button>
+                <div class="collapse-content">
+                    <div class="collapse-content-inner">
+                        <h4>1. Esquema Convencional (70/30 ou 2 doses)</h4>
+                        <p>Mais simples, menos flexível, geralmente 2 injeções por dia (manhã e noite).</p>
+                        <ul>
+                            <li><strong>2/3 da dose pela manhã:</strong> 70% NPH + 30% Regular (antes do café)</li>
+                            <li><strong>1/3 da dose à noite:</strong> 70% NPH + 30% Regular (antes do jantar)</li>
+                        </ul>
+                        <p><strong>Indicações:</strong> Pacientes com rotina regular, idosos, dificuldade de adesão a esquemas complexos.</p>
+                        
+                        <h4>2. Esquema Basal-Bolus (múltiplas doses)</h4>
+                        <p>Mais fisiológico, flexível, geralmente 4 injeções por dia.</p>
+                        <ul>
+                            <li><strong>Basal (50% da dose total):</strong> Insulina de ação longa 1x/dia (Glargina, Degludeca) ou NPH 2x/dia</li>
+                            <li><strong>Bolus (50% da dose total):</strong> Insulina de ação rápida antes das refeições
+                                <ul>
+                                    <li>40% no café da manhã</li>
+                                    <li>30% no almoço</li>
+                                    <li>30% no jantar</li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <p><strong>Indicações:</strong> DM1, gestantes, rotina variável, melhor controle glicêmico.</p>
+                        
+                        <h4>3. Esquema Misto Adaptado</h4>
+                        <p>Flexibilidade intermediária.</p>
+                        <ul>
+                            <li><strong>Basal:</strong> Insulina de ação longa 1x/dia</li>
+                            <li><strong>Correções:</strong> Insulina de ação rápida de acordo com as glicemias capilares</li>
+                        </ul>
+                        <p><strong>Indicações:</strong> Pacientes com dificuldade para múltiplas doses mas que precisam de melhor controle.</p>
+                    </div>
+                </div>
+                
+                <button class="collapsible">Ajustes de Dose e Monitoramento</button>
+                <div class="collapse-content">
+                    <div class="collapse-content-inner">
+                        <h4>Monitoramento ideal para ajuste:</h4>
+                        <ul>
+                            <li>Glicemia de jejum (ajusta basal noturna)</li>
+                            <li>Glicemia pré-almoço (ajusta basal matinal)</li>
+                            <li>Glicemia pré-jantar (ajusta basal vespertina)</li>
+                            <li>Glicemia 2h pós-refeições (ajusta bolus)</li>
+                        </ul>
+                        
+                        <h4>Regras para ajuste de dose:</h4>
+                        <ul>
+                            <li><strong>Ajustes lentos e pequenos:</strong> 10-20% da dose a cada 2-3 dias</li>
+                            <li><strong>Hipoglicemias:</strong> Reduzir dose da insulina correspondente ao período em 20%</li>
+                            <li><strong>Hiperglicemia persistente:</strong> Aumentar insulina correspondente ao período em 10-20%</li>
+                            <li><strong>Fenômeno do alvorecer:</strong> Hiperglicemia matinal por aumento de hormônios contrarreguladores; pode requerer ajuste na NPH noturna ou Glargina</li>
+                        </ul>
+                        
+                        <h4>Alvo glicêmico:</h4>
+                        <ul>
+                            <li><strong>Jovens saudáveis:</strong> 80-130 mg/dL (jejum) e &lt;180 mg/dL (pós-prandial)</li>
+                            <li><strong>Idosos ou com comorbidades:</strong> 100-180 mg/dL (jejum) e &lt;200 mg/dL (pós-prandial)</li>
+                            <li><strong>Gestantes:</strong> &lt;95 mg/dL (jejum) e &lt;120 mg/dL (pós-prandial)</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <button class="collapsible">Complicações e Manejo</button>
+                <div class="collapse-content">
+                    <div class="collapse-content-inner">
+                        <h4>Hipoglicemia:</h4>
+                        <p><strong>Definição:</strong> Glicemia &lt;70 mg/dL</p>
+                        <ul>
+                            <li><strong>Tratamento:</strong> 
+                                <ul>
+                                    <li>Paciente consciente: 15g de carboidrato rápido (3 colheres de açúcar, 150ml de suco)</li>
+                                    <li>Paciente inconsciente: Glucagon IM/SC ou Glicose 50% EV</li>
+                                </ul>
+                            </li>
+                            <li><strong>Prevenção:</strong> 
+                                <ul>
+                                    <li>Monitoramento frequente</li>
+                                    <li>Ajuste de dose (reduzir em 20% se hipoglicemias frequentes)</li>
+                                    <li>Considerar lanches intermediários</li>
+                                </ul>
+                            </li>
+                        </ul>
+                        
+                        <h4>Lipodistrofia:</h4>
+                        <ul>
+                            <li>Alteração do tecido subcutâneo por injeções repetidas no mesmo local</li>
+                            <li><strong>Impacto:</strong> Absorção errática de insulina</li>
+                            <li><strong>Prevenção:</strong> Rodízio dos locais de aplicação</li>
+                        </ul>
+                        
+                        <h4>Efeito Somogyi:</h4>
+                        <p>Hiperglicemia matinal paradoxal após hipoglicemia noturna (rebote hiperglicêmico).</p>
+                        <p><strong>Manejo:</strong> Reduzir dose de insulina noturna.</p>
+                    </div>
+                </div>
+                
+                <button class="collapsible">Situações Especiais</button>
+                <div class="collapse-content">
+                    <div class="collapse-content-inner">
+                        <h4>Paciente hospitalizado:</h4>
+                        <ul>
+                            <li><strong>Não crítico:</strong> Esquema basal-bolus-correção. Evitar sliding scale isolado</li>
+                            <li><strong>Crítico:</strong> Infusão EV contínua, alvo 140-180 mg/dL</li>
+                            <li><strong>Jejum para procedimentos:</strong> 50-80% da basal, suspender bolus</li>
+                        </ul>
+                        
+                        <h4>Paciente com Doença Renal Crônica:</h4>
+                        <ul>
+                            <li>Maior risco de hipoglicemia por redução da degradação renal de insulina</li>
+                            <li>Reduzir doses em 25-50% conforme TFG</li>
+                            <li>Preferir insulinas com metabolização hepática (Detemir)</li>
+                        </ul>
+                        
+                        <h4>Paciente corticodependente:</h4>
+                        <ul>
+                            <li>Aumento importante da resistência à insulina</li>
+                            <li>Pode requerer 30-40% a mais de insulina</li>
+                            <li>Maior necessidade de bolus à tarde se corticoide matinal</li>
+                        </ul>
+                        
+                        <h4>Gravidez:</h4>
+                        <ul>
+                            <li>Controle rigoroso: jejum <95 mg/dL, 1h pós-prandial <140 mg/dL, 2h <120 mg/dL</li>
+                            <li>Esquema basal-bolus preferencial</li>
+                            <li>Necessidade crescente de insulina ao longo da gestação</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <button class="collapsible">Pearls para Prescrição e Acompanhamento</button>
+                <div class="collapse-content">
+                    <div class="collapse-content-inner">
+                        <ul>
+                            <li>Informe ao paciente que em média são necessários 3 dias para que um ajuste de dose basal se estabilize e mostre resultados;</li>
+                            <li>Considerar o momento alimentar em relação ao pico da insulina: Regular deve ser aplicada 30 min antes das refeições;</li>
+                            <li>Pacientes com neuropatia autonômica podem não perceber sintomas adrenérgicos de hipoglicemia - monitoramento mais frequente;</li>
+                            <li>Uma simples regra prática: para cada 30 mg/dL acima do alvo, adicione 2U de insulina de correção;</li>
+                            <li>Ao iniciar corticoterapia, aumente a dose de insulina em 20% e monitore para ajustes adicionais;</li>
+                            <li>O efeito cumulativo da insulina NPH pode causar hipoglicemias tardias - atenção aos esquemas BID;</li>
+                            <li>Exercícios podem aumentar a sensibilidade à insulina por até 48h - oriente redução de dose para atividades não rotineiras;</li>
+                            <li>Infecções e estresse agudo podem aumentar a necessidade de insulina em 20-50%;</li>
+                            <li>Bolus prandial: aplique antes das refeições. Bolus de correção: pode ser aplicado a qualquer momento;</li>
+                            <li>Na ausência de automonitoramento, prefira esquemas menos intensivos e mais previsíveis.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Aba 5: Algoritmos -->
+            <div id="algoritmo" class="tab-content">
+                <h2>Algoritmos e Metodologia de Cálculo</h2>
+                <p>Esta seção detalha os algoritmos e fórmulas utilizados na calculadora para revisão técnica e validação.</p>
+                
+                <div class="medical-notes">
+                    <h3>1. Cálculo Baseado no Peso</h3>
+                    <h4>Fórmula Base:</h4>
+                    <pre>
+    Dose Total Diária (DTD) = Peso (kg) × Fator (U/kg)
+    
+    Onde Fator pode ser:
+    - 0,3 U/kg: Pacientes muito sensíveis à insulina
+    - 0,5 U/kg: Pacientes sensíveis
+    - 0,7 U/kg: Sensibilidade padrão
+    - 1,0 U/kg: Pacientes resistentes
+    - 1,5 U/kg: Pacientes muito resistentes
+    - 2,0 U/kg: Pacientes extremamente resistentes
+    </pre>
+    
+                    <h4>Esquema 70/30 (Divisão NPH/Regular):</h4>
+                    <pre>
+    NPH total = DTD × 0,7
+    Regular total = DTD × 0,3
+    </pre>
+    
+                    <h4>Distribuição em 2 Doses Diárias:</h4>
+                    <pre>
+    Dose Matinal = DTD × (2/3)
+    NPH Manhã = Dose Matinal × 0,7
+    Regular Manhã = Dose Matinal × 0,3
+    
+    Dose Noturna = DTD × (1/3)
+    NPH Noite = Dose Noturna × 0,7
+    Regular Noite = Dose Noturna × 0,3
+    </pre>
+    
+                    <h4>Esquema Basal-Bolus Alternativo:</h4>
+                    <pre>
+    Insulina Basal = DTD × 0,5
+    Insulina Bolus Total = DTD × 0,5
+    Bolus Café = Insulina Bolus Total × 0,4
+    Bolus Almoço = Insulina Bolus Total × 0,3
+    Bolus Jantar = Insulina Bolus Total × 0,3
+    </pre>
+    
+                    <h3>2. Regras 500/1800</h3>
+                    <h4>Razão Insulina/Carboidrato:</h4>
+                    <pre>
+    Regra dos 500:
+    Razão IC = 500 ÷ DTD
+    (g de carboidrato cobertos por 1U de insulina)
+    
+    Variação (para pacientes mais sensíveis):
+    Razão IC = 450 ÷ DTD
+    </pre>
+    
+                    <h4>Fator de Sensibilidade à Insulina (FSI):</h4>
+                    <pre>
+    Regra dos 1800:
+    FSI = 1800 ÷ DTD
+    (mg/dL reduzidos por 1U de insulina)
+    
+    Variação (para pacientes mais sensíveis):
+    FSI = 1500 ÷ DTD
+    </pre>
+    
+                    <h3>3. Cálculo de Bolus</h3>
+                    <h4>Bolus de Correção:</h4>
+                    <pre>
+    Diferença Glicêmica = max(0, Glicemia Atual - Glicemia Alvo)
+    Bolus de Correção = Diferença Glicêmica ÷ FSI
+    
+    Onde:
+    - Glicemia Atual: valor atual da glicemia em mg/dL
+    - Glicemia Alvo: valor alvo da glicemia em mg/dL (geralmente 100-120 mg/dL)
+    - FSI: Fator de Sensibilidade à Insulina (mg/dL por 1U)
+    </pre>
+    
+                    <h4>Bolus Alimentar:</h4>
+                    <pre>
+    Bolus Alimentar = Quantidade de Carboidratos (g) ÷ Razão IC
+    
+    Onde:
+    - Razão IC: gramas de carboidrato cobertas por 1U de insulina
+    </pre>
+    
+                    <h4>Bolus Total:</h4>
+                    <pre>
+    Bolus Total = Bolus de Correção + Bolus Alimentar
+    </pre>
+                </div>
+                
+                <div class="medical-notes" style="margin-top: 20px;">
+                    <h3>Representação do Esquema de Distribuição de Insulina</h3>
+                    
+                    <!-- Diagrama melhorado em barras horizontais -->
+                    <div class="diagram-container">
+                        <div class="distribution-diagram">
+                            <h4 style="text-align: center; margin-bottom: 20px;">Esquema de Distribuição da Dose Total (70/30)</h4>
+                            
+                            <!-- Dose Total -->
+                            <div class="diagram-row">
+                                <div class="diagram-label">Dose Total:</div>
+                                <div class="diagram-bar">
+                                    <div class="bar-section nph-color" style="width:70%;">NPH 70%</div>
+                                    <div class="bar-section regular-color" style="width:30%;">Regular 30%</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Dose Matinal -->
+                            <div class="diagram-row">
+                                <div class="diagram-label">Dose Matinal (2/3):</div>
+                                <div class="diagram-bar">
+                                    <div class="bar-section nph-color" style="width:70%;">NPH 70%</div>
+                                    <div class="bar-section regular-color" style="width:30%;">Regular 30%</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Dose Noturna -->
+                            <div class="diagram-row">
+                                <div class="diagram-label">Dose Noturna (1/3):</div>
+                                <div class="diagram-bar">
+                                    <div class="bar-section nph-color" style="width:70%;">NPH 70%</div>
+                                    <div class="bar-section regular-color" style="width:30%;">Regular 30%</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Esquema Basal-Bolus -->
+                            <div style="margin-top: 30px;">
+                                <h4 style="text-align: center; margin-bottom: 20px;">Esquema Basal-Bolus (50/50)</h4>
+                                
+                                <!-- Dose Total -->
+                                <div class="diagram-row">
+                                    <div class="diagram-label">Dose Total:</div>
+                                    <div class="diagram-bar">
+                                        <div class="bar-section nph-color" style="width:50%;">Basal 50%</div>
+                                        <div class="bar-section regular-color" style="width:50%;">Bolus 50%</div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Distribuição Bolus -->
+                                <div class="diagram-row">
+                                    <div class="diagram-label">Distribuição Bolus:</div>
+                                    <div class="diagram-bar">
+                                        <div class="bar-section regular-color" style="width:40%; background-color: #ffa8b4;">Café 40%</div>
+                                        <div class="bar-section regular-color" style="width:30%; background-color: #ffbcc5;">Almoço 30%</div>
+                                        <div class="bar-section regular-color" style="width:30%; background-color: #ffd0d6;">Jantar 30%</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Legenda -->
+                            <div class="diagram-legend">
+                                <div class="legend-item">
+                                    <div class="legend-color nph-color"></div>
+                                    <span>NPH/Basal</span>
+                                </div>
+                                <div class="legend-item">
+                                    <div class="legend-color regular-color"></div>
+                                    <span>Regular/Bolus</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h4>Explicação do Diagrama:</h4>
+                    <p>O diagrama representa visualmente a distribuição da dose total calculada:</p>
+                    <ol>
+                        <li>A dose total é dividida em:
+                            <ul>
+                                <li>70% para NPH e 30% para Regular (Esquema 70/30)</li>
+                                <li>50% para Basal e 50% para Bolus (Esquema Basal-Bolus)</li>
+                            </ul>
+                        </li>
+                        <li>No esquema 70/30, a dose total é distribuída em:
+                            <ul>
+                                <li>2/3 da dose pela manhã, mantendo a proporção 70% NPH e 30% Regular</li>
+                                <li>1/3 da dose à noite, mantendo a proporção 70% NPH e 30% Regular</li>
+                            </ul>
+                        </li>
+                        <li>No esquema Basal-Bolus, a dose de bolus (50% da dose total) é distribuída em:
                             <ul>
                                 <li>40% no café da manhã</li>
                                 <li>30% no almoço</li>
                                 <li>30% no jantar</li>
                             </ul>
                         </li>
-                    </ul>
-                    <p><strong>Indicações:</strong> DM1, gestantes, rotina variável, melhor controle glicêmico.</p>
-                    
-                    <h4>3. Esquema Misto Adaptado</h4>
-                    <p>Flexibilidade intermediária.</p>
-                    <ul>
-                        <li><strong>Basal:</strong> Insulina de ação longa 1x/dia</li>
-                        <li><strong>Correções:</strong> Insulina de ação rápida de acordo com as glicemias capilares</li>
-                    </ul>
-                    <p><strong>Indicações:</strong> Pacientes com dificuldade para múltiplas doses mas que precisam de melhor controle.</p>
+                    </ol>
                 </div>
             </div>
             
-            <button class="collapsible">Ajustes de Dose e Monitoramento</button>
-            <div class="collapse-content">
-                <div class="collapse-content-inner">
-                    <h4>Monitoramento ideal para ajuste:</h4>
-                    <ul>
-                        <li>Glicemia de jejum (ajusta basal noturna)</li>
-                        <li>Glicemia pré-almoço (ajusta basal matinal)</li>
-                        <li>Glicemia pré-jantar (ajusta basal vespertina)</li>
-                        <li>Glicemia 2h pós-refeições (ajusta bolus)</li>
-                    </ul>
-                    
-                    <h4>Regras para ajuste de dose:</h4>
-                    <ul>
-                        <li><strong>Ajustes lentos e pequenos:</strong> 10-20% da dose a cada 2-3 dias</li>
-                        <li><strong>Hipoglicemias:</strong> Reduzir dose da insulina correspondente ao período em 20%</li>
-                        <li><strong>Hiperglicemia persistente:</strong> Aumentar insulina correspondente ao período em 10-20%</li>
-                        <li><strong>Fenômeno do alvorecer:</strong> Hiperglicemia matinal por aumento de hormônios contrarreguladores; pode requerer ajuste na NPH noturna ou Glargina</li>
-                    </ul>
-                    
-                    <h4>Alvo glicêmico:</h4>
-                    <ul>
-                        <li><strong>Jovens saudáveis:</strong> 80-130 mg/dL (jejum) e &lt;180 mg/dL (pós-prandial)</li>
-                        <li><strong>Idosos ou com comorbidades:</strong> 100-180 mg/dL (jejum) e &lt;200 mg/dL (pós-prandial)</li>
-                        <li><strong>Gestantes:</strong> &lt;95 mg/dL (jejum) e &lt;120 mg/dL (pós-prandial)</li>
-                    </ul>
-                </div>
+            <div class="info-box" style="margin-top: 20px;">
+                <h3>Informações Importantes</h3>
+                <p><strong>1. Esquemas de Insulinoterapia</strong></p>
+                <p>O esquema 70/30 (2 doses diárias) e o esquema basal-bolus (múltiplas doses) têm indicações diferentes. A escolha depende do perfil do paciente, capacidade de automonitoramento, rotina e objetivo glicêmico.</p>
+                
+                <p><strong>2. Fatores que Afetam a Dose de Insulina</strong></p>
+                <p>Além do peso, considere: idade, função renal, resistência insulínica, atividade física, uso de medicamentos (corticoides), presença de infecção/estresse e variação da dieta.</p>
+                
+                <p><strong>3. Educação do Paciente</strong></p>
+                <p>Ensine o paciente sobre técnica de aplicação, rodízio de locais, reconhecimento de hipoglicemia e ajustes em situações especiais (exercício, doença aguda).</p>
+                
+                <p><strong>4. Monitoramento</strong></p>
+                <p>O ajuste de doses deve ser feito com base em padrões glicêmicos, não em valores isolados. Analise tendências por pelo menos 3 dias consecutivos antes de modificar o esquema.</p>
+                
+                <p><strong>5. Transição de Esquemas</strong></p>
+                <p>Ao migrar de um esquema para outro, considere sobreposição para evitar hiperglicemia ou hipoglicemia durante a transição.</p>
             </div>
-            
-            <button class="collapsible">Complicações e Manejo</button>
-            <div class="collapse-content">
-                <div class="collapse-content-inner">
-                    <h4>Hipoglicemia:</h4>
-                    <p><strong>Definição:</strong> Glicemia &lt;70 mg/dL</p>
-                    <ul>
-                        <li><strong>Tratamento:</strong> 
-                            <ul>
-                                <li>Paciente consciente: 15g de carboidrato rápido (3 colheres de açúcar, 150ml de suco)</li>
-                                <li>Paciente inconsciente: Glucagon IM/SC ou Glicose 50% EV</li>
-                            </ul>
-                        </li>
-                        <li><strong>Prevenção:</strong> 
-                            <ul>
-                                <li>Monitoramento frequente</li>
-                                <li>Ajuste de dose (reduzir em 20% se hipoglicemias frequentes)</li>
-                                <li>Considerar lanches intermediários</li>
-                            </ul>
-                        </li>
-                    </ul>
-                    
-                    <h4>Lipodistrofia:</h4>
-                    <ul>
-                        <li>Alteração do tecido subcutâneo por injeções repetidas no mesmo local</li>
-                        <li><strong>Impacto:</strong> Absorção errática de insulina</li>
-                        <li><strong>Prevenção:</strong> Rodízio dos locais de aplicação</li>
-                    </ul>
-                    
-                    <h4>Efeito Somogyi:</h4>
-                    <p>Hiperglicemia matinal paradoxal após hipoglicemia noturna (rebote hiperglicêmico).</p>
-                    <p><strong>Manejo:</strong> Reduzir dose de insulina noturna.</p>
+            <footer style="padding: 20px; text-align: center; border-top: 1px solid var(--border-color); margin-top: 30px;">
+                <button id="referencesBtn" class="reference-btn" onclick="openReferencesModal()">
+                    <i class="fas fa-book"></i> Referências Bibliográficas
+                </button>
+            </footer>
+
+        <!-- Modal de Referências com posição ajustada e ordem das seções alterada -->
+        <div id="referencesModal" class="modal">
+            <div class="modal-content references-modal">
+                <span class="close-modal" onclick="closeReferencesModal()">&times;</span>
+                <h2 class="modal-title">Referências Bibliográficas</h2>
+                
+                <!-- Movendo a contribuição técnica para o topo -->
+                <div class="references-section">
+                    <h3>Contribuição Técnica</h3>
+                    <ol class="references-list">
+                        <li><strong>Dr. George Ibiapina</strong> - Metodologia de cálculo por peso utilizada na primeira aba desta calculadora.</li>
+                    </ol>
                 </div>
-            </div>
-            
-            <button class="collapsible">Situações Especiais</button>
-            <div class="collapse-content">
-                <div class="collapse-content-inner">
-                    <h4>Paciente hospitalizado:</h4>
-                    <ul>
-                        <li><strong>Não crítico:</strong> Esquema basal-bolus-correção. Evitar sliding scale isolado</li>
-                        <li><strong>Crítico:</strong> Infusão EV contínua, alvo 140-180 mg/dL</li>
-                        <li><strong>Jejum para procedimentos:</strong> 50-80% da basal, suspender bolus</li>
-                    </ul>
-                    
-                    <h4>Paciente com Doença Renal Crônica:</h4>
-                    <ul>
-                        <li>Maior risco de hipoglicemia por redução da degradação renal de insulina</li>
-                        <li>Reduzir doses em 25-50% conforme TFG</li>
-                        <li>Preferir insulinas com metabolização hepática (Detemir)</li>
-                    </ul>
-                    
-                    <h4>Paciente corticodependente:</h4>
-                    <ul>
-                        <li>Aumento importante da resistência à insulina</li>
-                        <li>Pode requerer 30-40% a mais de insulina</li>
-                        <li>Maior necessidade de bolus à tarde se corticoide matinal</li>
-                    </ul>
-                    
-                    <h4>Gravidez:</h4>
-                    <ul>
-                        <li>Controle rigoroso: jejum &lt;95 mg/dL, 1h pós-prandial &lt;140 mg/dL, 2h &lt;120 mg/dL</li>
-                        <li>Esquema basal-bolus preferencial</li>
-                        <li>Necessidade crescente de insulina ao longo da gestação</li>
-                    </ul>
+                
+                <div class="references-section">
+                    <h3>Diretrizes e Consensos</h3>
+                    <ol class="references-list" start="2">
+                        <li>Sociedade Brasileira de Diabetes. (2022). <strong>Diretrizes da Sociedade Brasileira de Diabetes 2021-2022</strong>.</li>
+                        <li>American Diabetes Association. (2022). <strong>Standards of Medical Care in Diabetes</strong>. <em>Diabetes Care</em>, 45(Supplement 1).</li>
+                    </ol>
                 </div>
-            </div>
-            
-            <button class="collapsible">Pearls para Prescrição e Acompanhamento</button>
-            <div class="collapse-content">
-                <div class="collapse-content-inner">
-                    <ul>
-                        <li>Informe ao paciente que em média são necessários 3 dias para que um ajuste de dose basal se estabilize e mostre resultados;</li>
-                        <li>Considerar o momento alimentar em relação ao pico da insulina: Regular deve ser aplicada 30 min antes das refeições;</li>
-                        <li>Pacientes com neuropatia autonômica podem não perceber sintomas adrenérgicos de hipoglicemia - monitoramento mais frequente;</li>
-                        <li>Uma simples regra prática: para cada 30 mg/dL acima do alvo, adicione 2U de insulina de correção;</li>
-                        <li>Ao iniciar corticoterapia, aumente a dose de insulina em 20% e monitore para ajustes adicionais;</li>
-                        <li>O efeito cumulativo da insulina NPH pode causar hipoglicemias tardias - atenção aos esquemas BID;</li>
-                        <li>Exercícios podem aumentar a sensibilidade à insulina por até 48h - oriente redução de dose para atividades não rotineiras;</li>
-                        <li>Infecções e estresse agudo podem aumentar a necessidade de insulina em 20-50%;</li>
-                        <li>Bolus prandial: aplique antes das refeições. Bolus de correção: pode ser aplicado a qualquer momento;</li>
-                        <li>Na ausência de automonitoramento, prefira esquemas menos intensivos e mais previsíveis.</li>
-                    </ul>
+                
+                <div class="references-section">
+                    <h3>Livros e Manuais</h3>
+                    <ol class="references-list" start="4">
+                        <li>Grossi, S. A. A., & Pascali, P. M. (2009). <strong>Cuidados de Enfermagem em Diabetes Mellitus</strong>. Manual de Enfermagem. Sociedade Brasileira de Diabetes.</li>
+                        <li>Vilar, L. (Ed.). (2021). <strong>Endocrinologia Clínica</strong>. 7ª Ed. Guanabara Koogan.</li>
+                        <li>Oliveira, J. E. P., Montenegro Junior, R. M., & Vencio, S. (2017). <strong>Diretrizes da Sociedade Brasileira de Diabetes 2017-2018</strong>. Editora Clannad.</li>
+                    </ol>
+                </div>
+                
+                <div class="references-section">
+                    <h3>Artigos e Publicações</h3>
+                    <ol class="references-list" start="7">
+                        <li>Walsh, J., & Roberts, R. (2012). <strong>Pumping Insulin: Everything You Need to Know for Success with an Insulin Pump</strong>. Torrey Pines Press.</li>
+                        <li>Davidson, P. C., Hebblewhite, H. R., Steed, R. D., & Bode, B. W. (2008). Analysis of guidelines for basal-bolus insulin dosing: Basal insulin, correction factor, and carbohydrate-to-insulin ratio. <em>Endocrine Practice</em>, 14(9), 1095-1101.</li>
+                    </ol>
                 </div>
             </div>
         </div>
-        <!-- Aba 5: Algoritmos -->
-        <div id="algoritmo" class="tab-content">
-            <h2>Algoritmos e Metodologia de Cálculo</h2>
-            <p>Esta seção detalha os algoritmos e fórmulas utilizados na calculadora para revisão técnica e validação.</p>
-            
-            <div class="medical-notes">
-                <h3>1. Cálculo Baseado no Peso</h3>
-                <h4>Fórmula Base:</h4>
-                <pre>
-Dose Total Diária (DTD) = Peso (kg) × Fator (U/kg)
 
-Onde Fator pode ser:
-- 0,3 U/kg: Pacientes muito sensíveis à insulina
-- 0,5 U/kg: Pacientes sensíveis
-- 0,7 U/kg: Sensibilidade padrão
-- 1,0 U/kg: Pacientes resistentes
-- 1,5 U/kg: Pacientes muito resistentes
-- 2,0 U/kg: Pacientes extremamente resistentes
-</pre>
+        <style>
+        /* Botão de referências */
+        .reference-btn {
+            background-color: transparent;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            border-radius: var(--border-radius);
+            padding: 8px 15px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: auto;
+        }
 
-                <h4>Esquema 70/30 (Divisão NPH/Regular):</h4>
-                <pre>
-NPH total = DTD × 0,7
-Regular total = DTD × 0,3
-</pre>
+        .reference-btn i {
+            margin-right: 8px;
+        }
 
-                <h4>Distribuição em 2 Doses Diárias:</h4>
-                <pre>
-Dose Matinal = DTD × (2/3)
-NPH Manhã = Dose Matinal × 0,7
-Regular Manhã = Dose Matinal × 0,3
+        .reference-btn:hover {
+            background-color: var(--primary-light);
+            color: var(--primary-dark);
+        }
 
-Dose Noturna = DTD × (1/3)
-NPH Noite = Dose Noturna × 0,7
-Regular Noite = Dose Noturna × 0,3
-</pre>
+        /* Modal de referências */
+        .references-modal {
+            max-width: 700px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
 
-                <h4>Esquema Basal-Bolus Alternativo:</h4>
-                <pre>
-Insulina Basal = DTD × 0,5
-Insulina Bolus Total = DTD × 0,5
-Bolus Café = Insulina Bolus Total × 0,4
-Bolus Almoço = Insulina Bolus Total × 0,3
-Bolus Jantar = Insulina Bolus Total × 0,3
-</pre>
+        .references-section {
+            margin-bottom: 25px;
+            text-align: left;
+        }
 
-                <h3>2. Regras 500/1800</h3>
-                <h4>Razão Insulina/Carboidrato:</h4>
-                <pre>
-Regra dos 500:
-Razão IC = 500 ÷ DTD
-(g de carboidrato cobertos por 1U de insulina)
+        .references-section h3 {
+            color: var(--primary-dark);
+            margin-bottom: 12px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 18px;
+        }
 
-Variação (para pacientes mais sensíveis):
-Razão IC = 450 ÷ DTD
-</pre>
+        .references-list {
+            margin: 0;
+            padding-left: 25px;
+            font-size: 14px;
+            line-height: 1.5;
+            color: var(--text-color);
+        }
 
-                <h4>Fator de Sensibilidade à Insulina (FSI):</h4>
-                <pre>
-Regra dos 1800:
-FSI = 1800 ÷ DTD
-(mg/dL reduzidos por 1U de insulina)
-
-Variação (para pacientes mais sensíveis):
-FSI = 1500 ÷ DTD
-</pre>
-
-                <h4>Explicação Detalhada das Regras 500/1800:</h4>
-                <div style="background-color: #f0f7ff; padding: 15px; border-radius: 5px; margin-top: 10px; border-left: 4px solid #3a6bdb;">
-                    <h5>Regra dos 500 (Razão Insulina/Carboidrato)</h5>
-                    <p><strong>Definição:</strong> A razão insulina/carboidrato (IC) indica quantos gramas de carboidratos são "cobertos" por 1 unidade de insulina.</p>
-                    
-                    <p><strong>Base fisiológica:</strong> Esta regra foi desenvolvida a partir de observações clínicas mostrando que a quantidade de carboidratos metabolizada por unidade de insulina está inversamente relacionada à dose total diária. Pacientes que necessitam de mais insulina diária (mais resistentes à insulina) têm uma razão menor, o que significa que cada unidade de insulina cobre menos carboidratos.</p>
-                    
-                    <p><strong>Variantes e ajustes:</strong></p>
-                    <ul>
-                        <li><strong>Regra dos 450:</strong> Usada para pessoas mais sensíveis à insulina, como crianças, idosos e pessoas fisicamente ativas</li>
-                        <li><strong>Regra dos 550-600:</strong> Às vezes usada para pessoas mais resistentes à insulina, como adolescentes, obesos ou com infecções</li>
-                        <li>A razão IC pode variar ao longo do dia: muitos pacientes são mais resistentes pela manhã (fenômeno do alvorecer) e precisam de razões IC menores no café da manhã</li>
-                    </ul>
-                    
-                    <p><strong>Exemplo prático:</strong></p>
-                    <p>Se um paciente usa 50 unidades de insulina por dia (DTD):<br>
-                    Razão IC = 500 ÷ 50 = 10<br>
-                    Isso significa que 1 unidade de insulina cobrirá aproximadamente 10g de carboidratos</p>
-                    
-                    <h5>Regra dos 1800 (Fator de Sensibilidade à Insulina)</h5>
-                    <p><strong>Definição:</strong> O Fator de Sensibilidade à Insulina (FSI) indica quantos mg/dL de glicose sanguínea são reduzidos por 1 unidade de insulina.</p>
-                    
-                    <p><strong>Base fisiológica:</strong> Esta regra deriva de observações clínicas sobre a potência relativa da insulina em diferentes indivíduos. Quanto maior a DTD, menor o impacto de cada unidade individual de insulina na glicemia.</p>
-                    
-                    <p><strong>Variantes e ajustes:</strong></p>
-                    <ul>
-                        <li><strong>Regra dos 1500:</strong> Para pacientes mais sensíveis à insulina (crianças, idosos)</li>
-                        <li><strong>Regra dos 2000-2200:</strong> Para pacientes mais resistentes à insulina</li>
-                        <li><strong>Regra dos 100:</strong> Quando calculando o FSI em mmol/L em vez de mg/dL (sistema internacional)</li>
-                        <li>O FSI também pode variar ao longo do dia e é frequentemente menor pela manhã</li>
-                    </ul>
-                    
-                    <p><strong>Exemplo prático:</strong></p>
-                    <p>Para o mesmo paciente usando 50 unidades diárias:<br>
-                    FSI = 1800 ÷ 50 = 36<br>
-                    Isso significa que 1 unidade de insulina reduzirá a glicemia em aproximadamente 36 mg/dL</p>
-                    
-                    <h5>Aplicações na Prática Clínica</h5>
-                    <p><strong>1. Cálculo do Bolus Alimentar:</strong></p>
-                    <pre>
-Bolus alimentar = Carboidratos (g) ÷ Razão IC
-
-Exemplo: Para uma refeição com 60g de carboidratos e razão IC de 10
-Bolus alimentar = 60 ÷ 10 = 6 unidades de insulina
-</pre>
-                    
-                    <p><strong>2. Cálculo do Bolus de Correção:</strong></p>
-                    <pre>
-Bolus de correção = (Glicemia atual - Glicemia alvo) ÷ FSI
-
-Exemplo: Glicemia atual de 200 mg/dL, alvo de 100 mg/dL, FSI de 36
-Bolus de correção = (200 - 100) ÷ 36 = 2,8 unidades de insulina
-</pre>
-                    
-                    <p><strong>3. Bolus Total:</strong></p>
-                    <pre>
-Bolus Total = Bolus alimentar + Bolus de correção
-
-Continuando o exemplo: 6 + 2,8 = 8,8 unidades de insulina
-</pre>
-                    
-                    <h5>Considerações Importantes na Prática Clínica</h5>
-                    <ul>
-                        <li>Estas são regras de aproximação e os resultados podem precisar de ajustes com base na resposta individual</li>
-                        <li>Fatores que podem alterar a sensibilidade à insulina:
-                            <ul>
-                                <li>Exercício físico (aumenta a sensibilidade)</li>
-                                <li>Estresse e doença aguda (diminui a sensibilidade)</li>
-                                <li>Ciclo menstrual (variações hormonais)</li>
-                                <li>Ritmo circadiano (variação ao longo do dia)</li>
-                                <li>Composição da refeição (gorduras e proteínas retardam absorção de carboidratos)</li>
-                            </ul>
-                        </li>
-                        <li>A precisão destas regras diminui em doses muito baixas (&lt;10 U/dia) ou muito altas (&gt;100 U/dia)</li>
-                        <li>Automonitoramento glicêmico ou monitoração contínua de glicose são essenciais para validar e ajustar estas estimativas</li>
-                    </ul>
-                    
-                    <h5>Origem Histórica das Regras</h5>
-                    <p>Os valores 500 e 1800 foram determinados empiricamente através de observações clínicas em pacientes com diabetes tipo 1. Embora não tenham um significado fisiológico exato, produzem aproximações úteis que têm servido como base para a insulinoterapia intensiva por décadas.</p>
-                    
-                    <p>Estas regras foram popularizadas por líderes em diabetes como John Walsh em seu livro "Bombas de Insulina e Uso da Insulina" e pelo Dr. Paul Davidson e colegas da Universidade de Indiana.</p>
-                </div>
-
-                <h3>3. Cálculo de Bolus</h3>
-                <h4>Bolus de Correção:</h4>
-                <pre>
-Diferença Glicêmica = max(0, Glicemia Atual - Glicemia Alvo)
-Bolus de Correção = Diferença Glicêmica ÷ FSI
-
-Onde:
-- Glicemia Atual: valor atual da glicemia em mg/dL
-- Glicemia Alvo: valor alvo da glicemia em mg/dL (geralmente 100-120 mg/dL)
-- FSI: Fator de Sensibilidade à Insulina (mg/dL por 1U)
-</pre>
-
-                <h4>Bolus Alimentar:</h4>
-                <pre>
-Bolus Alimentar = Quantidade de Carboidratos (g) ÷ Razão IC
-
-Onde:
-- Razão IC: gramas de carboidrato cobertas por 1U de insulina
-</pre>
-
-                <h4>Bolus Total:</h4>
-                <pre>
-Bolus Total = Bolus de Correção + Bolus Alimentar
-</pre>
-            </div>
-            
-            <div class="medical-notes" style="margin-top: 20px;">
-                <h3>Representação do Esquema Original</h3>
-                <p>Baseado no diagrama de cálculo original apresentado:</p>
-                
-                <h4>Fórmula principal:</h4>
-                <pre>
-Peso + 1 = Dose total
-</pre>
-                
-                <h4>Esquema de Distribuição:</h4>
-                <div class="diagram-container">
-                    <svg viewBox="0 0 400 300" style="width: 100%; max-width: 400px; height: auto;">
-                        <!-- Círculo principal -->
-                        <circle cx="200" cy="150" r="100" fill="none" stroke="#333" stroke-width="2"/>
-                        
-                        <!-- Divisão principal 70/30 -->
-                        <path d="M 200 150 L 200 50 A 100 100 0 0 1 286 200 Z" fill="#e0e0ff" stroke="#333" stroke-width="2"/>
-                        <path d="M 200 150 L 286 200 A 100 100 0 0 1 200 250 A 100 100 0 0 1 114 200 A 100 100 0 0 1 200 50 Z" fill="#ffe0e0" stroke="#333" stroke-width="2"/>
-                        
-                        <!-- Subdivisões -->
-                        <!-- NPH 70% subdivisão -->
-                        <path d="M 200 150 L 200 50 A 100 100 0 0 1 243 70 Z" fill="#d0d0ff" stroke="#333" stroke-width="1"/>
-                        <path d="M 200 150 L 243 70 A 100 100 0 0 1 286 200 Z" fill="#c0c0ff" stroke="#333" stroke-width="1"/>
-                        
-                        <!-- Regular 30% subdivisão -->
-                        <path d="M 200 150 L 286 200 A 100 100 0 0 1 200 250 Z" fill="#ffc0c0" stroke="#333" stroke-width="1"/>
-                        <path d="M 200 150 L 200 250 A 100 100 0 0 1 114 200 Z" fill="#ffd0d0" stroke="#333" stroke-width="1"/>
-                        
-                        <!-- Legendas -->
-                        <text x="160" y="100" font-size="16" font-weight="bold">70%</text>
-                        <text x="162" y="120" font-size="14">NPH</text>
-                        
-                        <text x="250" y="150" font-size="16" font-weight="bold">30%</text>
-                        <text x="248" y="170" font-size="14">Regular</text>
-                        
-                        <!-- Subdivisão NPH -->
-                        <text x="226" y="90" font-size="12" font-weight="bold">70%</text>
-                        <text x="226" y="105" font-size="10">NPH</text>
-                        
-                        <text x="270" y="130" font-size="12" font-weight="bold">30%</text>
-                        <text x="270" y="145" font-size="10">R</text>
-                        
-                        <!-- Subdivisão Regular -->
-                        <text x="230" y="210" font-size="12" font-weight="bold">50%</text>
-                        <text x="230" y="225" font-size="10">NPH</text>
-                        
-                        <text x="150" y="210" font-size="12" font-weight="bold">50%</text>
-                        <text x="150" y="225" font-size="10">R</text>
-                    </svg>
-                </div>
-                
-                <h4>Explicação do Diagrama:</h4>
-                <p>O diagrama representa a distribuição da dose total calculada:</p>
-                <ol>
-                    <li>A dose total (calculada como Peso + 1) é dividida inicialmente em:
-                        <ul>
-                            <li>70% para NPH (setor azul)</li>
-                            <li>30% para Regular (setor vermelho)</li>
-                        </ul>
-                    </li>
-                    <li>Do total de NPH (70%):
-                        <ul>
-                            <li>70% permanece como NPH</li>
-                            <li>30% é convertido para Regular</li>
-                        </ul>
-                    </li>
-                    <li>Do total de Regular (30%):
-                        <ul>
-                            <li>50% é convertido para NPH</li>
-                            <li>50% permanece como Regular</li>
-                        </ul>
-                    </li>
-                </ol>
-                
-                <h4>Cálculo Completo:</h4>
-                <pre>
-Dose Total = Peso + 1
-
-NPH (porção inicial) = Dose Total × 0,7
-Regular (porção inicial) = Dose Total × 0,3
-
-Subdivisões:
-- NPH final = (NPH inicial × 0,7) + (Regular inicial × 0,5)
-- Regular final = (NPH inicial × 0,3) + (Regular inicial × 0,5)
-</pre>
-            </div>
+        .references-list li {
+            margin-bottom: 10px;
+        }
+        </style>
         </div>
-        <div class="info-box" style="margin-top: 20px;">
-            <h3>Informações Importantes</h3>
-            <p><strong>1. Esquemas de Insulinoterapia</strong></p>
-            <p>O esquema 70/30 (2 doses diárias) e o esquema basal-bolus (múltiplas doses) têm indicações diferentes. A escolha depende do perfil do paciente, capacidade de automonitoramento, rotina e objetivo glicêmico.</p>
+        
+        <script>
+            // Função para alternar entre as abas
+            document.addEventListener('DOMContentLoaded', function() {
+                const tabLinks = document.querySelectorAll('.tab-link');
+                
+                // Adiciona evento de clique a todos os links de abas
+                tabLinks.forEach(function(link) {
+                    link.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const tabId = this.getAttribute('data-tab');
+                        openTab(tabId);
+                    });
+                });
+                
+                // Inicializar a primeira aba como ativa
+                openTab('peso');
+                
+                // Configurar os botões colapsáveis para o guia médico
+                var coll = document.getElementsByClassName("collapsible");
+                for (var i = 0; i < coll.length; i++) {
+                    coll[i].addEventListener("click", function() {
+                        this.classList.toggle("active-collapse");
+                        var content = this.nextElementSibling;
+                        if (content.style.maxHeight) {
+                            content.style.maxHeight = null;
+                        } else {
+                            content.style.maxHeight = content.scrollHeight + "px";
+                        }
+                    });
+                }
+            });
             
-            <p><strong>2. Fatores que Afetam a Dose de Insulina</strong></p>
-            <p>Além do peso, considere: idade, função renal, resistência insulínica, atividade física, uso de medicamentos (corticoides), presença de infecção/estresse e variação da dieta.</p>
-            
-            <p><strong>3. Educação do Paciente</strong></p>
-            <p>Ensine o paciente sobre técnica de aplicação, rodízio de locais, reconhecimento de hipoglicemia e ajustes em situações especiais (exercício, doença aguda).</p>
-            
-            <p><strong>4. Monitoramento</strong></p>
-            <p>O ajuste de doses deve ser feito com base em padrões glicêmicos, não em valores isolados. Analise tendências por pelo menos 3 dias consecutivos antes de modificar o esquema.</p>
-            
-            <p><strong>5. Transição de Esquemas</strong></p>
-            <p>Ao migrar de um esquema para outro, considere sobreposição para evitar hiperglicemia ou hipoglicemia durante a transição.</p>
-        </div>
-    </div>
+            // Função para abrir uma aba
+            function openTab(tabName) {
+                // Esconde todas as abas
+                const tabContent = document.querySelectorAll('.tab-content');
+                tabContent.forEach(function(tab) {
+                    tab.style.display = 'none';
+                    tab.classList.remove('active');
+                });
+                
+                // Remove a classe "active" de todos os links
+                const tabLinks = document.querySelectorAll('.tab-link');
+                tabLinks.forEach(function(link) {
+                    link.classList.remove('active');
+                });
 
-    <script>
-        // Função para alternar entre as abas
-        function openTab(evt, tabName) {
-            // Previne comportamento padrão de link
-            if (evt.preventDefault) {
-                evt.preventDefault();
+
+// Mostra a aba atual e adiciona a classe "active" ao link
+            document.getElementById(tabName).style.display = 'block';
+            document.getElementById(tabName).classList.add('active');
+            
+            // Ativa o link correspondente
+            document.querySelector(`.tab-link[data-tab="${tabName}"]`).classList.add('active');
+        }
+        
+        // Funções para o modal Sobre
+        function openModal() {
+            document.getElementById("aboutModal").style.display = "block";
+        }
+        
+        function closeModal() {
+            document.getElementById("aboutModal").style.display = "none";
+        }
+        
+        // Fechar o modal quando clicar fora dele
+        window.onclick = function(event) {
+            if (event.target == document.getElementById("aboutModal")) {
+                closeModal();
             }
-            
-            var i, tabcontent, tablinks;
-            
-            // Esconde todas as abas
-            tabcontent = document.getElementsByClassName("tab-content");
-            for (i = 0; i < tabcontent.length; i++) {
-                tabcontent[i].style.display = "none";
-            }
-            
-            // Remove a classe "active" de todos os botões
-            tablinks = document.getElementsByClassName("tablinks");
-            for (i = 0; i < tablinks.length; i++) {
-                tablinks[i].classList.remove("active");
-            }
-            
-            // Mostra a aba atual e adiciona a classe "active" ao botão
-            document.getElementById(tabName).style.display = "block";
-            
-            // Encontra o link clicado e adiciona a classe active
-            var clickedLink;
-            if (evt.target.tagName === 'I') {
-                // Se o ícone foi clicado
-                clickedLink = evt.target.parentElement;
-            } else {
-                // Se o texto ou o link foi clicado
-                clickedLink = evt.target;
-            }
-            clickedLink.classList.add("active");
         }
         
         // Mostrar/esconder o campo de fator personalizado
@@ -1348,25 +1621,24 @@ Subdivisões:
             
             document.getElementById("resultadosBolus").style.display = "block";
         }
-        
-        // Configurar os botões colapsáveis para o guia médico
-        var coll = document.getElementsByClassName("collapsible");
-        for (var i = 0; i < coll.length; i++) {
-            coll[i].addEventListener("click", function() {
-                this.classList.toggle("active-collapse");
-                var content = this.nextElementSibling;
-                if (content.style.maxHeight) {
-                    content.style.maxHeight = null;
-                } else {
-                    content.style.maxHeight = content.scrollHeight + "px";
-                }
-            });
+        // Funções adicionais para o modal de referências
+        function openReferencesModal() {
+            document.getElementById("referencesModal").style.display = "block";
+        }
+
+        function closeReferencesModal() {
+            document.getElementById("referencesModal").style.display = "none";
+        }
+
+        // Atualizar o evento window.onclick para incluir o modal de referências
+        window.onclick = function(event) {
+            if (event.target == document.getElementById("aboutModal")) {
+                closeModal();
+            }
+            if (event.target == document.getElementById("referencesModal")) {
+                closeReferencesModal();
+            }
         }
     </script>
 </body>
 </html>
-
-
-        
-
-
