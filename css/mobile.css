@@ -1,0 +1,153 @@
+/* Estilos específicos para dispositivos móveis */
+
+/* Arquivo: mobile.css - Estilos específicos para dispositivos móveis */
+
+/* Mobile Responsiveness */
+@media screen and (max-width: 768px) {
+    .tabs-nav {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+    }
+    
+    .tabs-nav li {
+        min-width: 120px;
+    }
+    
+    .tab-content {
+        padding: 20px 15px;
+    }
+    
+    .collapsible {
+        padding: 12px;
+        font-size: 15px;
+    }
+    
+    header h1 {
+        font-size: 24px;
+        padding-right: 60px; /* Espaço para o botão Sobre */
+        padding-left: 60px; /* Espaço para o botão de visualização */
+    }
+    
+    header p {
+        font-size: 14px;
+    }
+    
+    .diagram-label {
+        width: 90px;
+        font-size: 12px;
+    }
+    
+    .bar-section {
+        font-size: 12px;
+    }
+    
+    .route-options {
+        flex-direction: column;
+    }
+    
+    .route-option {
+        min-width: 100%;
+        margin-bottom: 5px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .container {
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    .tabs-nav a {
+        font-size: 12px;
+        padding: 10px 5px;
+    }
+    
+    .tabs-nav li {
+        min-width: 90px;
+    }
+    
+    .tabs-nav a i {
+        font-size: 16px;
+    }
+    
+    header {
+        padding: 15px 10px;
+    }
+    
+    header h1 {
+        font-size: 22px;
+    }
+    
+    .tab-content {
+        padding: 15px 10px;
+    }
+    
+    .modal-content {
+        width: 90%;
+        margin: 20% auto;
+    }
+    
+    .about-btn {
+        top: 10px;
+        right: 10px;
+        font-size: 11px;
+    }
+    
+    .about-btn i {
+        font-size: 12px;
+    }
+    
+    .view-toggle {
+        top: 10px;
+        left: 10px;
+        font-size: 11px;
+    }
+    
+    .view-toggle i {
+        font-size: 12px;
+    }
+    
+    table {
+        font-size: 12px;
+    }
+    
+    th, td {
+        padding: 8px;
+    }
+}
+
+/* Classes específicas para mobile */
+.mobile-view .tabs-nav {
+    flex-direction: row !important; /* Para manter horizontal */
+    overflow-x: auto;
+    white-space: nowrap;
+    flex-wrap: nowrap;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.mobile-view .tabs-nav li {
+    flex: 0 0 auto; /* Para que não expandam demais */
+    min-width: auto;
+    max-width: fit-content;
+}
+
+.mobile-view .tabs-nav a {
+    flex-direction: column;
+    padding: 10px 15px;
+    font-size: 11px;
+}
+
+.mobile-view .tabs-nav a i {
+    margin-bottom: 5px;
+    margin-right: 0;
+    font-size: 16px;
+}
+
+.mobile-view .tab-content {
+    padding: 15px 10px;
+}
+
+.mobile-view .diagram-container {
+    overflow-x: auto;
+}

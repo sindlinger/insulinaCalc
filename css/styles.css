@@ -1,0 +1,294 @@
+/* Arquivo: styles.css - Estilos principais do aplicativo */
+
+:root {
+    --primary-color: #3498db;
+    --primary-light: #e8f4fc;
+    --primary-dark: #2980b9;
+    --accent-color: #f39c12;
+    --danger-color: #e74c3c;
+    --success-color: #2ecc71;
+    --text-color: #333;
+    --light-text: #666;
+    --very-light-text: #999;
+    --border-color: #ddd;
+    --bg-light: #f5f7fa;
+    --white: #fff;
+    --shadow: 0 2px 10px rgba(0,0,0,0.05);
+    --border-radius: 8px;
+}
+
+* {
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-light);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background-color: var(--white);
+    box-shadow: var(--shadow);
+}
+
+header {
+    text-align: center;
+    padding: 20px;
+    background-color: var(--white);
+    border-bottom: 1px solid var(--border-color);
+    position: relative;
+}
+
+header h1 {
+    color: var(--primary-color);
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.header-description {
+    margin-bottom: 5px;
+}
+
+/* Estilo para elementos comuns do layout */
+.section-title {
+    margin-top: 20px;
+    margin-bottom: 15px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--primary-dark);
+    font-weight: 600;
+}
+
+.indent {
+    margin-left: 20px;
+}
+
+/* Info boxes */
+.info-box {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: var(--bg-light);
+    border-radius: var(--border-radius);
+    border-left: 4px solid var(--primary-color);
+}
+
+.info-box h4 {
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+/* Timing info boxes */
+.timing-info {
+    margin-top: 15px;
+    padding: 10px;
+    background-color: #fdf8e3;
+    border-left: 4px solid var(--accent-color);
+    border-radius: var(--border-radius);
+}
+
+.timing-info h4 {
+    color: #8a6d3b;
+    margin-bottom: 10px;
+}
+
+.timing-list {
+    list-style-type: none;
+}
+
+.timing-list li {
+    margin-bottom: 8px;
+    display: flex;
+    align-items: baseline;
+}
+
+.timing-list li i {
+    color: var(--accent-color);
+    margin-right: 10px;
+    font-size: 12px;
+}
+
+.citation {
+    font-size: 12px;
+    color: var(--light-text);
+    font-style: italic;
+    margin-top: 10px;
+}
+
+/* Results section */
+.results {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: var(--primary-light);
+    border-radius: var(--border-radius);
+    border-left: 4px solid var(--primary-color);
+    display: none;
+}
+
+.results h3 {
+    color: var(--primary-dark);
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.result-item {
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.result-label {
+    font-weight: 500;
+}
+
+.result-value {
+    font-weight: 600;
+    color: var(--primary-dark);
+}
+
+/* Tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+th {
+    background-color: var(--primary-light);
+    color: var(--primary-dark);
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+}
+
+td {
+    padding: 12px;
+    border-top: 1px solid var(--border-color);
+}
+
+tr:nth-child(even) {
+    background-color: var(--bg-light);
+}
+
+/* Diagrama para algoritmo */
+.diagram-container {
+    display: flex;
+    justify-content: center;
+    margin: 30px 0;
+}
+
+.distribution-diagram {
+    width: 100%;
+    max-width: 800px;
+}
+
+.diagram-row {
+    display: flex;
+    margin-bottom: 15px;
+    align-items: center;
+    height: 40px;
+}
+
+.diagram-label {
+    width: 120px;
+    font-weight: 600;
+    text-align: right;
+    padding-right: 10px;
+    flex-shrink: 0;
+}
+
+.diagram-bar {
+    flex-grow: 1;
+    height: 100%;
+    border-radius: 4px;
+    display: flex;
+    overflow: hidden;
+}
+
+.bar-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-color);
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.nph-color {
+    background-color: #c0d9ff;
+}
+
+.regular-color {
+    background-color: #ffccd5;
+}
+
+.diagram-legend {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    margin: 0 15px;
+}
+
+.legend-color {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    margin-right: 8px;
+}
+
+/* Elementos específicos da calculadora */
+.medical-notes {
+    margin-top: 25px;
+    padding: 20px;
+    background-color: var(--white);
+    border-radius: var(--border-radius);
+    border-left: 4px solid var(--primary-color);
+    box-shadow: var(--shadow);
+}
+
+.medical-notes h3 {
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.medical-notes h4 {
+    color: var(--text-color);
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+pre {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: var(--border-radius);
+    overflow-x: auto;
+    border-left: 3px solid var(--primary-color);
+    font-family: Consolas, Monaco, 'Andale Mono', monospace;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* Footer */
+footer {
+    padding: 20px;
+    text-align: center;
+    border-top: 1px solid var(--border-color);
+    margin-top: 30px;
+}
