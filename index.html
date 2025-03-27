@@ -781,6 +781,7 @@
             <li><a href="#" class="tab-link" onclick="abrirEmergencia()"><i class="fas fa-ambulance"></i> Emergências</a></li>
         </ul>
         
+        <!-- Aba 1: Cálculo por Peso -->
         <div id="peso" class="tab-content active">
             <h2>Cálculo baseado no Peso</h2>
             
@@ -929,9 +930,9 @@
             <div class="info-box">
                 <h4>Informações sobre o cálculo:</h4>
                 <p><strong>Dose Total Diária:</strong> Geralmente calculada como 0,5 a 1,0 unidades por kg de peso corporal.</p>
-                <p><strong>Distribuição Total:</strong> 70% da dose total para o período diurno e 30% para o período noturno.</p>
-                <p><strong>Esquema Diurno (70% do total):</strong> Da dose diurna, 70% é insulina intermediária (NPH) e 30% insulina rápida (Regular).</p>
-                <p><strong>Esquema Noturno (30% do total):</strong> Da dose noturna, 50% é insulina intermediária (NPH) e 50% insulina rápida (Regular) para maior segurança durante a noite.</p>
+                <p><strong>Esquema 70/30:</strong> Divisão em 70% insulina intermediária (NPH) e 30% insulina rápida (Regular).</p>
+                <p><strong>Divisão de cada tipo:</strong> No esquema 70/30, tanto a insulina intermediária quanto a rápida são divididas 50/50 entre as doses da manhã e da noite.</p>
+                <p><strong>Distribuição diária:</strong> Tipicamente 2/3 da dose total pela manhã e 1/3 à noite.</p>
                 <p><strong>Esquema Basal-Bolus:</strong> Alternativa com 50% da dose como insulina basal e 50% como bolus distribuídos nas refeições.</p>
                 <p><strong>Vias de administração:</strong></p>
                 <ul>
@@ -941,6 +942,7 @@
                 </ul>
                 <p>Esta calculadora é uma ferramenta educativa. Ajustes individualizados devem ser feitos com base nos diversos fatores clínicos e resposta do paciente.</p>
             </div>
+        </div>
         <!-- Aba 2: Regras 500/1800 -->
         <div id="regras" class="tab-content">
             <h2>Regras 500/1800</h2>
@@ -2070,46 +2072,52 @@ Volume em 24h (mL) = Volume a Infundir × 24
                 fator = parseFloat(fatorSelect.value);
             }
             // Cálculo principal: Peso * Fator = Dose total
-        // Cálculo principal: Peso * Fator = Dose total
-        var doseTotal = peso * fator;
+            var doseTotal = peso * fator;
 
-        // Divisão principal (70% dia, 30% noite)
-        var doseDia = doseTotal * 0.7;
-        var doseNoite = doseTotal * 0.3;
+            // Divisão principal (70% Intermediária, 30% Rápida)
+            var doseIntermediaria = doseTotal * 0.7;
+            var doseRapida = doseTotal * 0.3;
 
-        // Dose Diurna (70% NPH, 30% Regular)
-        var intermediariaManha = doseDia * 0.7;
-        var rapidaManha = doseDia * 0.3;
+            // Esquema duas doses (2/3 manhã, 1/3 noite)
+            var doseManha = doseTotal * (2/3);
+            var doseNoite = doseTotal * (1/3);
 
-        // Dose Noturna (50% NPH, 50% Regular)
-        var intermediariaNoite = doseNoite * 0.5;
-        var rapidaNoite = doseNoite * 0.5;
+            // Manhã (2/3) - mantém 70/30
+            var intermediariaManha = doseManha * 0.7;
+            var rapidaManha = doseManha * 0.3;
 
-        // Esquema basal-bolus alternativo (50/50)
-        var basal = doseTotal * 0.5;
-        var bolusTotal = doseTotal * 0.5;
-
-        // Dividir bolus em 3 refeições
-        var bolusCafe = bolusTotal * 0.4;
-        var bolusAlmoco = bolusTotal * 0.3;
-        var bolusJantar = bolusTotal * 0.3;
-
-        // Exibir resultados usando os IDs existentes
-        document.getElementById("doseTotalPeso").textContent = formatarNumero(doseTotal);
-        document.getElementById("doseIntermediaria").textContent = formatarNumero(intermediariaManha);
-        document.getElementById("doseRapida").textContent = formatarNumero(rapidaManha);
-        document.getElementById("doseManha").textContent = formatarNumero(doseDia);
-        document.getElementById("intermediariaManha").textContent = formatarNumero(intermediariaManha);
-        document.getElementById("rapidaManha").textContent = formatarNumero(rapidaManha);
-        document.getElementById("doseNoite").textContent = formatarNumero(doseNoite);
-        document.getElementById("intermediariaNoite").textContent = formatarNumero(intermediariaNoite);
-        document.getElementById("rapidaNoite").textContent = formatarNumero(rapidaNoite);
-        document.getElementById("doseBasal").textContent = formatarNumero(basal);
-        document.getElementById("bolusTotal").textContent = formatarNumero(bolusTotal);
-        document.getElementById("bolusCafe").textContent = formatarNumero(bolusCafe);
-        document.getElementById("bolusAlmoco").textContent = formatarNumero(bolusAlmoco);
-        document.getElementById("bolusJantar").textContent = formatarNumero(bolusJantar);
+            // Noite (1/3) - ajustado para 50/50
+            var intermediariaNoite = doseNoite * 0.5;
+            var rapidaNoite = doseNoite * 0.5;
+            
+            // Esquema basal-bolus alternativo (50/50)
+            var basal = doseTotal * 0.5;
+            var bolusTotal = doseTotal * 0.5;
+            
+            // Dividir bolus em 3 refeições
+            var bolusCafe = bolusTotal * 0.4;  // 40% no café
+            var bolusAlmoco = bolusTotal * 0.3;  // 30% no almoço
+            var bolusJantar = bolusTotal * 0.3;  // 30% no jantar
+            
+            // Exibir resultados
+            document.getElementById("doseTotalPeso").textContent = formatarNumero(doseTotal);
+            document.getElementById("doseIntermediaria").textContent = formatarNumero(doseIntermediaria);
+            document.getElementById("doseRapida").textContent = formatarNumero(doseRapida);
+            document.getElementById("doseManha").textContent = formatarNumero(doseManha);
+            document.getElementById("intermediariaManha").textContent = formatarNumero(intermediariaManha);
+            document.getElementById("rapidaManha").textContent = formatarNumero(rapidaManha);
+            document.getElementById("doseNoite").textContent = formatarNumero(doseNoite);
+            document.getElementById("intermediariaNoite").textContent = formatarNumero(intermediariaNoite);
+            document.getElementById("rapidaNoite").textContent = formatarNumero(rapidaNoite);
+            document.getElementById("doseBasal").textContent = formatarNumero(basal);
+            document.getElementById("bolusTotal").textContent = formatarNumero(bolusTotal);
+            document.getElementById("bolusCafe").textContent = formatarNumero(bolusCafe);
+            document.getElementById("bolusAlmoco").textContent = formatarNumero(bolusAlmoco);
+            document.getElementById("bolusJantar").textContent = formatarNumero(bolusJantar);
+            
+            document.getElementById("resultadosPeso").style.display = "block";
         }
+
         // Função para calcular regras 500/1800
         function calcularRegras() {
             var doseTotal = parseFloat(document.getElementById("inputDoseTotal").value);
