@@ -1941,6 +1941,28 @@ Volume em 24h (mL) = Volume a Infundir × 24
             document.getElementById("referencesModal").style.display = "none";
         }
 
+        // Função para abrir o modal de emergência
+        function abrirEmergencia() {
+            document.getElementById("modalEmergencia").style.display = "block";
+            document.getElementById("senhaEmergencia").value = "";
+            document.getElementById("erro-senha").style.display = "none";
+        }
+
+        // Função para fechar o modal de emergência
+        function fecharModalEmergencia() {
+            document.getElementById("modalEmergencia").style.display = "none";
+        }
+
+        // Função para verificar a senha
+        function verificarSenha() {
+            const senha = document.getElementById("senhaEmergencia").value;
+            if (senha === "endo2023") {
+                window.location.href = "./emergencia.html";
+            } else {
+                document.getElementById("erro-senha").style.display = "block";
+            }
+        }
+
         // Fechar os modais quando clicar fora deles
         window.onclick = function(event) {
             if (event.target == document.getElementById("aboutModal")) {
