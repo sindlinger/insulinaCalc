@@ -1525,242 +1525,290 @@
             <h2>Algoritmos e Metodologia de Cálculo</h2>
             <p>Esta seção detalha os algoritmos e fórmulas utilizados na calculadora para revisão técnica e validação.</p>
             
-            <div class="medical-notes">
-                <h3>1. Cálculo Baseado no Peso</h3>
-                <h4>Fórmula Base:</h4>
-                <pre>
-Dose Total Diária (DTD) = Peso (kg) × Fator (U/kg)
+<!-- Aba 1: Cálculo por Peso -->
+<div id="peso" class="tab-content active">
+    <h2>Cálculo baseado no Peso</h2>
+    
+    <div class="form-group">
+        <label for="inputPeso">Peso (kg):</label>
+        <input type="number" id="inputPeso" placeholder="Digite o peso em kg" min="0.1" max="300" step="0.1">
+    </div>
+    
+    <div class="form-group">
+        <label for="selectFator">Fator (U/kg):</label>
+        <select id="selectFator">
+            <option value="0.3">0,3 - Muito sensível</option>
+            <option value="0.5">0,5 - Sensível</option>
+            <option value="0.7" selected>0,7 - Padrão</option>
+            <option value="1.0">1,0 - Resistente</option>
+            <option value="1.5">1,5 - Muito resistente</option>
+            <option value="2.0">2,0 - Extremamente resistente</option>
+            <option value="-1">Personalizado</option>
+        </select>
+    </div>
+    
+    <div class="form-group" id="fatorPersonalizadoGroup" style="display: none;">
+        <label for="inputFatorPersonalizado">Fator personalizado:</label>
+        <input type="number" id="inputFatorPersonalizado" placeholder="Digite o fator personalizado" min="0.1" max="10" step="0.1">
+    </div>
+    
+    <!-- Seleção de via de administração -->
+    <div class="admin-route-selector">
+        <label>Via de Administração:</label>
+        <div class="route-options">
+            <div class="route-option active" id="route-sc" onclick="selectRoute('sc')">
+                <i class="fas fa-syringe"></i>
+                <span>Subcutânea</span>
+            </div>
+            <div class="route-option" id="route-iv" onclick="selectRoute('iv')">
+                <i class="fas fa-pump-medical"></i>
+                <span>Intravenosa</span>
+            </div>
+            <div class="route-option" id="route-im" onclick="selectRoute('im')">
+                <i class="fas fa-prescription-bottle"></i>
+                <span>Intramuscular</span>
+            </div>
+        </div>
+        <div class="route-description" id="route-description">
+            Via subcutânea: Administração no tecido subcutâneo, geralmente abdômen, coxas ou braços.
+        </div>
+    </div>
+    
+    <button onclick="calcularPeso()"><i class="fas fa-calculator"></i> Calcular Doses</button>
+    
+    <div id="resultadosPeso" class="results">
+        <h3>Resultados</h3>
+        
+        <div class="result-item">
+            <span class="result-label">Dose Total Diária:</span> 
+            <span class="result-value"><span id="doseTotalPeso">--</span> U</span>
+        </div>
+        
+        <h4 class="section-title">Distribuição Dia/Noite:</h4>
+        <div class="result-item">
+            <span class="result-label">Dose Diurna (70%):</span> 
+            <span class="result-value"><span id="doseManha">--</span> U</span>
+        </div>
+        <div class="result-item indent">
+            <span class="result-label">NPH Manhã (70%):</span> 
+            <span class="result-value"><span id="intermediariaManha">--</span> U</span>
+        </div>
+        <div class="result-item indent">
+            <span class="result-label">Regular Manhã (30%):</span> 
+            <span class="result-value"><span id="rapidaManha">--</span> U</span>
+        </div>
+        
+        <div class="result-item">
+            <span class="result-label">Dose Noturna (30%):</span> 
+            <span class="result-value"><span id="doseNoite">--</span> U</span>
+        </div>
+        <div class="result-item indent">
+            <span class="result-label">NPH Noite (50%):</span> 
+            <span class="result-value"><span id="intermediariaNoite">--</span> U</span>
+        </div>
+        <div class="result-item indent">
+            <span class="result-label">Regular Noite (50%):</span> 
+            <span class="result-value"><span id="rapidaNoite">--</span> U</span>
+        </div>
+        
+        <h4 class="section-title">Esquema Basal-Bolus:</h4>
+        <div class="result-item">
+            <span class="result-label">Insulina Basal (50%):</span> 
+            <span class="result-value"><span id="doseBasal">--</span> U</span>
+        </div>
+        <div class="result-item">
+            <span class="result-label">Insulina Bolus Total (50%):</span> 
+            <span class="result-value"><span id="bolusTotal">--</span> U</span>
+        </div>
+        <div class="result-item indent">
+            <span class="result-label">Bolus Café (40%):</span> 
+            <span class="result-value"><span id="bolusCafe">--</span> U</span>
+        </div>
+        <div class="result-item indent">
+            <span class="result-label">Bolus Almoço (30%):</span> 
+            <span class="result-value"><span id="bolusAlmoco">--</span> U</span>
+        </div>
+        <div class="result-item indent">
+            <span class="result-label">Bolus Jantar (30%):</span> 
+            <span class="result-value"><span id="bolusJantar">--</span> U</span>
+        </div>
+    </div>
+    
+    <!-- Horários de Aplicação -->
+    <div class="timing-info">
+        <h4><i class="fas fa-clock"></i> Horários Recomendados de Aplicação:</h4>
+        <ul class="timing-list">
+            <li><i class="fas fa-circle"></i> <strong>Esquema 70/30 (2 doses):</strong></li>
+            <li class="indent"><i class="fas fa-angle-right"></i> Dose matinal: 30 minutos antes do café da manhã (entre 06:00-08:00h)</li>
+            <li class="indent"><i class="fas fa-angle-right"></i> Dose noturna: 30 minutos antes do jantar (entre 18:00-20:00h)</li>
+            <li><i class="fas fa-circle"></i> <strong>Esquema Basal-Bolus:</strong></li>
+            <li class="indent"><i class="fas fa-angle-right"></i> Insulina basal (Glargina/Detemir): Uma vez ao dia, mesmo horário (preferencialmente antes de dormir)</li>
+            <li class="indent"><i class="fas fa-angle-right"></i> Insulina basal (NPH): Duas vezes ao dia (antes do café da manhã e ao deitar)</li>
+            <li class="indent"><i class="fas fa-angle-right"></i> Bolus de insulina rápida: 15-30 minutos antes das refeições</li>
+            <li class="indent"><i class="fas fa-angle-right"></i> Bolus de insulina ultrarrápida: 0-15 minutos antes das refeições</li>
+        </ul>
+        <p class="citation">Fonte: Sociedade Brasileira de Diabetes. Diretrizes da Sociedade Brasileira de Diabetes 2021-2022.</p>
+    </div>
 
-Onde Fator pode ser:
-- 0,3 U/kg: Pacientes muito sensíveis à insulina
-- 0,5 U/kg: Pacientes sensíveis
-- 0,7 U/kg: Sensibilidade padrão
-- 1,0 U/kg: Pacientes resistentes
-- 1,5 U/kg: Pacientes muito resistentes
-- 2,0 U/kg: Pacientes extremamente resistentes
-</pre>
+    <div class="info-box">
+        <h4>Informações sobre o cálculo:</h4>
+        <p><strong>Dose Total Diária:</strong> Geralmente calculada como 0,5 a 1,0 unidades por kg de peso corporal.</p>
+        <p><strong>Distribuição dia/noite:</strong> 70% da dose total para o dia e 30% para a noite.</p>
+        <p><strong>Distribuição por tipo de insulina:</strong></p>
+        <ul>
+            <li><strong>Dose diurna:</strong> 70% NPH e 30% Regular</li>
+            <li><strong>Dose noturna:</strong> 50% NPH e 50% Regular</li>
+        </ul>
+        <p><strong>Esquema Basal-Bolus:</strong> Alternativa com 50% da dose como insulina basal e 50% como bolus distribuídos nas refeições.</p>
+        <p><strong>Vias de administração:</strong></p>
+        <ul>
+            <li><strong>Subcutânea (SC):</strong> Via mais comum para uso ambulatorial. Locais: abdômen, coxas, braços e nádegas. Rotação dos locais é essencial.</li>
+            <li><strong>Intravenosa (IV):</strong> Usada em ambiente hospitalar, especialmente em emergências ou no controle de cetoacidose diabética.</li>
+            <li><strong>Intramuscular (IM):</strong> Pode ser usada em situações específicas quando a absorção SC está comprometida.</li>
+        </ul>
+        <p>Esta calculadora é uma ferramenta educativa. Ajustes individualizados devem ser feitos com base nos diversos fatores clínicos e resposta do paciente.</p>
+    </div>
+</div>
 
-                <h4>Esquema 70/30 (Divisão Corrigida):</h4>
-                <pre>
-Intermediária total = DTD × 0,7
-Rápida total = DTD × 0,3
-
-Divisão de cada tipo:
-- 50% Intermediária para manhã, 50% para noite
-- 50% Rápida para manhã, 50% para noite
-</pre>
-
-                <h4>Distribuição em 2 Doses Diárias:</h4>
-                <pre>
-Dose Matinal = DTD × (2/3)
-Intermediária Manhã = Dose Matinal × 0,7 × 0,5
-Rápida Manhã = Dose Matinal × 0,3 × 0,5
-
-Dose Noturna = DTD × (1/3)
-Intermediária Noite = Dose Noturna × 0,7 × 0,5
-Rápida Noite = Dose Noturna × 0,3 × 0,5
-</pre>
-
-                <h4>Esquema Basal-Bolus Alternativo:</h4>
-                <pre>
-Insulina Basal = DTD × 0,5
-Insulina Bolus Total = DTD × 0,5
-Bolus Café = Insulina Bolus Total × 0,4
-Bolus Almoço = Insulina Bolus Total × 0,3
-Bolus Jantar = Insulina Bolus Total × 0,3
-</pre>
-
-                <h3>2. Regras 500/1800</h3>
-                <h4>Razão Insulina/Carboidrato:</h4>
-                <pre>
-Regra dos 500:
-Razão IC = 500 ÷ DTD
-(g de carboidrato cobertos por 1U de insulina)
-
-Variação (para pacientes mais sensíveis):
-Razão IC = 450 ÷ DTD
-</pre>
-
-                <h4>Fator de Sensibilidade à Insulina (FSI):</h4>
-                <pre>
-Regra dos 1800:
-FSI = 1800 ÷ DTD
-(mg/dL reduzidos por 1U de insulina)
-
-Variação (para pacientes mais sensíveis):
-FSI = 1500 ÷ DTD
-</pre>
-
-                <h3>3. Cálculo de Bolus</h3>
-                <h4>Bolus de Correção:</h4>
-                <pre>
-Diferença Glicêmica = max(0, Glicemia Atual - Glicemia Alvo)
-Bolus de Correção = Diferença Glicêmica ÷ FSI
-
-Onde:
-- Glicemia Atual: valor atual da glicemia em mg/dL
-- Glicemia Alvo: valor alvo da glicemia em mg/dL (geralmente 100-120 mg/dL)
-- FSI: Fator de Sensibilidade à Insulina (mg/dL por 1U)
-</pre>
-
-                <h4>Bolus Alimentar:</h4>
-                <pre>
-Bolus Alimentar = Quantidade de Carboidratos (g) ÷ Razão IC
-
-Onde:
-- Razão IC: gramas de carboidrato cobertas por 1U de insulina
-</pre>
-
-                <h4>Bolus Total:</h4>
-                <pre>
-Bolus Total = Bolus de Correção + Bolus Alimentar
-</pre>
-
-                <h3>4. Cálculo para Bomba de Infusão</h3>
-                <h4>Fórmula para Infusão Contínua:</h4>
-                <pre>
-Dose Horária (U/h) = Peso (kg) × Dosagem (U/kg/h)
-Volume a Infundir (mL/h) = Dose Horária ÷ Concentração (U/mL)
-Dose em 24h (U) = Dose Horária × 24
-Volume em 24h (mL) = Volume a Infundir × 24
-</pre>
+<!-- Aba 6: Algoritmos (seção do diagrama atualizada) -->
+<div class="medical-notes" style="margin-top: 20px;">
+    <h3>Representação do Esquema de Distribuição de Insulina</h3>
+    
+    <!-- Diagrama melhorado em barras horizontais -->
+    <div class="diagram-container">
+        <div class="distribution-diagram">
+            <h4 style="text-align: center; margin-bottom: 20px;">Esquema de Distribuição da Dose Total (70/30)</h4>
+            
+            <!-- Dose Total -->
+            <div class="diagram-row">
+                <div class="diagram-label">Dose Total:</div>
+                <div class="diagram-bar">
+                    <div class="bar-section nph-color" style="width:70%;">Dia 70%</div>
+                    <div class="bar-section regular-color" style="width:30%;">Noite 30%</div>
+                </div>
             </div>
             
-            <div class="medical-notes" style="margin-top: 20px;">
-                <h3>Representação do Esquema de Distribuição de Insulina</h3>
+            <!-- Dose Diurna -->
+            <div class="diagram-row">
+                <div class="diagram-label">Dose Diurna (70%):</div>
+                <div class="diagram-bar">
+                    <div class="bar-section nph-color" style="width:70%;">NPH (70%)</div>
+                    <div class="bar-section regular-color" style="width:30%;">Regular (30%)</div>
+                </div>
+            </div>
+            
+            <!-- Dose Noturna -->
+            <div class="diagram-row">
+                <div class="diagram-label">Dose Noturna (30%):</div>
+                <!-- Dose Noturna -->
+            <div class="diagram-row">
+                <div class="diagram-label">Dose Noturna (30%):</div>
+                <div class="diagram-bar">
+                    <div class="bar-section nph-color" style="width:50%;">NPH (50%)</div>
+                    <div class="bar-section regular-color" style="width:50%;">Regular (50%)</div>
+                </div>
+            </div>
+            
+            <!-- Esquema Basal-Bolus -->
+            <div style="margin-top: 30px;">
+                <h4 style="text-align: center; margin-bottom: 20px;">Esquema Basal-Bolus (50/50)</h4>
                 
-                <!-- Diagrama melhorado em barras horizontais -->
-                <div class="diagram-container">
-                    <div class="distribution-diagram">
-                        <h4 style="text-align: center; margin-bottom: 20px;">Esquema de Distribuição da Dose Total (70/30)</h4>
-                        
-                        <!-- Dose Total -->
-                        <div class="diagram-row">
-                            <div class="diagram-label">Dose Total:</div>
-                            <div class="diagram-bar">
-                                <div class="bar-section nph-color" style="width:70%;">Intermediária 70%</div>
-                                <div class="bar-section regular-color" style="width:30%;">Rápida 30%</div>
-                            </div>
-                        </div>
-                        
-                        <!-- Dose Matinal -->
-                        <div class="diagram-row">
-                            <div class="diagram-label">Dose Matinal (2/3):</div>
-                            <div class="diagram-bar">
-                                <div class="bar-section nph-color" style="width:46.7%;">Intermediária (70% × 2/3)</div>
-                                <div class="bar-section regular-color" style="width:20%;">Rápida (30% × 2/3)</div>
-                            </div>
-                        </div>
-                        
-                        <!-- Dose Noturna -->
-                        <div class="diagram-row">
-                            <div class="diagram-label">Dose Noturna (1/3):</div>
-                            <div class="diagram-bar">
-                                <div class="bar-section nph-color" style="width:23.3%;">Intermediária (70% × 1/3)</div>
-                                <div class="bar-section regular-color" style="width:10%;">Rápida (30% × 1/3)</div>
-                            </div>
-                        </div>
-                        
-                        <!-- Esquema Basal-Bolus -->
-                        <div style="margin-top: 30px;">
-                            <h4 style="text-align: center; margin-bottom: 20px;">Esquema Basal-Bolus (50/50)</h4>
-                            
-                            <!-- Dose Total -->
-                            <div class="diagram-row">
-                                <div class="diagram-label">Dose Total:</div>
-                                <div class="diagram-bar">
-                                    <div class="bar-section nph-color" style="width:50%;">Basal 50%</div>
-                                    <div class="bar-section regular-color" style="width:50%;">Bolus 50%</div>
-                                </div>
-                            </div>
-                            
-                            <!-- Distribuição Bolus -->
-                            <div class="diagram-row">
-                                <div class="diagram-label">Distribuição Bolus:</div>
-                                <div class="diagram-bar">
-                                    <div class="bar-section regular-color" style="width:40%; background-color: #ffa8b4;">Café 40%</div>
-                                    <div class="bar-section regular-color" style="width:30%; background-color: #ffbcc5;">Almoço 30%</div>
-                                    <div class="bar-section regular-color" style="width:30%; background-color: #ffd0d6;">Jantar 30%</div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Legenda -->
-                        <div class="diagram-legend">
-                            <div class="legend-item">
-                                <div class="legend-color nph-color"></div>
-                                <span>Intermediária/Basal</span>
-                            </div>
-                            <div class="legend-item">
-                                <div class="legend-color regular-color"></div>
-                                <span>Rápida/Bolus</span>
-                            </div>
-                        </div>
+                <!-- Dose Total -->
+                <div class="diagram-row">
+                    <div class="diagram-label">Dose Total:</div>
+                    <div class="diagram-bar">
+                        <div class="bar-section nph-color" style="width:50%;">Basal 50%</div>
+                        <div class="bar-section regular-color" style="width:50%;">Bolus 50%</div>
                     </div>
                 </div>
                 
-                <h4>Explicação do Diagrama:</h4>
-                <p>O diagrama representa visualmente a distribuição da dose total calculada:</p>
-                <ol>
-                    <li>A dose total é dividida em:
-                        <ul>
-                            <li>70% para Intermediária e 30% para Rápida (Esquema 70/30)</li>
-                            <li>50% para Basal e 50% para Bolus (Esquema Basal-Bolus)</li>
-                        </ul>
-                    </li>
-                    <li>No esquema 70/30, a dose total é distribuída em:
-                        <ul>
-                            <li>2/3 da dose pela manhã</li>
-                            <li>1/3 da dose à noite</li>
-                        </ul>
-                    </li>
-                    <li>No esquema Basal-Bolus, a dose de bolus (50% da dose total) é distribuída em:
-                        <ul>
-                            <li>40% no café da manhã</li>
-                            <li>30% no almoço
-                                <li>30% no jantar</li>
-                        </ul>
-                    </li>
-                </ol>
+                <!-- Distribuição Bolus -->
+                <div class="diagram-row">
+                    <div class="diagram-label">Distribuição Bolus:</div>
+                    <div class="diagram-bar">
+                        <div class="bar-section regular-color" style="width:40%; background-color: #ffa8b4;">Café 40%</div>
+                        <div class="bar-section regular-color" style="width:30%; background-color: #ffbcc5;">Almoço 30%</div>
+                        <div class="bar-section regular-color" style="width:30%; background-color: #ffd0d6;">Jantar 30%</div>
+                    </div>
+                </div>
             </div>
             
-            <div class="info-box" style="margin-top: 20px;">
-                <h3>Informações Importantes</h3>
-                <p><strong>1. Esquemas de Insulinoterapia</strong></p>
-                <p>O esquema 70/30 (2 doses diárias) e o esquema basal-bolus (múltiplas doses) têm indicações diferentes. A escolha depende do perfil do paciente, capacidade de automonitoramento, rotina e objetivo glicêmico.</p>
-                
-                <p><strong>2. Horários de Administração</strong></p>
-                <p>Seguir corretamente os horários de aplicação é essencial para um controle glicêmico adequado:
-                <ul>
-                    <li>Insulina regular: aplicar 30 minutos antes das refeições</li>
-                    <li>Insulina ultrarrápida: aplicar 0-15 minutos antes das refeições</li>
-                    <li>Insulina NPH: aplicar antes do café da manhã e ao deitar</li>
-                    <li>Insulina basal (Glargina/Detemir): aplicar no mesmo horário diariamente</li>
-                </ul>
-                </p>
-                
-                <p><strong>3. Vias de Administração</strong></p>
-                <p>A via de administração influencia diretamente na velocidade de absorção e duração do efeito:
-                <ul>
-                    <li>Subcutânea (SC): via padrão para uso ambulatorial, absorção mais lenta</li>
-                    <li>Intravenosa (IV): uso hospitalar, início imediato (apenas insulina regular)</li>
-                    <li>Intramuscular (IM): absorção intermediária, usada em situações de emergência</li>
-                </ul>
-                </p>
-                
-                <p><strong>4. Fatores que Afetam a Dose de Insulina</strong></p>
-                <p>Além do peso, considere: idade, função renal, resistência insulínica, atividade física, uso de medicamentos (corticoides), presença de infecção/estresse e variação da dieta.</p>
-                
-                <p><strong>5. Educação do Paciente</strong></p>
-                <p>Ensine o paciente sobre técnica de aplicação, rodízio de locais, reconhecimento de hipoglicemia e ajustes em situações especiais (exercício, doença aguda).</p>
-                
-                <p><strong>6. Monitoramento</strong></p>
-                <p>O ajuste de doses deve ser feito com base em padrões glicêmicos, não em valores isolados. Analise tendências por pelo menos 3 dias consecutivos antes de modificar o esquema.</p>
-                
-                <p><strong>7. Transição de Esquemas</strong></p>
-                <p>Ao migrar de um esquema para outro, considere sobreposição para evitar hiperglicemia ou hipoglicemia durante a transição.</p>
+            <!-- Legenda -->
+            <div class="diagram-legend">
+                <div class="legend-item">
+                    <div class="legend-color nph-color"></div>
+                    <span>Intermediária/Basal</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color regular-color"></div>
+                    <span>Rápida/Bolus</span>
+                </div>
             </div>
         </div>
+    </div>
+    
+    <h4>Explicação do Diagrama:</h4>
+    <p>O diagrama representa visualmente a distribuição da dose total calculada:</p>
+    <ol>
+        <li>A dose total é dividida em:
+            <ul>
+                <li>70% para dose diurna e 30% para dose noturna</li>
+            </ul>
+        </li>
+        <li>A dose diurna (70% da dose total) é distribuída em:
+            <ul>
+                <li>70% NPH e 30% Regular</li>
+            </ul>
+        </li>
+        <li>A dose noturna (30% da dose total) é distribuída em:
+            <ul>
+                <li>50% NPH e 50% Regular</li>
+            </ul>
+        </li>
+        <li>No esquema Basal-Bolus, a divisão permanece em 50% da dose total para basal e 50% para bolus
+            <ul>
+                <li>Bolus: 40% no café da manhã, 30% no almoço e 30% no jantar</li>
+            </ul>
+        </li>
+    </ol>
+</div>
+
+<div class="info-box" style="margin-top: 20px;">
+    <h3>Informações Importantes</h3>
+    <p><strong>1. Esquemas de Insulinoterapia</strong></p>
+    <p>O esquema 70/30 (2 doses diárias) e o esquema basal-bolus (múltiplas doses) têm indicações diferentes. A escolha depende do perfil do paciente, capacidade de automonitoramento, rotina e objetivo glicêmico.</p>
+    
+    <p><strong>2. Horários de Administração</strong></p>
+    <p>Seguir corretamente os horários de aplicação é essencial para um controle glicêmico adequado:
+    <ul>
+        <li>Insulina regular: aplicar 30 minutos antes das refeições</li>
+        <li>Insulina ultrarrápida: aplicar 0-15 minutos antes das refeições</li>
+        <li>Insulina NPH: aplicar antes do café da manhã e ao deitar</li>
+        <li>Insulina basal (Glargina/Detemir): aplicar no mesmo horário diariamente</li>
+    </ul>
+    </p>
+    
+    <p><strong>3. Vias de Administração</strong></p>
+    <p>A via de administração influencia diretamente na velocidade de absorção e duração do efeito:
+    <ul>
+        <li>Subcutânea (SC): via padrão para uso ambulatorial, absorção mais lenta</li>
+        <li>Intravenosa (IV): uso hospitalar, início imediato (apenas insulina regular)</li>
+        <li>Intramuscular (IM): absorção intermediária, usada em situações de emergência</li>
+    </ul>
+    </p>
+    
+    <p><strong>4. Fatores que Afetam a Dose de Insulina</strong></p>
+    <p>Além do peso, considere: idade, função renal, resistência insulínica, atividade física, uso de medicamentos (corticoides), presença de infecção/estresse e variação da dieta.</p>
+    
+    <p><strong>5. Educação do Paciente</strong></p>
+    <p>Ensine o paciente sobre técnica de aplicação, rodízio de locais, reconhecimento de hipoglicemia e ajustes em situações especiais (exercício, doença aguda).</p>
+    
+    <p><strong>6. Monitoramento</strong></p>
+    <p>O ajuste de doses deve ser feito com base em padrões glicêmicos, não em valores isolados. Analise tendências por pelo menos 3 dias consecutivos antes de modificar o esquema.</p>
+    
+    <p><strong>7. Transição de Esquemas</strong></p>
+    <p>Ao migrar de um esquema para outro, considere sobreposição para evitar hiperglicemia ou hipoglicemia durante a transição.</p>
+</div>
         
         <footer style="padding: 20px; text-align: center; border-top: 1px solid var(--border-color); margin-top: 30px;">
             <button id="referencesBtn" class="reference-btn" onclick="openReferencesModal()">
