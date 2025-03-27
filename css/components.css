@@ -202,9 +202,19 @@ button:hover {
     font-size: 18px; /* Ícone menor */
     color: var(--primary-color);
 }
+.route-option.active {
+    background-color: var(--primary-light);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 1px var(--primary-color);
+    color: var(--primary-color);
+    font-weight: bold;
+}
 
+.route-option.active i {
+    transform: scale(1.1);
+}
 .route-description {
-    margin-top: 8px;
+    margin-top: 1px;
     font-size: 13px;
     color: var(--light-text);
     font-style: italic;
@@ -255,4 +265,88 @@ button:hover {
 .tabs-nav a i {
     font-size: 22px; /* Ícones maiores */
     margin-bottom: 10px; /* Mais espaço abaixo do ícone */
+}
+/* Estilos para botões de ajuda e modal de ajuda */
+
+.label-with-help {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.help-btn {
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    padding: 0;
+    font-size: 16px;
+    cursor: pointer;
+    width: auto;
+    margin: 0;
+}
+
+.help-btn:hover {
+    color: var(--primary-dark);
+    background: none;
+}
+
+.help-content {
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+.help-content h4 {
+    color: var(--primary-color);
+    margin-top: 15px;
+    margin-bottom: 8px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 5px;
+}
+
+.help-content ul {
+    margin-left: 20px;
+    margin-bottom: 15px;
+}
+
+.help-content code {
+    background-color: #f5f5f5;
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-family: Consolas, Monaco, 'Andale Mono', monospace;
+    font-size: 90%;
+}
+
+.help-formula {
+    background-color: #f8f9fa;
+    padding: 10px 15px;
+    border-left: 4px solid var(--primary-color);
+    margin: 15px 0;
+    font-style: italic;
+}
+
+.help-tip {
+    background-color: var(--primary-light);
+    padding: 8px 12px;
+    border-radius: 4px;
+    margin: 10px 0;
+}
+
+.help-example {
+    margin: 15px 0;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+}
+
+.help-action {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.help-link {
+    color: var(--primary-color);
+    text-decoration: underline;
+    cursor: pointer;
 }

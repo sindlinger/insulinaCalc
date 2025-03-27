@@ -4,6 +4,13 @@
 let viaAdministracaoSelecionada = 'sc'; // Padrão: subcutânea
 let tipoInsulinaSelecionada = 'regular'; // Padrão: regular
 
+// Objeto para armazenar os últimos resultados de cada calculadora
+window.ultimosResultados = {
+    peso: null,
+    bolus: null,
+    bomba: null
+};
+
 /**
  * Calcula doses de insulina com base no peso
  */
@@ -66,7 +73,7 @@ function calcularPeso() {
         case 'iv':
             // Intravenosa - dose menor pela absorção direta
             ajusteDose = 0.7; // 70% da dose SC
-            infoVia = "Via intravenosa: Dose reduzida para 70% da dose subcutânea devido à absorção direta. Monitorar glicemia a cada 1-2h inicialmente.";
+            infoVia = "Via intravenosa: Dose reduzida para 80% da dose subcutânea devido à absorção direta. Monitorar glicemia a cada 1-2h inicialmente.";
             break;
         case 'im':
             // Intramuscular - absorção mais rápida, ajuste intermediário
@@ -123,8 +130,23 @@ function calcularPeso() {
     
     document.getElementById("resultadosPeso").style.display = "block";
     
-    // Salvar os valores calculados para uso na função de prescrição
+    // Salvar os valores calculados para uso na função de prescrição antiga
     window.ultimoResultado = {
+        doseTotal, 
+        intermediariaManha, 
+        rapidaManha, 
+        intermediariaNoite, 
+        rapidaNoite,
+        basal,
+        bolusCafe,
+        bolusAlmoco,
+        bolusJantar,
+        via: viaAdministracaoSelecionada,
+        peso: peso
+    };
+    
+    // Salvar os valores calculados no sistema unificado
+    window.ultimosResultados.peso = {
         doseTotal, 
         intermediariaManha, 
         rapidaManha, 
@@ -141,6 +163,7 @@ function calcularPeso() {
 
 /**
  * Mostra um exemplo de prescrição baseado nos resultados calculados
+ * Função original, mantida para compatibilidade
  */
 function mostrarExemploPrescricao() {
     if (!window.ultimoResultado) {
@@ -289,6 +312,21 @@ function formatarData() {
 }
 
 /**
+ * Formata a data e hora atual no formato brasileiro
+ * @returns {string} Data e hora formatadas (ex: 15/04/2023 14:30)
+ */
+function formatarDataHora() {
+    const agora = new Date();
+    const dia = String(agora.getDate()).padStart(2, '0');
+    const mes = String(agora.getMonth() + 1).padStart(2, '0');
+    const ano = agora.getFullYear();
+    const hora = String(agora.getHours()).padStart(2, '0');
+    const minuto = String(agora.getMinutes()).padStart(2, '0');
+    
+    return `${dia}/${mes}/${ano} ${hora}:${minuto}`;
+}
+
+/**
  * Selecionar a via de administração
  * @param {string} route - Código da via (sc, iv, im)
  */
@@ -390,6 +428,23 @@ function calcularBolus() {
     document.getElementById('bolus-timing-info').innerHTML = timingInfo;
     
     document.getElementById("resultadosBolus").style.display = "block";
+    
+    // Salvar os valores calculados no sistema unificado
+    window.ultimosResultados.bolus = {
+        glicemiaAtual,
+        glicemiaAlvo,
+        carboidratos,
+        diferencaGlicemia,
+        bolusCorrecao,
+        bolusAlimentar,
+        bolusTotal,
+        tipoInsulina: document.getElementById('insulin-rapid').classList.contains('active') ? 'rapid' : 'regular'
+    };
+    
+    // Adicionar botão de prescrição
+    if (typeof adicionarBotaoPrescrição === 'function') {
+        adicionarBotaoPrescrição('resultadosBolus', 'bolus');
+    }
 }
 
 /**
@@ -486,7 +541,7 @@ function calcularBomba() {
     document.getElementById("volumeDia").textContent = formatarNumero(volumeDia);
     document.getElementById("resultadosBomba").style.display = "block";
     
-    // Salvar dados para possível prescrição
+    // Salvar dados para possível prescrição (para compatibilidade com código antigo)
     window.ultimoResultadoBomba = {
         doseHoraria,
         volumeInfusao,
@@ -495,5 +550,68 @@ function calcularBomba() {
         volumeDia,
         concentracao,
         peso
+    };
+    
+    // Salvar dados no sistema unificado
+    window.ultimosResultados.bomba = {
+        doseHoraria,
+        volumeInfusao,
+        velocidadeInfusao,
+        doseDia,
+        volumeDia,
+        concentracao,
+        peso
+    };
+    
+    // Adicionar botão de prescrição
+    if (typeof adicionarBotaoPrescrição === 'function') {
+        adicionarBotaoPrescrição('resultadosBomba', 'bomba');
+    }
+}
+
+/**
+ * Formata um número para exibição
+ * @param {number} numero - Número a ser formatado
+ * @returns {string} Número formatado com uma casa decimal
+ */
+function formatarNumero(numero) {
+    // Arredondar para uma casa decimal
+    return Number(numero.toFixed(1)).toLocaleString('pt-BR');
+}
+
+/**
+ * Funções do sistema de prescrição unificado
+ * Estas funções são definidas em detalhe no arquivo prescricao.js
+ * Estão aqui apenas como stubs para garantir compatibilidade no caso do arquivo não estar carregado
+ */
+
+// Verifica se a função já existe antes de definir
+if (typeof adicionarBotaoPrescrição !== 'function') {
+    function adicionarBotaoPrescrição(containerId, tipoCalculo) {
+        console.log("Sistema de prescrição unificado não carregado. Usando função padrão.");
+        // Para calculadora de peso, usa o comportamento padrão
+        if (tipoCalculo === 'peso' && containerId === 'resultadosPeso') {
+            const btnPrescrição = document.getElementById('prescription-btn');
+            if (btnPrescrição) {
+                btnPrescrição.style.display = 'flex';
+            } else {
+                // Criar o botão se ainda não existe
+                const resultadosDiv = document.getElementById('resultadosPeso');
+                const btnHTML = `<button id="prescription-btn" class="prescription-btn" onclick="mostrarExemploPrescricao()">
+                    <i class="fas fa-file-prescription"></i> Ver exemplo de prescrição
+                </button>`;
+                
+                resultadosDiv.insertAdjacentHTML('afterend', btnHTML);
+            }
+        }
+    }
+}
+
+// Inicializar o objeto de resultados se ainda não existir
+if (!window.ultimosResultados) {
+    window.ultimosResultados = {
+        peso: null,
+        bolus: null,
+        bomba: null
     };
 }

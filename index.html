@@ -237,8 +237,8 @@
                         </tr>
                         <tr>
                             <td>Intravenosa (IV)</td>
-                            <td>70% da dose SC</td>
-                            <td>Absorção mais rápida e completa, maior potência por evitar a barreira subcutânea</td>
+                            <td>80% da dose SC convertida para IV</td>
+                            <td>Maior biodisponibilidade por evitar a barreira subcutânea</td>
                         </tr>
                         <tr>
                             <td>Intramuscular (IM)</td>
@@ -250,11 +250,11 @@
                 
                 <h4>Fundamentação científica:</h4>
                 
-                <p><strong>Para ajuste da via intravenosa (70%):</strong></p>
+                <p><strong>Para ajuste da via intravenosa (80%):</strong></p>
                 <ul>
-                    <li>A <strong>American Diabetes Association (ADA)</strong> em seu guideline <em>"Diabetes Care in the Hospital" (2023)</em> recomenda reduzir a dose total diária em 20-30% ao converter de insulina subcutânea para intravenosa, devido à maior biodisponibilidade.</li>
-                    <li>O documento orienta: "Para pacientes convertidos de infusão intravenosa para subcutânea, calcule a dose IV total nas últimas 6-8 horas, multiplique por 3-4, e reduza em 20-30% para obter a dose subcutânea equivalente".</li>
-                    <li>Esta recomendação se baseia na maior potência da insulina quando administrada diretamente na corrente sanguínea, evitando a absorção variável do tecido subcutâneo.</li>
+                    <li>De acordo com a revisão publicada por Davis e Umpierrez (2017) em "Transition From Intravenous to Subcutaneous Insulin", diversos estudos e protocolos clínicos recomendam usar 80% da dose diária total de insulina subcutânea quando se converte para via intravenosa.</li>
+                    <li>Os autores afirmam: <em>"Despite the lack of consensus, most have suggested that using 80% of the total 24-h IV insulin utilization to calculate the 24-h SQ insulin requirement is an effective percentage to allow glycemic control without precipitating hypoglycemia"</em>.</li>
+                    <li>Esta recomendação é apoiada por múltiplos estudos e protocolos institucionais citados na revisão, especificamente para evitar hipoglicemia ao fazer a transição entre vias de administração.</li>
                 </ul>
                 
                 <p><strong>Para ajuste da via intramuscular (85%):</strong></p>
@@ -277,46 +277,75 @@
                 
                 <p class="citation" style="margin-top: 15px;">Referências:</p>
                 <ol class="references-list" style="font-size: 13px; margin-left: 25px;">
-                    <li>American Diabetes Association Professional Practice Committee. (2023). "16. Diabetes Care in the Hospital: Standards of Medical Care in Diabetes". <em>Diabetes Care</em> 46(Supplement_1): S250-S263.</li>
+                    <li>Davis GM, Umpierrez GE. (2017). <strong>Transition From Intravenous to Subcutaneous Insulin</strong>. <em>Current Diabetes Reports</em>, 17(5):31. DOI: 10.1007/s11892-017-0855-6.</li>
                     <li>Endocrine Society Clinical Practice Guideline. (2022). "Management of Hyperglycemia in Hospitalized Patients in Non-Critical Care Setting". <em>The Journal of Clinical Endocrinology & Metabolism</em> 107(2): 379-393.</li>
-                    <li>Joint British Diabetes Societies for Inpatient Care (JBDS-IP). (2022). "The Hospital Management of Hypoglycaemia in Adults with Diabetes Mellitus".</li>
+                    <li>Avanzini F, Marelli G, Donzelli W, et al. (2011). <strong>Transition From Intravenous to Subcutaneous Insulin: Effectiveness and safety of a standardized protocol and predictors of outcome in patients with acute coronary syndrome</strong>. <em>Diabetes, Metabolic Syndrome and Obesity: Targets and Therapy</em>, 4: 269-275.</li>
                     <li>Heinemann L, Linkeschova R, Rave K, et al. (2000). "Time-action profile of the long-acting insulin analog insulin glargine (HOE901) in comparison with those of NPH insulin and placebo". <em>Diabetes Care</em> 23(5): 644-649.</li>
                 </ol>
             </div>
         </div>
-
         <!-- Aba 2: Cálculo de Bolus -->
         <div id="bolus" class="tab-content">
             <h2>Cálculo de Bolus</h2>
             
             <div class="form-group">
-                <label for="inputGlicemiaAtual">Glicemia Atual (mg/dL):</label>
+                <div class="label-with-help">
+                    <label for="inputGlicemiaAtual">Glicemia Atual (mg/dL):</label>
+                    <button type="button" class="help-btn" onclick="mostrarAjuda('glicemia-atual')">
+                        <i class="fas fa-question-circle"></i>
+                    </button>
+                </div>
                 <input type="number" id="inputGlicemiaAtual" placeholder="Digite a glicemia atual" min="40" max="600">
             </div>
             
             <div class="form-group">
-                <label for="inputGlicemiaAlvo">Glicemia Alvo (mg/dL):</label>
+                <div class="label-with-help">
+                    <label for="inputGlicemiaAlvo">Glicemia Alvo (mg/dL):</label>
+                    <button type="button" class="help-btn" onclick="mostrarAjuda('glicemia-alvo')">
+                        <i class="fas fa-question-circle"></i>
+                    </button>
+                </div>
                 <input type="number" id="inputGlicemiaAlvo" placeholder="Digite a glicemia alvo" min="70" max="180" value="100">
             </div>
             
             <div class="form-group">
-                <label for="inputCarboidratos">Carboidratos a serem consumidos (g):</label>
+                <div class="label-with-help">
+                    <label for="inputCarboidratos">Carboidratos a serem consumidos (g):</label>
+                    <button type="button" class="help-btn" onclick="mostrarAjuda('carboidratos')">
+                        <i class="fas fa-question-circle"></i>
+                    </button>
+                </div>
                 <input type="number" id="inputCarboidratos" placeholder="Digite a quantidade de carboidratos" min="0" max="300" step="0.1">
             </div>
             
             <div class="form-group">
-                <label for="inputRazaoIC">Razão Insulina/Carboidrato:</label>
+                <div class="label-with-help">
+                    <label for="inputRazaoIC">Razão Insulina/Carboidrato:</label>
+                    <button type="button" class="help-btn" onclick="mostrarAjuda('razao-ic')">
+                        <i class="fas fa-question-circle"></i>
+                    </button>
+                </div>
                 <input type="number" id="inputRazaoIC" placeholder="g de carboidrato por 1U de insulina" min="1" max="100" step="0.1">
             </div>
             
             <div class="form-group">
-                <label for="inputFSI">Fator de Sensibilidade (FSI):</label>
+                <div class="label-with-help">
+                    <label for="inputFSI">Fator de Sensibilidade (FSI):</label>
+                    <button type="button" class="help-btn" onclick="mostrarAjuda('fsi')">
+                        <i class="fas fa-question-circle"></i>
+                    </button>
+                </div>
                 <input type="number" id="inputFSI" placeholder="mg/dL reduzidos por 1U de insulina" min="1" max="100" step="0.1">
             </div>
             
             <!-- Seleção de insulina para bolus -->
             <div class="admin-route-selector">
-                <label>Tipo de Insulina para Bolus:</label>
+                <div class="label-with-help">
+                    <label>Tipo de Insulina para Bolus:</label>
+                    <button type="button" class="help-btn" onclick="mostrarAjuda('tipo-insulina')">
+                        <i class="fas fa-question-circle"></i>
+                    </button>
+                </div>
                 <div class="route-options">
                     <div class="route-option active" id="insulin-regular" onclick="selectInsulinType('regular')">
                         <i class="fas fa-vial"></i>
@@ -1026,11 +1055,24 @@
             </button>
         </footer>
     </div>
-
+    <!-- Modal de Ajuda -->
+    <div id="ajudaModal" class="modal">
+        <div class="modal-content" style="max-width: 600px;">
+            <span class="close-modal" onclick="fecharAjuda()">&times;</span>
+            <h2 class="modal-title" id="ajudaTitulo">Título da Ajuda</h2>
+            <div id="ajudaConteudo" class="help-content">
+                <!-- O conteúdo será preenchido dinamicamente pelo JavaScript -->
+            </div>
+        </div>
+    </div>
     <!-- Importação dos arquivos JavaScript -->
     <script src="js/utils.js"></script>
     <script src="js/tabs.js"></script>
     <script src="js/calculadoras.js"></script>
+    <!-- Sistema de prescrição unificado -->
+    <script src="js/prescricao.js"></script>
+    <script src="js/integracao-prescricao.js"></script>
+    <!-- Outros scripts -->
     <script src="js/modals.js"></script>
     <script src="js/main.js"></script>
 </body>
