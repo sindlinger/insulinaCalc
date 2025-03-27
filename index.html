@@ -2070,42 +2070,46 @@ Volume em 24h (mL) = Volume a Infundir × 24
                 fator = parseFloat(fatorSelect.value);
             }
             // Cálculo principal: Peso * Fator = Dose total
-            var doseTotal = peso * fator;
+        // Cálculo principal: Peso * Fator = Dose total
+        var doseTotal = peso * fator;
 
-            // Distribuição dia/noite (70% dia, 30% noite)
-            var doseDia = doseTotal * 0.7;
-            var doseNoite = doseTotal * 0.3;
+        // Divisão principal (70% dia, 30% noite)
+        var doseDia = doseTotal * 0.7;
+        var doseNoite = doseTotal * 0.3;
 
-            // Dose Diurna (70% NPH, 30% Regular)
-            var nphDia = doseDia * 0.7;
-            var regularDia = doseDia * 0.3;
+        // Dose Diurna (70% NPH, 30% Regular)
+        var intermediariaManha = doseDia * 0.7;
+        var rapidaManha = doseDia * 0.3;
 
-            // Dose Noturna (50% NPH, 50% Regular)
-            var nphNoite = doseNoite * 0.5;
-            var regularNoite = doseNoite * 0.5;
-            
-            // Dividir bolus em 3 refeições
-            var bolusCafe = bolusTotal * 0.4;  // 40% no café
-            var bolusAlmoco = bolusTotal * 0.3;  // 30% no almoço
-            var bolusJantar = bolusTotal * 0.3;  // 30% no jantar
-            
-            // Exibir resultados
-            document.getElementById("doseTotalPeso").textContent = formatarNumero(doseTotal);
-            document.getElementById("doseDia").textContent = formatarNumero(doseDia);
-            document.getElementById("doseNoite").textContent = formatarNumero(doseNoite);
-            document.getElementById("nphDia").textContent = formatarNumero(nphDia);
-            document.getElementById("regularDia").textContent = formatarNumero(regularDia);
-            document.getElementById("nphNoite").textContent = formatarNumero(nphNoite);
-            document.getElementById("regularNoite").textContent = formatarNumero(regularNoite);
-            document.getElementById("doseBasal").textContent = formatarNumero(basal);
-            document.getElementById("bolusTotal").textContent = formatarNumero(bolusTotal);
-            document.getElementById("bolusCafe").textContent = formatarNumero(bolusCafe);
-            document.getElementById("bolusAlmoco").textContent = formatarNumero(bolusAlmoco);
-            document.getElementById("bolusJantar").textContent = formatarNumero(bolusJantar);
+        // Dose Noturna (50% NPH, 50% Regular)
+        var intermediariaNoite = doseNoite * 0.5;
+        var rapidaNoite = doseNoite * 0.5;
 
-            document.getElementById("resultadosPeso").style.display = "block";
+        // Esquema basal-bolus alternativo (50/50)
+        var basal = doseTotal * 0.5;
+        var bolusTotal = doseTotal * 0.5;
+
+        // Dividir bolus em 3 refeições
+        var bolusCafe = bolusTotal * 0.4;
+        var bolusAlmoco = bolusTotal * 0.3;
+        var bolusJantar = bolusTotal * 0.3;
+
+        // Exibir resultados usando os IDs existentes
+        document.getElementById("doseTotalPeso").textContent = formatarNumero(doseTotal);
+        document.getElementById("doseIntermediaria").textContent = formatarNumero(intermediariaManha);
+        document.getElementById("doseRapida").textContent = formatarNumero(rapidaManha);
+        document.getElementById("doseManha").textContent = formatarNumero(doseDia);
+        document.getElementById("intermediariaManha").textContent = formatarNumero(intermediariaManha);
+        document.getElementById("rapidaManha").textContent = formatarNumero(rapidaManha);
+        document.getElementById("doseNoite").textContent = formatarNumero(doseNoite);
+        document.getElementById("intermediariaNoite").textContent = formatarNumero(intermediariaNoite);
+        document.getElementById("rapidaNoite").textContent = formatarNumero(rapidaNoite);
+        document.getElementById("doseBasal").textContent = formatarNumero(basal);
+        document.getElementById("bolusTotal").textContent = formatarNumero(bolusTotal);
+        document.getElementById("bolusCafe").textContent = formatarNumero(bolusCafe);
+        document.getElementById("bolusAlmoco").textContent = formatarNumero(bolusAlmoco);
+        document.getElementById("bolusJantar").textContent = formatarNumero(bolusJantar);
         }
-
         // Função para calcular regras 500/1800
         function calcularRegras() {
             var doseTotal = parseFloat(document.getElementById("inputDoseTotal").value);
