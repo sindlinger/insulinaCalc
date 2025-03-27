@@ -60,46 +60,60 @@
         .header-description {
             margin-bottom: 5px;
         }
-        .about-btn:hover, .view-toggle:hover {
-            background-color: transparent;
-        }    
+        
+        /* Botão Sobre - Mais discreto e à direita */
         .about-btn {
             position: absolute;
-            top: 10px;
-            right: 10px;
+            top: 20px;
+            right: 20px;
             background-color: transparent;
-            color: #666;
+            color: var(--light-text);
             border: none;
-            font-size: 14px;
+            font-size: 12px;
             cursor: pointer;
             transition: all 0.3s;
             display: flex;
             align-items: center;
-            gap: 5px;
-            padding: 5px;
-            opacity: 0.7;
-            z-index: 101;
-            margin-right: -400px;
+            width: auto;
+            padding: 5px 10px;
+            margin: 0;
         }
-
+        
+        .about-btn i {
+            margin-right: 4px;
+            font-size: 14px;
+        }
+        
+        .about-btn:hover {
+            color: var(--primary-color);
+            background-color: transparent;
+        }
+        
+        /* Seletor de visualização (desktop/mobile) */
         .view-toggle {
             position: absolute;
-            top: -10px;
-            left: 10px;
+            top: 20px;
+            left: 20px;
             background-color: transparent;
-            color: #666;
+            color: var(--light-text);
             border: none;
-            font-size: 14px;
+            font-size: 12px;
             cursor: pointer;
             transition: all 0.3s;
             display: flex;
             align-items: center;
-            gap: 5px;
-            padding: 5px;
-            opacity: 0.7;
-            z-index: 102;
-            margin-right: -400px;
+            padding: 5px 10px;
         }
+        
+        .view-toggle i {
+            margin-right: 4px;
+            font-size: 14px;
+        }
+        
+        .view-toggle:hover {
+            color: var(--primary-color);
+        }
+        
         /* Modal Sobre */
         .modal {
             display: none;
@@ -781,57 +795,60 @@
 
         /* Classes específicas para mobile */
         .mobile-view .tabs-nav {
-            flex-direction: row !important; /* Para manter horizontal */
-            overflow-x: auto;
-            white-space: nowrap;
-            flex-wrap: nowrap;
-            padding-left: 0;
-            padding-right: 0;
-        }
-
-        .mobile-view .tabs-nav li {
-            flex: 0 0 auto; /* Para que não expandam demais */
-            min-width: auto;
-            max-width: fit-content;
-        }
-
-        .mobile-view .tabs-nav a {
             flex-direction: column;
-            padding: 10px 15px;
-            font-size: 11px;
+            overflow-x: visible;
         }
-
+        
+        .mobile-view .tabs-nav li {
+            width: 100%;
+            min-width: 100%;
+        }
+        
+        .mobile-view .tabs-nav a {
+            flex-direction: row;
+            justify-content: flex-start;
+            padding: 12px;
+        }
+        
         .mobile-view .tabs-nav a i {
-            margin-bottom: 5px;
-            margin-right: 0;
-            font-size: 16px;
+            margin-right: 10px;
+            margin-bottom: 0;
         }
-
+        
         .mobile-view .tab-content {
             padding: 15px 10px;
         }
-
+        
         .mobile-view .diagram-container {
             overflow-x: auto;
         }
+        
+        .mobile-view .diagram-row {
+            flex-direction: column;
+            height: auto;
+        }
+        
+        .mobile-view .diagram-label {
+            width: 100%;
+            text-align: left;
+            padding: 5px 0;
+        }
+        
+        .mobile-view .table-responsive {
+            overflow-x: auto;
+            display: block;
+            width: 100%;
+        }
     </style>
-    </head>
-    <body>
-    <div class="container" id="appContainer">
-        <header>
-            <button class="view-toggle" onclick="toggleView()" title="Alternar visualização">
-                <i class="fas fa-mobile-alt"></i>
-                <span>Mobile</span>
-            </button>
-            
-            <h1>Calculadora de Insulina</h1>
-            <p class="header-description">Auxílio no cálculo de doses de insulina com base em diferentes métodos</p>
-            
-            <button class="about-btn" onclick="openModal()" title="Sobre a calculadora">
-                <i class="fas fa-info-circle"></i>
-                <span>Sobre</span>
-            </button>
-        </header>
+</head>
+<body>
+<div class="container" id="appContainer">
+    <header>
+        <button class="view-toggle" onclick="toggleView()"><i class="fas fa-mobile-alt"></i> <span id="viewText">Mobile</span></button>
+        <h1>Calculadora de Insulina</h1>
+        <p class="header-description">Auxílio no cálculo de doses de insulina com base em diferentes métodos</p>
+        <button class="about-btn" onclick="openModal()"><i class="fas fa-info-circle"></i> Sobre</button>
+    </header>
     
     <!-- Modal Sobre -->
     <div id="aboutModal" class="modal">
@@ -850,16 +867,16 @@
             
             <div class="credits-section">
                 <div class="credits-item">
-                    <strong>Metodologia de cálculo por peso: </strong> <strong>Dr. George Ibiapina</strong>
+                    <strong>Metodologia de cálculo por peso:</strong> Dr. George Ibiapina
                 </div>
                 <div class="credits-item">
-                    Sinceros agradecimentos ao professor Dr. George Ibiapina pela metodologia de cálculo e orientação científica.
+                    Sinceros agradecimentos ao Dr. George Ibiapina pela metodologia de cálculo e orientação científica.
                 </div>
             </div>
             
             <div class="credits-section" style="border-bottom: none;">
                 <div class="credits-item">
-                    <strong>Versão:</strong> 1.3.1
+                    <strong>Versão:</strong> 1.2
                 </div>
                 <div class="credits-item">
                     Esta aplicação é uma ferramenta educativa e não substitui a orientação médica profissional.
@@ -1770,19 +1787,20 @@
     
     // Função para alternar entre as visualizações
     function toggleView() {
-    const container = document.getElementById('appContainer');
-    const viewToggle = document.querySelector('.view-toggle i');
-    
-    if (container.classList.contains('mobile-view')) {
-        container.classList.remove('mobile-view');
-        viewToggle.className = 'fas fa-mobile-alt';
-        viewToggle.title = "Visualização Mobile";
-    } else {
-        container.classList.add('mobile-view');
-        viewToggle.className = 'fas fa-desktop';
-        viewToggle.title = "Visualização Desktop";
+        const container = document.getElementById('appContainer');
+        const viewText = document.getElementById('viewText');
+        const viewIcon = document.querySelector('.view-toggle i');
+        
+        if (container.classList.contains('mobile-view')) {
+            container.classList.remove('mobile-view');
+            viewText.textContent = 'Mobile';
+            viewIcon.className = 'fas fa-mobile-alt';
+        } else {
+            container.classList.add('mobile-view');
+            viewText.textContent = 'Desktop';
+            viewIcon.className = 'fas fa-desktop';
+        }
     }
-}
     
     // Função para alternar entre as abas
     document.addEventListener('DOMContentLoaded', function() {
