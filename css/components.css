@@ -166,48 +166,93 @@ button:hover {
 .collapse-content-inner {
     padding: 20px;
 }
-
-/* Via de administração */
+/* Ajuste para os botões de via de administração */
 .admin-route-selector {
-    margin-bottom: 20px;
-    padding: 10px;
+    margin-bottom: 15px;
+    padding: 8px;
     background-color: var(--bg-light);
     border-radius: var(--border-radius);
+    border: 1px dashed var(--border-color);
 }
 
 .route-options {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 10px;
+    gap: 8px;
+    margin-top: 8px;
 }
 
 .route-option {
-    flex: 1;
-    min-width: 150px;
+    flex: 0 1 auto; /* Mudado para não expandir demais */
+    min-width: 100px; /* Reduzido */
+    max-width: 130px; /* Limitado o tamanho máximo */
     text-align: center;
-    padding: 12px;
+    padding: 8px; /* Reduzido o padding */
     background-color: var(--white);
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
     cursor: pointer;
     transition: all 0.3s;
-}
-
-.route-option:hover, .route-option.active {
-    background-color: var(--primary-light);
-    border-color: var(--primary-color);
+    font-size: 13px; /* Texto menor */
 }
 
 .route-option i {
     display: block;
-    margin-bottom: 8px;
-    font-size: 24px;
+    margin-bottom: 5px; /* Espaço menor */
+    font-size: 18px; /* Ícone menor */
     color: var(--primary-color);
 }
 
 .route-description {
-    margin-top: 10px;
-    font-size: 14px;
+    margin-top: 8px;
+    font-size: 13px;
     color: var(--light-text);
+    font-style: italic;
+}
+
+/* Adicionado aviso para os botões de via */
+.route-impact-info {
+    font-size: 12px;
+    color: var(--primary-dark);
+    margin-top: 5px;
+    display: block;
+}
+/* Estilo para o botão de prescrição */
+.prescription-btn {
+    background-color: #f8f9fa;
+    color: var(--primary-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: 8px 12px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    box-shadow: none;
+}
+
+.prescription-btn i {
+    margin-right: 5px;
+    color: #28a745;
+}
+
+.prescription-btn:hover {
+    background-color: var(--primary-light);
+    color: var(--primary-dark);
+}
+
+/* Melhorias para as abas */
+.tabs-nav a {
+    padding: 18px 15px; /* Aumentado o padding para botões maiores */
+    font-size: 15px; /* Texto ligeiramente maior */
+}
+
+.tabs-nav a i {
+    font-size: 22px; /* Ícones maiores */
+    margin-bottom: 10px; /* Mais espaço abaixo do ícone */
 }

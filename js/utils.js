@@ -1,5 +1,3 @@
-// Funções utilitárias
-
 // Arquivo: utils.js - Funções utilitárias comuns
 
 /**
@@ -51,20 +49,29 @@ function selectRoute(route) {
     // Adicionar classe active à opção selecionada
     document.getElementById('route-' + route).classList.add('active');
     
+    // Guardar a via selecionada
+    viaAdministracaoSelecionada = route;
+    
     // Atualizar a descrição conforme a via selecionada
     let description = "";
     switch(route) {
         case 'sc':
-            description = "Via subcutânea: Administração no tecido subcutâneo, geralmente abdômen, coxas ou braços.";
+            description = "Via subcutânea: Administração no tecido subcutâneo, geralmente abdômen, coxas ou braços. Via padrão para insulinoterapia.";
             break;
         case 'iv':
-            description = "Via intravenosa: Administração direta na corrente sanguínea, uso hospitalar ou emergencial.";
+            description = "Via intravenosa: Administração direta na corrente sanguínea. Uso hospitalar ou emergencial. Requer ajuste de dose.";
             break;
         case 'im':
-            description = "Via intramuscular: Administração no tecido muscular, absorção mais rápida que a subcutânea.";
+            description = "Via intramuscular: Administração no tecido muscular. Absorção mais rápida que a subcutânea. Uso em situações especiais.";
             break;
     }
-    document.getElementById('route-description').textContent = description;
+    document.getElementById('route-description').innerHTML = description + 
+        '<span class="route-impact-info">Esta seleção afetará os resultados do cálculo.</span>';
+    
+    // Se já temos resultados exibidos, recalcular automaticamente
+    if (document.getElementById('resultadosPeso').style.display === 'block') {
+        calcularPeso();
+    }
 }
 
 /**
@@ -79,6 +86,9 @@ function selectInsulinType(type) {
     
     // Adicionar classe active à opção selecionada
     document.getElementById('insulin-' + type).classList.add('active');
+    
+    // Guardar o tipo selecionado
+    tipoInsulinaSelecionada = type;
     
     // Atualizar a descrição e o timing info conforme o tipo selecionado
     let description = "";
@@ -112,4 +122,58 @@ function selectInsulinType(type) {
     if (document.getElementById('resultadosBolus').style.display === 'block') {
         document.getElementById('bolus-timing-info').innerHTML = timingInfo;
     }
+}
+
+/**
+ * Função para mostrar um exemplo de prescrição com base nos últimos resultados calculados
+ */
+function mostrarExemploPrescricao() {
+    if (!window.ultimoResultado) {
+        alert("Por favor, calcule as doses primeiro.");
+        return;
+    }
+    
+    // O corpo da função é implementado no arquivo calculadoras.js
+    // Esta declaração serve para garantir que a função esteja definida globalmente
+}
+
+/**
+ * Função para imprimir a prescrição
+ */
+function imprimirPrescricao() {
+    const conteudo = document.querySelector('.modal-content').innerHTML;
+    const janelaImpressao = window.open('', '', 'height=600,width=800');
+    
+    janelaImpressao.document.write('<html><head><title>Exemplo de Prescrição</title>');
+    // Adicionar estilos básicos para impressão
+    janelaImpressao.document.write('<style>body { font-family: Arial, sans-serif; } h2, h3, h4 { color: #2980b9; }</style>');
+    janelaImpressao.document.write('</head><body>');
+    janelaImpressao.document.write(conteudo);
+    janelaImpressao.document.write('</body></html>');
+    
+    janelaImpressao.document.close();
+    janelaImpressao.focus();
+    
+    // Remover botões da impressão
+    const botoesRemover = janelaImpressao.document.querySelectorAll('button, .close-modal');
+    botoesRemover.forEach(btn => btn.style.display = 'none');
+    
+    // Imprimir após um pequeno delay para garantir que o documento foi carregado
+    setTimeout(() => {
+        janelaImpressao.print();
+        janelaImpressao.close();
+    }, 500);
+}
+
+/**
+ * Formata a data atual no formato brasileiro
+ * @returns {string} Data formatada (ex: 15/04/2023)
+ */
+function formatarData() {
+    const hoje = new Date();
+    const dia = String(hoje.getDate()).padStart(2, '0');
+    const mes = String(hoje.getMonth() + 1).padStart(2, '0');
+    const ano = hoje.getFullYear();
+    
+    return `${dia}/${mes}/${ano}`;
 }

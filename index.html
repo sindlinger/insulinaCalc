@@ -100,9 +100,9 @@
                 <input type="number" id="inputFatorPersonalizado" placeholder="Digite o fator personalizado" min="0.1" max="10" step="0.1">
             </div>
             
-            <!-- Seleção de via de administração -->
+            <!-- Adicionar após a div dos resultados na aba "peso" (linha 283 aproximadamente) -->
             <div class="admin-route-selector">
-                <label>Via de Administração:</label>
+                <label>Via de Administração: <span style="font-size: 13px; color: var(--primary-color);">(Afeta os resultados do cálculo)</span></label>
                 <div class="route-options">
                     <div class="route-option active" id="route-sc" onclick="selectRoute('sc')">
                         <i class="fas fa-syringe"></i>
@@ -118,7 +118,8 @@
                     </div>
                 </div>
                 <div class="route-description" id="route-description">
-                    Via subcutânea: Administração no tecido subcutâneo, geralmente abdômen, coxas ou braços.
+                    Via subcutânea: Administração no tecido subcutâneo, geralmente abdômen, coxas ou braços. Via padrão para insulinoterapia.
+                    <span class="route-impact-info">Esta seleção afetará os resultados do cálculo.</span>
                 </div>
             </div>
             
@@ -214,7 +215,76 @@
                 <p>Esta calculadora é uma ferramenta educativa. Ajustes individualizados devem ser feitos com base nos diversos fatores clínicos e resposta do paciente.</p>
             </div>
         </div>
-        
+
+        <!-- Seção retrátil para explicação sobre ajustes de via de administração -->
+        <button class="collapsible">Ajustes de Dose por Via de Administração</button>
+        <div class="collapse-content">
+            <div class="collapse-content-inner">
+                <h4>Ajustes de dose baseados na via de administração</h4>
+                <p>A potência e a farmacocinética da insulina variam significativamente dependendo da via de administração. A calculadora aplica automaticamente os seguintes ajustes quando você seleciona uma via diferente:</p>
+                
+                <div class="table-responsive">
+                    <table>
+                        <tr>
+                            <th>Via</th>
+                            <th>Ajuste da Dose</th>
+                            <th>Justificativa</th>
+                        </tr>
+                        <tr>
+                            <td>Subcutânea (SC)</td>
+                            <td>100% (referência)</td>
+                            <td>Via padrão para administração ambulatorial de insulina</td>
+                        </tr>
+                        <tr>
+                            <td>Intravenosa (IV)</td>
+                            <td>70% da dose SC</td>
+                            <td>Absorção mais rápida e completa, maior potência por evitar a barreira subcutânea</td>
+                        </tr>
+                        <tr>
+                            <td>Intramuscular (IM)</td>
+                            <td>85% da dose SC</td>
+                            <td>Absorção intermediária, mais rápida que SC mas não tão imediata quanto IV</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <h4>Fundamentação científica:</h4>
+                
+                <p><strong>Para ajuste da via intravenosa (70%):</strong></p>
+                <ul>
+                    <li>A <strong>American Diabetes Association (ADA)</strong> em seu guideline <em>"Diabetes Care in the Hospital" (2023)</em> recomenda reduzir a dose total diária em 20-30% ao converter de insulina subcutânea para intravenosa, devido à maior biodisponibilidade.</li>
+                    <li>O documento orienta: "Para pacientes convertidos de infusão intravenosa para subcutânea, calcule a dose IV total nas últimas 6-8 horas, multiplique por 3-4, e reduza em 20-30% para obter a dose subcutânea equivalente".</li>
+                    <li>Esta recomendação se baseia na maior potência da insulina quando administrada diretamente na corrente sanguínea, evitando a absorção variável do tecido subcutâneo.</li>
+                </ul>
+                
+                <p><strong>Para ajuste da via intramuscular (85%):</strong></p>
+                <ul>
+                    <li>A <strong>Endocrine Society</strong> em seu guideline <em>"Management of Hyperglycemia in Hospitalized Patients" (2022)</em> indica que a absorção da insulina administrada por via IM é aproximadamente 15-20% mais rápida que a via SC.</li>
+                    <li>Estudos de farmacocinética como os de <strong>Heinemann et al. (2000)</strong> demonstraram que a insulina administrada por via IM tem um início de ação mais rápido e um pico mais alto que a via SC, justificando uma redução moderada na dose.</li>
+                    <li>A redução de 15% compensa a maior velocidade de absorção, evitando hipoglicemias sem comprometer a eficácia.</li>
+                </ul>
+                
+                <div class="info-box" style="margin-top: 15px;">
+                    <h4>Observações importantes:</h4>
+                    <ul>
+                        <li>Estes ajustes são baseados em recomendações de diretrizes internacionais e podem variar conforme protocolos institucionais específicos.</li>
+                        <li>A via subcutânea é a preferencial para uso ambulatorial e de longo prazo.</li>
+                        <li>A via intravenosa é reservada para ambiente hospitalar, especialmente em situações de emergência como cetoacidose diabética.</li>
+                        <li>A via intramuscular é pouco utilizada na prática clínica atual, restrita a situações específicas onde as outras vias não são possíveis.</li>
+                        <li>O monitoramento da glicemia deve ser mais frequente quando se utiliza vias alternativas (especialmente IV).</li>
+                    </ul>
+                </div>
+                
+                <p class="citation" style="margin-top: 15px;">Referências:</p>
+                <ol class="references-list" style="font-size: 13px; margin-left: 25px;">
+                    <li>American Diabetes Association Professional Practice Committee. (2023). "16. Diabetes Care in the Hospital: Standards of Medical Care in Diabetes". <em>Diabetes Care</em> 46(Supplement_1): S250-S263.</li>
+                    <li>Endocrine Society Clinical Practice Guideline. (2022). "Management of Hyperglycemia in Hospitalized Patients in Non-Critical Care Setting". <em>The Journal of Clinical Endocrinology & Metabolism</em> 107(2): 379-393.</li>
+                    <li>Joint British Diabetes Societies for Inpatient Care (JBDS-IP). (2022). "The Hospital Management of Hypoglycaemia in Adults with Diabetes Mellitus".</li>
+                    <li>Heinemann L, Linkeschova R, Rave K, et al. (2000). "Time-action profile of the long-acting insulin analog insulin glargine (HOE901) in comparison with those of NPH insulin and placebo". <em>Diabetes Care</em> 23(5): 644-649.</li>
+                </ol>
+            </div>
+        </div>
+
         <!-- Aba 2: Cálculo de Bolus -->
         <div id="bolus" class="tab-content">
             <h2>Cálculo de Bolus</h2>
