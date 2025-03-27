@@ -1,6 +1,6 @@
 /* Arquivo: components.css - Estilos de componentes (botões, inputs, etc.) */
 
-/* Botões de navegação */
+/* Botões de navegação - AJUSTADOS */
 .about-btn, .view-toggle {
     position: absolute;
     background-color: transparent;
@@ -12,25 +12,29 @@
     display: flex;
     align-items: center;
     gap: 5px;
-    padding: 5px;
+    padding: 5px 10px;
     opacity: 0.7;
     z-index: 101;
+    width: auto; /* Limita largura ao conteúdo */
+    max-width: fit-content; /* Garante que o botão não seja mais largo que seu conteúdo */
 }
 
 .about-btn:hover, .view-toggle:hover {
     background-color: transparent;
+    opacity: 1;
+    color: var(--primary-color);
 }
 
 .about-btn {
     top: 10px;
     right: 10px;
-    margin-right: -400px;
+    /* Removido: margin-right: -400px; */
 }
 
 .view-toggle {
-    top: -10px;
-    left: 10px;
-    margin-right: -400px;
+    top: 10px;
+    right: 120px;
+    /* Removido: margin-right: -400px; */
 }
 
 /* Form Elements */
