@@ -310,13 +310,21 @@ function gerarPrescricao() {
             <li style="margin-bottom: 15px;">
                 <strong>Insulina NPH Humana</strong><br>
                 Apresentação: Frasco-ampola 10ml (100 UI/ml)<br>
-                Posologia: Aplicar ${nphManha} unidades pela manhã (30 minutos antes do café) e ${nphNoite} unidades à noite (30 minutos antes do jantar), por via subcutânea.
+                Posologia: 
+                <ul>
+                    <li>Manhã: ${nphManha} unidades, via subcutânea, 30 minutos antes do café da manhã</li>
+                    <li>Noite: ${nphNoite} unidades, via subcutânea, 30 minutos antes do jantar</li>
+                </ul>
             </li>
             
             <li style="margin-bottom: 15px;">
                 <strong>Insulina Regular Humana</strong><br>
                 Apresentação: Frasco-ampola 10ml (100 UI/ml)<br>
-                Posologia: Aplicar ${regularManha} unidades pela manhã (30 minutos antes do café) e ${regularNoite} unidades à noite (30 minutos antes do jantar), por via subcutânea.
+                Posologia: 
+                <ul>
+                    <li>Manhã: ${regularManha} unidades, via subcutânea, 30 minutos antes do café da manhã</li>
+                    <li>Noite: ${regularNoite} unidades, via subcutânea, 30 minutos antes do jantar</li>
+                </ul>
             </li>
             
             <li style="margin-bottom: 15px;">
@@ -327,12 +335,22 @@ function gerarPrescricao() {
         </ol>
         
         <div style="margin-top: 30px; border-top: 1px solid #ddd; padding-top: 10px;">
-            <p><strong>Orientações:</strong></p>
+            <p><strong>Detalhes sobre preparação e aplicação:</strong></p>
             <ul>
-                <li>Rodizie os locais de aplicação (abdômen, coxas, braços).</li>
-                <li>Aplique a insulina NPH e Regular na mesma seringa, aspirando primeiro a Regular.</li>
-                <li>Monitore a glicemia antes das principais refeições e ao deitar.</li>
-                <li>Em caso de hipoglicemia, ingerir 15g de carboidratos (3 colheres de açúcar ou 150ml de suco).</li>
+                <li><strong>Preparação da dose:</strong> Aspirar primeiro a insulina Regular e depois a NPH na mesma seringa, para evitar contaminação.</li>
+                <li><strong>Locais de aplicação:</strong> Realizar rodízio entre abdômen (absorção mais rápida), face externa das coxas, região posterior dos braços e região superior lateral das nádegas.</li>
+                <li><strong>Técnica de aplicação:</strong> Limpar o local com álcool, pinçar a pele, introduzir a agulha a 90°, aspirar para verificar se não atingiu vaso sanguíneo, injetar lentamente e aguardar 5 segundos antes de retirar a agulha.</li>
+                <li><strong>Armazenamento:</strong> Frascos em uso podem ser mantidos em temperatura ambiente (até 25°C) por até 30 dias. Frascos fechados devem ser refrigerados (2-8°C).</li>
+            </ul>
+        </div>
+        
+        <div style="margin-top: 15px;">
+            <p><strong>Orientações adicionais:</strong></p>
+            <ul>
+                <li>Monitorar a glicemia antes das principais refeições e ao deitar.</li>
+                <li>Em caso de hipoglicemia (glicemia <70 mg/dL), ingerir 15g de carboidratos (3 colheres de açúcar ou 150ml de suco).</li>
+                <li>Não alterar as doses sem orientação médica.</li>
+                <li>Retornar para reavaliação em 30 dias com registro das glicemias.</li>
             </ul>
         </div>
         
@@ -355,30 +373,46 @@ function gerarPrescricao() {
             <li style="margin-bottom: 15px;">
                 <strong>Insulina Glargina</strong><br>
                 Apresentação: Frasco-ampola 10ml (100 UI/ml) ou caneta 3ml (100 UI/ml)<br>
-                Posologia: Aplicar ${glargina} unidades uma vez ao dia, antes de dormir, por via subcutânea.
+                Posologia: ${glargina} unidades, via subcutânea, uma vez ao dia, sempre no mesmo horário (preferencialmente entre 21-22h)
             </li>
             
             <li style="margin-bottom: 15px;">
                 <strong>Insulina Lispro</strong><br>
                 Apresentação: Frasco-ampola 10ml (100 UI/ml) ou caneta 3ml (100 UI/ml)<br>
-                Posologia: Aplicar ${lisproManha} unidades antes do café da manhã, ${lisproAlmoco} unidades antes do almoço e ${lisproJantar} unidades antes do jantar, por via subcutânea (0-15 minutos antes das refeições).
+                Posologia: 
+                <ul>
+                    <li>Café da manhã: ${lisproManha} unidades, via subcutânea, 0-15 minutos antes de iniciar a refeição</li>
+                    <li>Almoço: ${lisproAlmoco} unidades, via subcutânea, 0-15 minutos antes de iniciar a refeição</li>
+                    <li>Jantar: ${lisproJantar} unidades, via subcutânea, 0-15 minutos antes de iniciar a refeição</li>
+                </ul>
             </li>
             
             <li style="margin-bottom: 15px;">
                 <strong>Seringas para insulina</strong><br>
-                100 unidades com agulha 8mm<br>
-                Quantidade: 60 unidades
+                100 unidades com agulha 8mm (ou canetas para aplicação)<br>
+                Quantidade: 60 unidades (ou 5 refis de 3ml se canetas)
             </li>
         </ol>
         
         <div style="margin-top: 30px; border-top: 1px solid #ddd; padding-top: 10px;">
-            <p><strong>Orientações:</strong></p>
+            <p><strong>Detalhes sobre preparação e aplicação:</strong></p>
             <ul>
-                <li>A insulina Glargina deve ser aplicada sempre no mesmo horário, preferencialmente antes de dormir.</li>
-                <li>A insulina Lispro deve ser aplicada 0-15 minutos antes das refeições.</li>
-                <li>Rodizie os locais de aplicação (abdômen, coxas, braços).</li>
-                <li>Monitore a glicemia antes das principais refeições e ao deitar.</li>
-                <li>Em caso de hipoglicemia, ingerir 15g de carboidratos (3 colheres de açúcar ou 150ml de suco).</li>
+                <li><strong>Insulina Glargina:</strong> Aplicar sempre no mesmo horário para manter um nível basal constante.</li>
+                <li><strong>Insulina Lispro:</strong> Por ser de ação ultrarrápida, deve ser aplicada muito próximo ao início da refeição (0-15 minutos antes).</li>
+                <li><strong>Locais de aplicação:</strong> Glargina preferencialmente nas coxas ou nádegas (absorção mais lenta). Lispro preferencialmente no abdômen (absorção mais rápida).</li>
+                <li><strong>Técnica de aplicação:</strong> Limpar o local com álcool, pinçar a pele, introduzir a agulha a 90°, aspirar para verificar se não atingiu vaso sanguíneo, injetar lentamente e aguardar 5 segundos antes de retirar a agulha.</li>
+                <li><strong>Armazenamento:</strong> Frascos/canetas em uso podem ser mantidos em temperatura ambiente (até 25°C) por até 28 dias. Produtos fechados devem ser refrigerados (2-8°C).</li>
+                <li><strong>IMPORTANTE:</strong> NUNCA misturar Glargina com outras insulinas na mesma seringa.</li>
+            </ul>
+        </div>
+        
+        <div style="margin-top: 15px;">
+            <p><strong>Orientações adicionais:</strong></p>
+            <ul>
+                <li>Monitorar a glicemia antes das principais refeições e ao deitar.</li>
+                <li>Em caso de hipoglicemia (glicemia <70 mg/dL), ingerir 15g de carboidratos (3 colheres de açúcar ou 150ml de suco).</li>
+                <li>A dose de Lispro pode ser ajustada conforme o conteúdo de carboidratos da refeição.</li>
+                <li>Retornar para reavaliação em 30 dias com registro das glicemias.</li>
             </ul>
         </div>
         

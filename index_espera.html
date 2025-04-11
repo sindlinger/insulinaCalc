@@ -1,1136 +1,4 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InsulinaCalc - Calculadora de Insulina</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        :root {
-            --primary-color: #3498db;
-            --primary-dark: #2980b9;
-            --secondary-color: #e74c3c;
-            --secondary-dark: #c0392b;
-            --text-color: #333;
-            --light-text: #666;
-            --lighter-text: #999;
-            --light-bg: #f8f9fa;
-            --border-color: #ddd;
-            --success-color: #2ecc71;
-            --warning-color: #f39c12;
-            --danger-color: #e74c3c;
-            --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            --container-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
-            --card-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            --transition-speed: 0.3s;
-        }
-            /* Estilos para o diagrama de distribuição Lispro */
-            .lispro-breakfast {
-                background: linear-gradient(to right, #e63946, #ff6b6b);
-                width: 33.33%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                color: white;
-                font-weight: 500;
-                text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-            }
-
-            .lispro-lunch {
-                background: linear-gradient(to right, #f94144, #ff758f);
-                width: 33.33%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                color: white;
-                font-weight: 500;
-                text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-            }
-
-            .lispro-dinner {
-                background: linear-gradient(to right, #ff758f, #ffb4a2);
-                width: 33.34%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                color: white;
-                font-weight: 500;
-                text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-            }
-
-            .glargina-color {
-                background-color: #3498db;
-            }
-
-            .lispro-color {
-                background-color: #f94144;
-            }
-
-            .bar-section i {
-                margin-right: 5px;
-                font-size: 0.9rem;
-            }
-
-            .diagram-bar {
-                border-radius: 8px;
-                overflow: hidden;
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-                transition: transform 0.3s ease;
-            }
-
-            .diagram-bar:hover {
-                transform: translateY(-3px);
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-            }
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: var(--font-main);
-            line-height: 1.6;
-            color: var(--text-color);
-            background-color: #f0f2f5;
-            padding: 0;
-            margin: 0;
-            min-height: 100vh;
-        }
-
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: white;
-            box-shadow: var(--container-shadow);
-            border-radius: 10px;
-            margin-top: 20px;
-            margin-bottom: 20px;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid var(--border-color);
-            position: relative;
-        }
-
-        header h1 {
-            color: var(--primary-color);
-            margin-bottom: 5px;
-            font-size: 2.2rem;
-        }
-
-        .header-description {
-            color: var(--light-text);
-            font-size: 1rem;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .about-btn, .view-toggle {
-            background-color: transparent;
-            border: none;
-            color: var(--primary-color);
-            cursor: pointer;
-            font-size: 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 8px;
-            border-radius: 50%;
-            position: absolute;
-            top: 0;
-            transition: var(--transition-speed);
-        }
-
-        .view-toggle {
-            left: 0;
-        }
-
-        .about-btn {
-            right: 0;
-        }
-
-        .about-btn:hover, .view-toggle:hover {
-            background-color: rgba(52, 152, 219, 0.1);
-        }
-
-        .tabs-nav {
-            display: flex;
-            list-style-type: none;
-            margin-bottom: 30px;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 10px;
-            overflow-x: auto;
-        }
-
-        .tabs-nav li {
-            margin-right: 10px;
-        }
-
-        .tab-link {
-            text-decoration: none;
-            color: var(--light-text);
-            padding: 10px 15px;
-            border-radius: 5px;
-            display: flex;
-            align-items: center;
-            font-weight: 500;
-            transition: var(--transition-speed);
-        }
-
-        .tab-link i {
-            margin-right: 8px;
-        }
-
-        .tab-link:hover {
-            background-color: rgba(52, 152, 219, 0.1);
-            color: var(--primary-color);
-        }
-
-        .tab-link.active {
-            background-color: var(--primary-color);
-            color: white;
-        }
-
-        .tab-content {
-            display: none;
-            animation: fadeIn 0.3s;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 500;
-            color: var(--text-color);
-        }
-
-        input, select {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid var(--border-color);
-            border-radius: 5px;
-            font-size: 1rem;
-            transition: var(--transition-speed);
-        }
-
-        input:focus, select:focus {
-            border-color: var(--primary-color);
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
-        }
-
-        button {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 5px;
-            padding: 12px 20px;
-            font-size: 1rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: var(--transition-speed);
-        }
-
-        button i {
-            margin-right: 8px;
-        }
-
-        button:hover {
-            background-color: var(--primary-dark);
-        }
-
-        .results {
-            margin-top: 30px;
-            background-color: var(--light-bg);
-            padding: 20px;
-            border-radius: 5px;
-            border-left: 4px solid var(--primary-color);
-            display: none;
-        }
-
-        .results.show {
-            display: block;
-            animation: slideIn 0.3s;
-        }
-
-        .result-item {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 12px;
-            padding-bottom: 12px;
-            border-bottom: 1px dashed var(--border-color);
-        }
-
-        .result-item:last-child {
-            border-bottom: none;
-        }
-
-        .result-label {
-            font-weight: 500;
-        }
-
-        .result-value {
-            font-weight: 600;
-            color: var(--primary-color);
-        }
-
-        .section-title {
-            margin-top: 20px;
-            margin-bottom: 10px;
-            color: var(--text-color);
-            font-weight: 600;
-            font-size: 1.1rem;
-        }
-
-        .indent {
-            margin-left: 20px;
-        }
-
-        .info-box {
-            background-color: #f9f9f9;
-            border: 1px solid var(--border-color);
-            border-radius: 5px;
-            padding: 15px;
-            margin-top: 20px;
-        }
-
-        .info-box h4 {
-            margin-bottom: 10px;
-            color: var(--text-color);
-            font-weight: 600;
-        }
-
-        .info-box p {
-            margin-bottom: 10px;
-        }
-
-        .info-box p:last-child {
-            margin-bottom: 0;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 999;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            animation: fadeIn 0.3s;
-        }
-
-        .modal-content {
-            background-color: white;
-            margin: 10% auto;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            max-width: 700px;
-            position: relative;
-            animation: slideIn 0.3s;
-        }
-
-        .close-modal {
-            position: absolute;
-            right: 20px;
-            top: 15px;
-            font-size: 28px;
-            color: var(--lighter-text);
-            cursor: pointer;
-            transition: var(--transition-speed);
-        }
-
-        .close-modal:hover {
-            color: var(--secondary-color);
-        }
-
-        .modal-title {
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid var(--border-color);
-            color: var(--primary-color);
-        }
-
-        .admin-route-selector {
-            margin-bottom: 20px;
-        }
-
-        .route-options {
-            display: flex;
-            gap: 10px;
-            margin-top: 8px;
-        }
-
-        .route-option {
-            flex: 1;
-            padding: 15px;
-            border: 1px solid var(--border-color);
-            border-radius: 5px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: var(--transition-speed);
-        }
-
-        .route-option i {
-            font-size: 1.5rem;
-            margin-bottom: 8px;
-            color: var(--light-text);
-        }
-
-        .route-option span {
-            font-weight: 500;
-        }
-
-        .route-option:hover {
-            border-color: var(--primary-color);
-            background-color: rgba(52, 152, 219, 0.05);
-        }
-
-        .route-option.active {
-            border-color: var(--primary-color);
-            background-color: rgba(52, 152, 219, 0.1);
-        }
-
-        .route-option.active i {
-            color: var(--primary-color);
-        }
-
-        .route-description {
-            margin-top: 10px;
-            padding: 10px;
-            background-color: var(--light-bg);
-            border-radius: 5px;
-            font-size: 0.9rem;
-            color: var(--light-text);
-        }
-
-        .credits-section {
-            padding: 15px 0;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .credits-item {
-            margin-bottom: 10px;
-        }
-
-        .credits-item:last-child {
-            margin-bottom: 0;
-        }
-
-        .credits-item a {
-            color: var(--primary-color);
-            text-decoration: none;
-        }
-
-        .credits-item a:hover {
-            text-decoration: underline;
-        }
-
-        .reference-btn {
-            background-color: transparent;
-            color: var(--primary-color);
-            border: 1px solid var(--primary-color);
-            display: inline-block;
-            margin: 0 auto;
-        }
-
-        .reference-btn:hover {
-            background-color: rgba(52, 152, 219, 0.1);
-            color: var(--primary-color);
-        }
-
-        .diagram-container {
-            margin: 20px 0;
-            padding: 15px;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: var(--card-shadow);
-        }
-
-        .distribution-diagram {
-            width: 100%;
-        }
-
-        .diagram-row {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .diagram-label {
-            width: 180px;
-            font-weight: 500;
-            padding-right: 15px;
-        }
-
-        .diagram-bar {
-            flex: 1;
-            height: 40px;
-            display: flex;
-            border-radius: 5px;
-            overflow: hidden;
-        }
-
-        .bar-section {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 500;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-        }
-
-        .glargina-width {
-            width: 60%;
-        }
-
-        .lispro-width {
-            width: 40%;
-        }
-
-        .glargina-width {
-            width: 60%;
-        }
-
-        .lispro-width {
-            width: 40%;
-        }
-
-        .nph-color {
-            background-color: var(--primary-color);
-        }
-
-        .regular-color {
-            background-color: var(--secondary-color);
-        }
-
-        .diagram-legend {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-            gap: 20px;
-        }
-
-        .legend-item {
-            display: flex;
-            align-items: center;
-        }
-
-        .legend-color {
-            width: 20px;
-            height: 20px;
-            border-radius: 3px;
-            margin-right: 8px;
-        }
-
-        .card-scheme {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-            flex-wrap: wrap;
-        }
-
-        .scheme-card {
-            background-color: white;
-            border-radius: 8px;
-            padding: 15px;
-            box-shadow: var(--card-shadow);
-            flex: 1;
-            min-width: 200px;
-            position: relative;
-            transition: var(--transition-speed);
-        }
-
-        .scheme-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .scheme-card h4 {
-            margin-bottom: 10px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-        }
-
-        .scheme-card h4 i {
-            margin-right: 8px;
-            color: var(--primary-color);
-        }
-
-        .scheme-card ul {
-            list-style-type: none;
-            margin-top: 10px;
-        }
-
-        .scheme-card ul li {
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            font-size: 0.9rem;
-        }
-
-        .scheme-card ul li i {
-            margin-right: 5px;
-            color: var(--primary-color);
-            font-size: 0.8rem;
-        }
-
-        .timing-info {
-            background-color: #f0f7ff;
-            padding: 15px;
-            border-radius: 5px;
-            margin-top: 20px;
-            border-left: 4px solid var(--primary-color);
-        }
-
-        .timing-info h4 {
-            display: flex;
-            align-items: center;
-            color: var(--primary-color);
-            margin-bottom: 10px;
-        }
-
-        .timing-info h4 i {
-            margin-right: 8px;
-        }
-
-        .timing-list {
-            list-style-type: none;
-            margin-top: 10px;
-        }
-
-        .timing-list li {
-            margin-bottom: 8px;
-            display: flex;
-            align-items: flex-start;
-        }
-
-        .timing-list li i {
-            margin-right: 8px;
-            margin-top: 3px;
-        }
-
-        .timing-list li strong {
-            margin-right: 5px;
-        }
-
-        .timing-info .citation {
-            font-size: 0.8rem;
-            color: var(--lighter-text);
-            margin-top: 10px;
-            text-align: right;
-            font-style: italic;
-        }
-
-        .table-responsive {
-            overflow-x: auto;
-            margin-top: 15px;
-            margin-bottom: 15px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th, td {
-            padding: 12px 15px;
-            border: 1px solid var(--border-color);
-            text-align: left;
-        }
-
-        th {
-            background-color: var(--light-bg);
-            font-weight: 600;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-
-        .collapsible {
-            background-color: var(--light-bg);
-            color: var(--text-color);
-            cursor: pointer;
-            padding: 15px;
-            width: 100%;
-            border: none;
-            text-align: left;
-            outline: none;
-            font-weight: 600;
-            border-radius: 5px;
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: var(--transition-speed);
-        }
-
-        .collapsible:after {
-            content: '\f078';
-            font-family: "Font Awesome 5 Free";
-            font-weight: 900;
-            color: var(--light-text);
-        }
-
-        .collapsible.active:after {
-            content: '\f077';
-        }
-
-        .collapsible:hover {
-            background-color: #e9ecef;
-        }
-
-        .collapse-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.2s ease-out;
-        }
-
-        .collapse-content-inner {
-            padding: 15px;
-            background-color: white;
-            border-radius: 5px;
-            box-shadow: var(--card-shadow);
-            margin-bottom: 10px;
-        }
-
-        .citation {
-            font-size: 0.8rem;
-            color: var(--lighter-text);
-            margin-top: 15px;
-            font-style: italic;
-        }
-
-        .references-section {
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .references-section:last-child {
-            border-bottom: none;
-        }
-
-        .references-section h3 {
-            margin-bottom: 10px;
-            color: var(--primary-color);
-        }
-
-        .references-list {
-            margin-left: 20px;
-        }
-
-        .references-list li {
-            margin-bottom: 8px;
-        }
-
-        /* Tooltip */
-        .tooltip {
-            position: relative;
-            display: inline-block;
-        }
-
-        .tooltip .tooltiptext {
-            visibility: hidden;
-            width: 200px;
-            background-color: #333;
-            color: #fff;
-            text-align: center;
-            border-radius: 5px;
-            padding: 8px;
-            position: absolute;
-            z-index: 1;
-            bottom: 125%;
-            left: 50%;
-            transform: translateX(-50%);
-            opacity: 0;
-            transition: opacity 0.3s;
-            font-size: 0.8rem;
-        }
-
-        .tooltip .tooltiptext::after {
-            content: "";
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            margin-left: -5px;
-            border-width: 5px;
-            border-style: solid;
-            border-color: #333 transparent transparent transparent;
-        }
-
-        .tooltip:hover .tooltiptext {
-            visibility: visible;
-            opacity: 1;
-        }
-
-        /* Custom Styles */
-        .no-border {
-            border-bottom: none;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        #fatorPersonalizadoGroup.hidden {
-            display: none;
-        }
-
-        #fatorPersonalizadoGroup.hidden {
-            display: none;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        #fatorPersonalizadoGroup.hidden {
-            display: none;
-        }
-
-        /* Mobile View Adjustments */
-        @media (max-width: 768px) {
-            .container {
-                margin: 0;
-                padding: 15px;
-                border-radius: 0;
-                box-shadow: none;
-            }
-
-            .tabs-nav {
-                flex-wrap: nowrap;
-                overflow-x: scroll;
-                margin-bottom: 15px;
-            }
-
-            .tabs-nav::-webkit-scrollbar {
-                height: 4px;
-            }
-
-            .tabs-nav::-webkit-scrollbar-track {
-                background: var(--light-bg);
-                border-radius: 10px;
-            }
-
-            .tabs-nav::-webkit-scrollbar-thumb {
-                background: var(--border-color);
-                border-radius: 10px;
-            }
-
-            .tab-link {
-                padding: 8px 12px;
-                font-size: 0.9rem;
-                white-space: nowrap;
-            }
-
-            .route-options {
-                flex-direction: column;
-            }
-
-            .modal-content {
-                margin: 20% auto;
-                width: 90%;
-                padding: 20px;
-            }
-
-            .diagram-row {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .diagram-label {
-                width: 100%;
-                margin-bottom: 5px;
-            }
-
-            .diagram-bar {
-                width: 100%;
-            }
-
-            .scheme-card {
-                flex: 1 0 100%;
-            }
-        }
-
-        /* Mode Toggle (Light/Dark) */
-        body.dark-mode {
-            background-color: #1a1d21;
-            color: #e4e6eb;
-        }
-
-        body.dark-mode .container {
-            background-color: #282c34;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-        }
-
-        body.dark-mode header h1 {
-            color: #61dafb;
-        }
-
-        body.dark-mode header {
-            border-bottom-color: #3e4451;
-        }
-
-        body.dark-mode .header-description {
-            color: #abb2bf;
-        }
-
-        body.dark-mode .tab-link {
-            color: #abb2bf;
-        }
-
-        body.dark-mode .tab-link:hover {
-            background-color: rgba(97, 218, 251, 0.1);
-            color: #61dafb;
-        }
-
-        body.dark-mode .tab-link.active {
-            background-color: #61dafb;
-            color: #282c34;
-        }
-
-        body.dark-mode input, 
-        body.dark-mode select {
-            background-color: #3e4451;
-            border-color: #4c5366;
-            color: #e4e6eb;
-        }
-
-        body.dark-mode input:focus, 
-        body.dark-mode select:focus {
-            border-color: #61dafb;
-            box-shadow: 0 0 0 3px rgba(97, 218, 251, 0.2);
-        }
-
-        body.dark-mode label {
-            color: #e4e6eb;
-        }
-
-        body.dark-mode button {
-            background-color: #61dafb;
-            color: #282c34;
-        }
-
-        body.dark-mode button:hover {
-            background-color: #4fa8d2;
-        }
-
-        body.dark-mode .results {
-            background-color: #3e4451;
-            border-left-color: #61dafb;
-        }
-
-        body.dark-mode .result-item {
-            border-bottom-color: #4c5366;
-        }
-
-        body.dark-mode .result-value {
-            color: #61dafb;
-        }
-
-        body.dark-mode .info-box {
-            background-color: #3e4451;
-            border-color: #4c5366;
-        }
-
-        body.dark-mode .modal-content {
-            background-color: #282c34;
-        }
-
-        body.dark-mode .close-modal {
-            color: #abb2bf;
-        }
-
-        body.dark-mode .close-modal:hover {
-            color: #e06c75;
-        }
-
-        body.dark-mode .modal-title {
-            color: #61dafb;
-            border-bottom-color: #3e4451;
-        }
-
-        body.dark-mode .route-option {
-            border-color: #4c5366;
-            background-color: #3e4451;
-        }
-
-        body.dark-mode .route-option:hover {
-            border-color: #61dafb;
-            background-color: rgba(97, 218, 251, 0.1);
-        }
-
-        body.dark-mode .route-option.active {
-            border-color: #61dafb;
-            background-color: rgba(97, 218, 251, 0.2);
-        }
-
-        body.dark-mode .route-description {
-            background-color: #3e4451;
-            color: #abb2bf;
-        }
-
-        body.dark-mode .credits-section {
-            border-bottom-color: #3e4451;
-        }
-
-        body.dark-mode .credits-item a {
-            color: #61dafb;
-        }
-
-        body.dark-mode .reference-btn {
-            color: #61dafb;
-            border-color: #61dafb;
-        }
-
-        body.dark-mode .reference-btn:hover {
-            background-color: rgba(97, 218, 251, 0.1);
-        }
-
-        body.dark-mode .nph-color {
-            background-color: #61dafb;
-        }
-
-        body.dark-mode .regular-color {
-            background-color: #e06c75;
-        }
-
-        body.dark-mode .scheme-card {
-            background-color: #3e4451;
-        }
-
-        body.dark-mode .scheme-card h4 {
-            border-bottom-color: #4c5366;
-        }
-
-        body.dark-mode .scheme-card h4 i {
-            color: #61dafb;
-        }
-
-        body.dark-mode .scheme-card ul li i {
-            color: #61dafb;
-        }
-
-        body.dark-mode .timing-info {
-            background-color: #2c313a;
-            border-left-color: #61dafb;
-        }
-
-        body.dark-mode .timing-info h4 {
-            color: #61dafb;
-        }
-
-        body.dark-mode .timing-info .citation {
-            color: #abb2bf;
-        }
-
-        body.dark-mode th {
-            background-color: #3e4451;
-        }
-
-        body.dark-mode tr:nth-child(even) {
-            background-color: #353b45;
-        }
-
-        body.dark-mode td, 
-        body.dark-mode th {
-            border-color: #4c5366;
-        }
-
-        body.dark-mode .collapsible {
-            background-color: #3e4451;
-            color: #e4e6eb;
-        }
-
-        body.dark-mode .collapsible:after {
-            color: #abb2bf;
-        }
-
-        body.dark-mode .collapsible:hover {
-            background-color: #4c5366;
-        }
-
-        body.dark-mode .collapse-content-inner {
-            background-color: #3e4451;
-        }
-
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes slideIn {
-            from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        /* Print Styles */
-        @media print {
-            body {
-                background-color: white;
-                font-size: 12pt;
-            }
-
-            .container {
-                max-width: 100%;
-                box-shadow: none;
-                margin: 0;
-                padding: 15px;
-            }
-
-            .tabs-nav, .about-btn, .view-toggle, button {
-                display: none;
-            }
-
-            .tab-content {
-                display: block;
-                page-break-inside: avoid;
-            }
-
-            .results {
-                display: block;
-                background-color: white;
-                border-left: 2px solid #3498db;
-                padding: 10px;
-            }
-
-            .info-box, .timing-info {
-                background-color: white;
-                border: 1px solid #ddd;
-                padding: 10px;
-            }
-
-            .timing-info {
-                border-left: 2px solid #3498db;
-            }
-
-            @page {
-                margin: 0.5cm;
-            }
-        }
+   }
         .footer {
             padding: 20px;
             text-align: center;
@@ -1154,7 +22,7 @@
             </button>
         </header>
     
-            <!-- Modal Sobre -->
+        <!-- Modal Sobre -->
         <div id="aboutModal" class="modal">
             <div class="modal-content">
                 <span class="close-modal" onclick="closeModal()">&times;</span>
@@ -1164,21 +32,18 @@
                     <div class="credits-item">
                         <strong>Desenvolvido por:</strong> Eduardo Candeia Gonçalves
                     </div>
+                </div>
+                
+                <div class="credits-section no-border">
                     <div class="credits-item">
-                        <a href="mailto:sindlinger@gmail.com">sindlinger@gmail.com</a>
+                        <strong>Metodologia de cálculo: </strong> Baseada em protocolos clínicos estabelecidos
+                    </div>
+                    <div class="credits-item">
+                        Esta calculadora implementa métodos específicos de cálculo de doses de insulina conforme orientação de especialistas em endocrinologia.
                     </div>
                 </div>
                 
-                <div class="credits-section">
-                    <div class="credits-item">
-                        <strong>Orientação Científica:</strong> Dr. George Ibiapina
-                    </div>
-                    <div class="credits-item">
-                        Agradecimento especial ao Dr. George Ibiapina pela orientação científica e metodologias de cálculo implementadas nesta aplicação, contribuindo de forma fundamental para a precisão e eficácia clínica desta ferramenta.
-                    </div>
-                </div>
-                
-                <div class="credits-section no-border-bottom">
+                <div class="credits-section no-border">
                     <div class="credits-item">
                         <strong>Versão:</strong> 1.0.0
                     </div>
@@ -1281,7 +146,29 @@
                     <span class="result-value"><span id="rapidaNoite">--</span> U</span>
                 </div>
                 
-
+                <h4 class="section-title">Esquema Basal-Bolus:</h4>
+                <div class="result-item">
+                    <span class="result-label">Insulina Basal (50%):</span> 
+                    <span class="result-value"><span id="doseBasal">--</span> U</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Insulina Bolus Total (50%):</span> 
+                    <span class="result-value"><span id="bolusTotal">--</span> U</span>
+                </div>
+                <div class="result-item indent">
+                    <span class="result-label">Bolus Café (40%):</span> 
+                    <span class="result-value"><span id="bolusCafe">--</span> U</span>
+                </div>
+                <div class="result-item indent">
+                    <span class="result-label">Bolus Almoço (30%):</span> 
+                    <span class="result-value"><span id="bolusAlmoco">--</span> U</span>
+                </div>
+                <div class="result-item indent">
+                    <span class="result-label">Bolus Jantar (30%):</span> 
+                    <span class="result-value"><span id="bolusJantar">--</span> U</span>
+                </div>
+            </div>
+            
             <!-- Horários de Aplicação -->
             <div class="timing-info">
                 <h4><i class="fas fa-clock"></i> Horários Recomendados de Aplicação:</h4>
@@ -1289,7 +176,11 @@
                     <li><i class="fas fa-circle"></i> <strong>Esquema 70/30 (2 doses):</strong></li>
                     <li class="indent"><i class="fas fa-angle-right"></i> Dose matinal: 30 minutos antes do café da manhã (entre 06:00-08:00h)</li>
                     <li class="indent"><i class="fas fa-angle-right"></i> Dose noturna: 30 minutos antes do jantar (entre 18:00-20:00h)</li>
-                    
+                    <li><i class="fas fa-circle"></i> <strong>Esquema Basal-Bolus:</strong></li>
+                    <li class="indent"><i class="fas fa-angle-right"></i> Insulina basal (Glargina/Detemir): Uma vez ao dia, mesmo horário (preferencialmente antes de dormir)</li>
+                    <li class="indent"><i class="fas fa-angle-right"></i> Insulina basal (NPH): Duas vezes ao dia (antes do café da manhã e ao deitar)</li>
+                    <li class="indent"><i class="fas fa-angle-right"></i> Bolus de insulina rápida: 15-30 minutos antes das refeições</li>
+                    <li class="indent"><i class="fas fa-angle-right"></i> Bolus de insulina ultrarrápida: 0-15 minutos antes das refeições</li>
                 </ul>
                 <p class="citation">Fonte: Sociedade Brasileira de Diabetes. Diretrizes da Sociedade Brasileira de Diabetes 2021-2022.</p>
             </div>
@@ -1300,6 +191,7 @@
                 <p><strong>Esquema 70/30:</strong> Divisão em 70% insulina intermediária (NPH) e 30% insulina rápida (Regular).</p>
                 <p><strong>Divisão de cada tipo:</strong> No esquema 70/30, os 70% iniciais são divididos novamente em 70% NPH e 30% Regular. Já os 30% iniciais são divididos em 50% NPH e 50% Regular.</p>
                 <p><strong>Distribuição diária:</strong> Tipicamente 2/3 da dose total pela manhã e 1/3 à noite.</p>
+                <p><strong>Esquema Basal-Bolus:</strong> Alternativa com 50% da dose como insulina basal e 50% como bolus distribuídos nas refeições.</p>
             </div>
         </div>
         
@@ -1396,29 +288,26 @@
                     <div class="diagram-row">
                         <div class="diagram-label">Distribuição Lispro:</div>
                         <div class="diagram-bar">
-                            <div class="bar-section lispro-breakfast" title="Aplicar 0-15 minutos antes do café da manhã">
-                                <i class="fas fa-sun"></i> Café 1/3
-                            </div>
-                            <div class="bar-section lispro-lunch" title="Aplicar 0-15 minutos antes do almoço">
-                                <i class="fas fa-utensils"></i> Almoço 1/3
-                            </div>
-                            <div class="bar-section lispro-dinner" title="Aplicar 0-15 minutos antes do jantar">
-                                <i class="fas fa-moon"></i> Jantar 1/3
-                            </div>
+                            <div class="bar-section regular-color cafe-bar">Café 1/3</div>
+                            <div class="bar-section regular-color almoco-bar">Almoço 1/3</div>
+                            <div class="bar-section regular-color jantar-bar">Jantar 1/3</div>
                         </div>
                     </div>
-
+                    
                     <!-- Legenda -->
                     <div class="diagram-legend">
                         <div class="legend-item">
-                            <div class="legend-color glargina-color"></div>
+                            <div class="legend-color nph-color"></div>
                             <span>Glargina (Basal)</span>
                         </div>
                         <div class="legend-item">
-                            <div class="legend-color lispro-color"></div>
+                            <div class="legend-color regular-color"></div>
                             <span>Lispro (Bolus)</span>
                         </div>
                     </div>
+                </div>
+            </div>
+            
             <!-- Horários de Aplicação -->
             <div class="timing-info">
                 <h4><i class="fas fa-clock"></i> Horários Recomendados de Aplicação:</h4>
@@ -1811,9 +700,11 @@
                 <h2 class="modal-title">Referências Bibliográficas</h2>
                 
                 <div class="references-section">
-                    <h3>Contribuições Científicas</h3>
+                    <h3>Diretrizes e Consensos</h3>
                     <ol class="references-list">
-                        <li>Ibiapina, G. <strong>Metodologias para cálculo de insulinoterapia baseada em peso corporal e esquema Glargina/Lispro</strong>. Contribuição científica pessoal para o desenvolvimento desta aplicação.</li>
+                        <li>Sociedade Brasileira de Diabetes. (2022). <strong>Diretrizes da Sociedade Brasileira de Diabetes 2021-2022</strong>.</li>
+                        <li>American Diabetes Association. (2022). <strong>Standards of Medical Care in Diabetes</strong>. <em>Diabetes Care</em>, 45(Supplement 1).</li>
+                        <li>American Diabetes Association Professional Practice Committee. (2022). <strong>16. Diabetes Care in the Hospital: Standards of Medical Care in Diabetes-2022</strong>. <em>Diabetes Care</em>, 45(Supplement_1), S244-S253.</li>
                     </ol>
                 </div>
                 
@@ -1829,8 +720,9 @@
                     <h3>Artigos e Publicações</h3>
                     <ol class="references-list" start="6">
                         <li>Davidson, P. C., Hebblewhite, H. R., Steed, R. D., & Bode, B. W. (2008). Analysis of guidelines for basal-bolus insulin dosing: Basal insulin, correction factor, and carbohydrate-to-insulin ratio. <em>Endocrine Practice</em>, 14(9), 1095-1101.</li>
+                    </ol>
         <footer class="footer">
-            <button class="reference-btn" type="button" onclick="openReferencesModal()">
+            <button class="reference-btn" type="button" onclick="openReferencesModal()" aria-label="Abrir Referências Bibliográficas">
                 </div>
             </div>
         </div>
@@ -2027,7 +919,11 @@
             document.getElementById('doseNoite').textContent = doseNoite;
             document.getElementById('intermediariaNoite').textContent = intermediariaNoite;
             document.getElementById('rapidaNoite').textContent = rapidaNoite;
-
+            document.getElementById('doseBasal').textContent = doseBasal;
+            document.getElementById('bolusTotal').textContent = bolusTotal;
+            document.getElementById('bolusCafe').textContent = bolusCafe;
+            document.getElementById('bolusAlmoco').textContent = bolusAlmoco;
+            document.getElementById('bolusJantar').textContent = bolusJantar;
             
             // Mostrar resultados
             document.getElementById('resultadosPeso').classList.add('show');
@@ -2341,3 +1237,743 @@
     </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.route-option {
+    flex: 1;
+    padding: 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition-speed);
+}
+
+.route-option i {
+    font-size: 1.5rem;
+    margin-bottom: 8px;
+    color: var(--light-text);
+}
+
+.route-option span {
+    font-weight: 500;
+}
+
+.route-option:hover {
+    border-color: var(--primary-color);
+    background-color: rgba(52, 152, 219, 0.05);
+}
+
+.route-option.active {
+    border-color: var(--primary-color);
+    background-color: rgba(52, 152, 219, 0.1);
+}
+
+.route-option.active i {
+    color: var(--primary-color);
+}
+
+.route-description {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: var(--light-bg);
+    border-radius: 5px;
+    font-size: 0.9rem;
+    color: var(--light-text);
+}
+
+.credits-section {
+    padding: 15px 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.credits-item {
+    margin-bottom: 10px;
+}
+
+.credits-item:last-child {
+    margin-bottom: 0;
+}
+
+.credits-item a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.credits-item a:hover {
+    text-decoration: underline;
+}
+
+.reference-btn {
+    background-color: transparent;
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+    display: inline-block;
+    margin: 0 auto;
+}
+
+.reference-btn:hover {
+    background-color: rgba(52, 152, 219, 0.1);
+    color: var(--primary-color);
+}
+
+.diagram-container {
+    margin: 20px 0;
+    padding: 15px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: var(--card-shadow);
+}
+
+.distribution-diagram {
+    width: 100%;
+}
+
+.diagram-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.diagram-label {
+    width: 180px;
+    font-weight: 500;
+    padding-right: 15px;
+}
+
+.diagram-bar {
+    flex: 1;
+    height: 40px;
+    display: flex;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.bar-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 500;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.glargina-width {
+    width: 60%;
+}
+
+.lispro-width {
+    width: 40%;
+}
+
+.glargina-width {
+    width: 60%;
+}
+
+.lispro-width {
+    width: 40%;
+}
+
+.nph-color {
+    background-color: var(--primary-color);
+}
+
+.regular-color {
+    background-color: var(--secondary-color);
+}
+
+.diagram-legend {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    gap: 20px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+}
+
+.legend-color {
+    width: 20px;
+    height: 20px;
+    border-radius: 3px;
+    margin-right: 8px;
+}
+
+.card-scheme {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.scheme-card {
+    background-color: white;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: var(--card-shadow);
+    flex: 1;
+    min-width: 200px;
+    position: relative;
+    transition: var(--transition-speed);
+}
+
+.scheme-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.scheme-card h4 {
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+}
+
+.scheme-card h4 i {
+    margin-right: 8px;
+    color: var(--primary-color);
+}
+
+.scheme-card ul {
+    list-style-type: none;
+    margin-top: 10px;
+}
+
+.scheme-card ul li {
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+}
+
+.scheme-card ul li i {
+    margin-right: 5px;
+    color: var(--primary-color);
+    font-size: 0.8rem;
+}
+
+.timing-info {
+    background-color: #f0f7ff;
+    padding: 15px;
+    border-radius: 5px;
+    margin-top: 20px;
+    border-left: 4px solid var(--primary-color);
+}
+
+.timing-info h4 {
+    display: flex;
+    align-items: center;
+    color: var(--primary-color);
+    margin-bottom: 10px;
+}
+
+.timing-info h4 i {
+    margin-right: 8px;
+}
+
+.timing-list {
+    list-style-type: none;
+    margin-top: 10px;
+}
+
+.timing-list li {
+    margin-bottom: 8px;
+    display: flex;
+    align-items: flex-start;
+}
+
+.timing-list li i {
+    margin-right: 8px;
+    margin-top: 3px;
+}
+
+.timing-list li strong {
+    margin-right: 5px;
+}
+
+.timing-info .citation {
+    font-size: 0.8rem;
+    color: var(--lighter-text);
+    margin-top: 10px;
+    text-align: right;
+    font-style: italic;
+}
+
+.table-responsive {
+    overflow-x: auto;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 12px 15px;
+    border: 1px solid var(--border-color);
+    text-align: left;
+}
+
+th {
+    background-color: var(--light-bg);
+    font-weight: 600;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.collapsible {
+    background-color: var(--light-bg);
+    color: var(--text-color);
+    cursor: pointer;
+    padding: 15px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-weight: 600;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: var(--transition-speed);
+}
+
+.collapsible:after {
+    content: '\f078';
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    color: var(--light-text);
+}
+
+.collapsible.active:after {
+    content: '\f077';
+}
+
+.collapsible:hover {
+    background-color: #e9ecef;
+}
+
+.collapse-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+}
+
+.collapse-content-inner {
+    padding: 15px;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: var(--card-shadow);
+    margin-bottom: 10px;
+}
+
+.citation {
+    font-size: 0.8rem;
+    color: var(--lighter-text);
+    margin-top: 15px;
+    font-style: italic;
+}
+
+.references-section {
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.references-section:last-child {
+    border-bottom: none;
+}
+
+.references-section h3 {
+    margin-bottom: 10px;
+    color: var(--primary-color);
+}
+
+.references-list {
+    margin-left: 20px;
+}
+
+.references-list li {
+    margin-bottom: 8px;
+}
+
+/* Tooltip */
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 200px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 5px;
+    padding: 8px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-size: 0.8rem;
+}
+
+.tooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #333 transparent transparent transparent;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Custom Styles */
+.no-border {
+    border-bottom: none;
+}
+
+.hidden {
+    display: none;
+}
+
+#fatorPersonalizadoGroup.hidden {
+    display: none;
+}
+
+#fatorPersonalizadoGroup.hidden {
+    display: none;
+}
+
+.hidden {
+    display: none;
+}
+
+#fatorPersonalizadoGroup.hidden {
+    display: none;
+}
+
+/* Mobile View Adjustments */
+@media (max-width: 768px) {
+    .container {
+        margin: 0;
+        padding: 15px;
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    .tabs-nav {
+        flex-wrap: nowrap;
+        overflow-x: scroll;
+        margin-bottom: 15px;
+    }
+
+    .tabs-nav::-webkit-scrollbar {
+        height: 4px;
+    }
+
+    .tabs-nav::-webkit-scrollbar-track {
+        background: var(--light-bg);
+        border-radius: 10px;
+    }
+
+    .tabs-nav::-webkit-scrollbar-thumb {
+        background: var(--border-color);
+        border-radius: 10px;
+    }
+
+    .tab-link {
+        padding: 8px 12px;
+        font-size: 0.9rem;
+        white-space: nowrap;
+    }
+
+    .route-options {
+        flex-direction: column;
+    }
+
+    .modal-content {
+        margin: 20% auto;
+        width: 90%;
+        padding: 20px;
+    }
+
+    .diagram-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .diagram-label {
+        width: 100%;
+        margin-bottom: 5px;
+    }
+
+    .diagram-bar {
+        width: 100%;
+    }
+
+    .scheme-card {
+        flex: 1 0 100%;
+    }
+}
+
+/* Mode Toggle (Light/Dark) */
+body.dark-mode {
+    background-color: #1a1d21;
+    color: #e4e6eb;
+}
+
+body.dark-mode .container {
+    background-color: #282c34;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode header h1 {
+    color: #61dafb;
+}
+
+body.dark-mode header {
+    border-bottom-color: #3e4451;
+}
+
+body.dark-mode .header-description {
+    color: #abb2bf;
+}
+
+body.dark-mode .tab-link {
+    color: #abb2bf;
+}
+
+body.dark-mode .tab-link:hover {
+    background-color: rgba(97, 218, 251, 0.1);
+    color: #61dafb;
+}
+
+body.dark-mode .tab-link.active {
+    background-color: #61dafb;
+    color: #282c34;
+}
+
+body.dark-mode input, 
+body.dark-mode select {
+    background-color: #3e4451;
+    border-color: #4c5366;
+    color: #e4e6eb;
+}
+
+body.dark-mode input:focus, 
+body.dark-mode select:focus {
+    border-color: #61dafb;
+    box-shadow: 0 0 0 3px rgba(97, 218, 251, 0.2);
+}
+
+body.dark-mode label {
+    color: #e4e6eb;
+}
+
+body.dark-mode button {
+    background-color: #61dafb;
+    color: #282c34;
+}
+
+body.dark-mode button:hover {
+    background-color: #4fa8d2;
+}
+
+body.dark-mode .results {
+    background-color: #3e4451;
+    border-left-color: #61dafb;
+}
+
+body.dark-mode .result-item {
+    border-bottom-color: #4c5366;
+}
+
+body.dark-mode .result-value {
+    color: #61dafb;
+}
+
+body.dark-mode .info-box {
+    background-color: #3e4451;
+    border-color: #4c5366;
+}
+
+body.dark-mode .modal-content {
+    background-color: #282c34;
+}
+
+body.dark-mode .close-modal {
+    color: #abb2bf;
+}
+
+body.dark-mode .close-modal:hover {
+    color: #e06c75;
+}
+
+body.dark-mode .modal-title {
+    color: #61dafb;
+    border-bottom-color: #3e4451;
+}
+
+body.dark-mode .route-option {
+    border-color: #4c5366;
+    background-color: #3e4451;
+}
+
+body.dark-mode .route-option:hover {
+    border-color: #61dafb;
+    background-color: rgba(97, 218, 251, 0.1);
+}
+
+body.dark-mode .route-option.active {
+    border-color: #61dafb;
+    background-color: rgba(97, 218, 251, 0.2);
+}
+
+body.dark-mode .route-description {
+    background-color: #3e4451;
+    color: #abb2bf;
+}
+
+body.dark-mode .credits-section {
+    border-bottom-color: #3e4451;
+}
+
+body.dark-mode .credits-item a {
+    color: #61dafb;
+}
+
+body.dark-mode .reference-btn {
+    color: #61dafb;
+    border-color: #61dafb;
+}
+
+body.dark-mode .reference-btn:hover {
+    background-color: rgba(97, 218, 251, 0.1);
+}
+
+body.dark-mode .nph-color {
+    background-color: #61dafb;
+}
+
+body.dark-mode .regular-color {
+    background-color: #e06c75;
+}
+
+body.dark-mode .scheme-card {
+    background-color: #3e4451;
+}
+
+body.dark-mode .scheme-card h4 {
+    border-bottom-color: #4c5366;
+}
+
+body.dark-mode .scheme-card h4 i {
+    color: #61dafb;
+}
+
+body.dark-mode .scheme-card ul li i {
+    color: #61dafb;
+}
+
+body.dark-mode .timing-info {
+    background-color: #2c313a;
+    border-left-color: #61dafb;
+}
+
+body.dark-mode .timing-info h4 {
+    color: #61dafb;
+}
+
+body.dark-mode .timing-info .citation {
+    color: #abb2bf;
+}
+
+body.dark-mode th {
+    background-color: #3e4451;
+}
+
+body.dark-mode tr:nth-child(even) {
+    background-color: #353b45;
+}
+
+body.dark-mode td, 
+body.dark-mode th {
+    border-color: #4c5366;
+}
+
+body.dark-mode .collapsible {
+    background-color: #3e4451;
+    color: #e4e6eb;
+}
+
+body.dark-mode .collapsible:after {
+    color: #abb2bf;
+}
+
+body.dark-mode .collapsible:hover {
+    background-color: #4c5366;
+}
+
+body.dark-mode .collapse-content-inner {
+    background-color: #3e4451;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideIn {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
