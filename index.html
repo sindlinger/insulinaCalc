@@ -3,29 +3,1097 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de Insulina</title>
+    <title>InsulinaCalc - Calculadora de Insulina</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Importação dos arquivos CSS -->
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/components.css">
-    <link rel="stylesheet" href="css/tabs.css">
-    <link rel="stylesheet" href="css/mobile.css">
-    <link rel="stylesheet" href="css/modals.css">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --primary-dark: #2980b9;
+            --secondary-color: #e74c3c;
+            --secondary-dark: #c0392b;
+            --text-color: #333;
+            --light-text: #666;
+            --lighter-text: #999;
+            --light-bg: #f8f9fa;
+            --border-color: #ddd;
+            --success-color: #2ecc71;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            --container-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+            --card-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            --transition-speed: 0.3s;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-main);
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: #f0f2f5;
+            padding: 0;
+            margin: 0;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: var(--container-shadow);
+            border-radius: 10px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        header h1 {
+            color: var(--primary-color);
+            margin-bottom: 5px;
+            font-size: 2.2rem;
+        }
+
+        .header-description {
+            color: var(--light-text);
+            font-size: 1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .about-btn, .view-toggle {
+            background-color: transparent;
+            border: none;
+            color: var(--primary-color);
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px;
+            border-radius: 50%;
+            position: absolute;
+            top: 0;
+            transition: var(--transition-speed);
+        }
+
+        .view-toggle {
+            left: 0;
+        }
+
+        .about-btn {
+            right: 0;
+        }
+
+        .about-btn:hover, .view-toggle:hover {
+            background-color: rgba(52, 152, 219, 0.1);
+        }
+
+        .tabs-nav {
+            display: flex;
+            list-style-type: none;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            overflow-x: auto;
+        }
+
+        .tabs-nav li {
+            margin-right: 10px;
+        }
+
+        .tab-link {
+            text-decoration: none;
+            color: var(--light-text);
+            padding: 10px 15px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+            transition: var(--transition-speed);
+        }
+
+        .tab-link i {
+            margin-right: 8px;
+        }
+
+        .tab-link:hover {
+            background-color: rgba(52, 152, 219, 0.1);
+            color: var(--primary-color);
+        }
+
+        .tab-link.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: var(--transition-speed);
+        }
+
+        input:focus, select:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 12px 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition-speed);
+        }
+
+        button i {
+            margin-right: 8px;
+        }
+
+        button:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .results {
+            margin-top: 30px;
+            background-color: var(--light-bg);
+            padding: 20px;
+            border-radius: 5px;
+            border-left: 4px solid var(--primary-color);
+            display: none;
+        }
+
+        .results.show {
+            display: block;
+            animation: slideIn 0.3s;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px dashed var(--border-color);
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+        }
+
+        .result-label {
+            font-weight: 500;
+        }
+
+        .result-value {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .section-title {
+            margin-top: 20px;
+            margin-bottom: 10px;
+            color: var(--text-color);
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .indent {
+            margin-left: 20px;
+        }
+
+        .info-box {
+            background-color: #f9f9f9;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+
+        .info-box h4 {
+            margin-bottom: 10px;
+            color: var(--text-color);
+            font-weight: 600;
+        }
+
+        .info-box p {
+            margin-bottom: 10px;
+        }
+
+        .info-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.3s;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            max-width: 700px;
+            position: relative;
+            animation: slideIn 0.3s;
+        }
+
+        .close-modal {
+            position: absolute;
+            right: 20px;
+            top: 15px;
+            font-size: 28px;
+            color: var(--lighter-text);
+            cursor: pointer;
+            transition: var(--transition-speed);
+        }
+
+        .close-modal:hover {
+            color: var(--secondary-color);
+        }
+
+        .modal-title {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--primary-color);
+        }
+
+        .admin-route-selector {
+            margin-bottom: 20px;
+        }
+
+        .route-options {
+            display: flex;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .route-option {
+            flex: 1;
+            padding: 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition-speed);
+        }
+
+        .route-option i {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+            color: var(--light-text);
+        }
+
+        .route-option span {
+            font-weight: 500;
+        }
+
+        .route-option:hover {
+            border-color: var(--primary-color);
+            background-color: rgba(52, 152, 219, 0.05);
+        }
+
+        .route-option.active {
+            border-color: var(--primary-color);
+            background-color: rgba(52, 152, 219, 0.1);
+        }
+
+        .route-option.active i {
+            color: var(--primary-color);
+        }
+
+        .route-description {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: var(--light-bg);
+            border-radius: 5px;
+            font-size: 0.9rem;
+            color: var(--light-text);
+        }
+
+        .credits-section {
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .credits-item {
+            margin-bottom: 10px;
+        }
+
+        .credits-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .credits-item a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .credits-item a:hover {
+            text-decoration: underline;
+        }
+
+        .reference-btn {
+            background-color: transparent;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            display: inline-block;
+            margin: 0 auto;
+        }
+
+        .reference-btn:hover {
+            background-color: rgba(52, 152, 219, 0.1);
+            color: var(--primary-color);
+        }
+
+        .diagram-container {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .distribution-diagram {
+            width: 100%;
+        }
+
+        .diagram-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .diagram-label {
+            width: 180px;
+            font-weight: 500;
+            padding-right: 15px;
+        }
+
+        .diagram-bar {
+            flex: 1;
+            height: 40px;
+            display: flex;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .bar-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 500;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .glargina-width {
+            width: 60%;
+        }
+
+        .lispro-width {
+            width: 40%;
+        }
+
+        .glargina-width {
+            width: 60%;
+        }
+
+        .lispro-width {
+            width: 40%;
+        }
+
+        .nph-color {
+            background-color: var(--primary-color);
+        }
+
+        .regular-color {
+            background-color: var(--secondary-color);
+        }
+
+        .diagram-legend {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            gap: 20px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 3px;
+            margin-right: 8px;
+        }
+
+        .card-scheme {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .scheme-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: var(--card-shadow);
+            flex: 1;
+            min-width: 200px;
+            position: relative;
+            transition: var(--transition-speed);
+        }
+
+        .scheme-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .scheme-card h4 {
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .scheme-card h4 i {
+            margin-right: 8px;
+            color: var(--primary-color);
+        }
+
+        .scheme-card ul {
+            list-style-type: none;
+            margin-top: 10px;
+        }
+
+        .scheme-card ul li {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+
+        .scheme-card ul li i {
+            margin-right: 5px;
+            color: var(--primary-color);
+            font-size: 0.8rem;
+        }
+
+        .timing-info {
+            background-color: #f0f7ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .timing-info h4 {
+            display: flex;
+            align-items: center;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .timing-info h4 i {
+            margin-right: 8px;
+        }
+
+        .timing-list {
+            list-style-type: none;
+            margin-top: 10px;
+        }
+
+        .timing-list li {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .timing-list li i {
+            margin-right: 8px;
+            margin-top: 3px;
+        }
+
+        .timing-list li strong {
+            margin-right: 5px;
+        }
+
+        .timing-info .citation {
+            font-size: 0.8rem;
+            color: var(--lighter-text);
+            margin-top: 10px;
+            text-align: right;
+            font-style: italic;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--light-bg);
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .collapsible {
+            background-color: var(--light-bg);
+            color: var(--text-color);
+            cursor: pointer;
+            padding: 15px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-weight: 600;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: var(--transition-speed);
+        }
+
+        .collapsible:after {
+            content: '\f078';
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+            color: var(--light-text);
+        }
+
+        .collapsible.active:after {
+            content: '\f077';
+        }
+
+        .collapsible:hover {
+            background-color: #e9ecef;
+        }
+
+        .collapse-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.2s ease-out;
+        }
+
+        .collapse-content-inner {
+            padding: 15px;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 10px;
+        }
+
+        .citation {
+            font-size: 0.8rem;
+            color: var(--lighter-text);
+            margin-top: 15px;
+            font-style: italic;
+        }
+
+        .references-section {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .references-section:last-child {
+            border-bottom: none;
+        }
+
+        .references-section h3 {
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+
+        .references-list {
+            margin-left: 20px;
+        }
+
+        .references-list li {
+            margin-bottom: 8px;
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 5px;
+            padding: 8px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.8rem;
+        }
+
+        .tooltip .tooltiptext::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #333 transparent transparent transparent;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Custom Styles */
+        .no-border {
+            border-bottom: none;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        #fatorPersonalizadoGroup.hidden {
+            display: none;
+        }
+
+        #fatorPersonalizadoGroup.hidden {
+            display: none;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        #fatorPersonalizadoGroup.hidden {
+            display: none;
+        }
+
+        /* Mobile View Adjustments */
+        @media (max-width: 768px) {
+            .container {
+                margin: 0;
+                padding: 15px;
+                border-radius: 0;
+                box-shadow: none;
+            }
+
+            .tabs-nav {
+                flex-wrap: nowrap;
+                overflow-x: scroll;
+                margin-bottom: 15px;
+            }
+
+            .tabs-nav::-webkit-scrollbar {
+                height: 4px;
+            }
+
+            .tabs-nav::-webkit-scrollbar-track {
+                background: var(--light-bg);
+                border-radius: 10px;
+            }
+
+            .tabs-nav::-webkit-scrollbar-thumb {
+                background: var(--border-color);
+                border-radius: 10px;
+            }
+
+            .tab-link {
+                padding: 8px 12px;
+                font-size: 0.9rem;
+                white-space: nowrap;
+            }
+
+            .route-options {
+                flex-direction: column;
+            }
+
+            .modal-content {
+                margin: 20% auto;
+                width: 90%;
+                padding: 20px;
+            }
+
+            .diagram-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .diagram-label {
+                width: 100%;
+                margin-bottom: 5px;
+            }
+
+            .diagram-bar {
+                width: 100%;
+            }
+
+            .scheme-card {
+                flex: 1 0 100%;
+            }
+        }
+
+        /* Mode Toggle (Light/Dark) */
+        body.dark-mode {
+            background-color: #1a1d21;
+            color: #e4e6eb;
+        }
+
+        body.dark-mode .container {
+            background-color: #282c34;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        body.dark-mode header h1 {
+            color: #61dafb;
+        }
+
+        body.dark-mode header {
+            border-bottom-color: #3e4451;
+        }
+
+        body.dark-mode .header-description {
+            color: #abb2bf;
+        }
+
+        body.dark-mode .tab-link {
+            color: #abb2bf;
+        }
+
+        body.dark-mode .tab-link:hover {
+            background-color: rgba(97, 218, 251, 0.1);
+            color: #61dafb;
+        }
+
+        body.dark-mode .tab-link.active {
+            background-color: #61dafb;
+            color: #282c34;
+        }
+
+        body.dark-mode input, 
+        body.dark-mode select {
+            background-color: #3e4451;
+            border-color: #4c5366;
+            color: #e4e6eb;
+        }
+
+        body.dark-mode input:focus, 
+        body.dark-mode select:focus {
+            border-color: #61dafb;
+            box-shadow: 0 0 0 3px rgba(97, 218, 251, 0.2);
+        }
+
+        body.dark-mode label {
+            color: #e4e6eb;
+        }
+
+        body.dark-mode button {
+            background-color: #61dafb;
+            color: #282c34;
+        }
+
+        body.dark-mode button:hover {
+            background-color: #4fa8d2;
+        }
+
+        body.dark-mode .results {
+            background-color: #3e4451;
+            border-left-color: #61dafb;
+        }
+
+        body.dark-mode .result-item {
+            border-bottom-color: #4c5366;
+        }
+
+        body.dark-mode .result-value {
+            color: #61dafb;
+        }
+
+        body.dark-mode .info-box {
+            background-color: #3e4451;
+            border-color: #4c5366;
+        }
+
+        body.dark-mode .modal-content {
+            background-color: #282c34;
+        }
+
+        body.dark-mode .close-modal {
+            color: #abb2bf;
+        }
+
+        body.dark-mode .close-modal:hover {
+            color: #e06c75;
+        }
+
+        body.dark-mode .modal-title {
+            color: #61dafb;
+            border-bottom-color: #3e4451;
+        }
+
+        body.dark-mode .route-option {
+            border-color: #4c5366;
+            background-color: #3e4451;
+        }
+
+        body.dark-mode .route-option:hover {
+            border-color: #61dafb;
+            background-color: rgba(97, 218, 251, 0.1);
+        }
+
+        body.dark-mode .route-option.active {
+            border-color: #61dafb;
+            background-color: rgba(97, 218, 251, 0.2);
+        }
+
+        body.dark-mode .route-description {
+            background-color: #3e4451;
+            color: #abb2bf;
+        }
+
+        body.dark-mode .credits-section {
+            border-bottom-color: #3e4451;
+        }
+
+        body.dark-mode .credits-item a {
+            color: #61dafb;
+        }
+
+        body.dark-mode .reference-btn {
+            color: #61dafb;
+            border-color: #61dafb;
+        }
+
+        body.dark-mode .reference-btn:hover {
+            background-color: rgba(97, 218, 251, 0.1);
+        }
+
+        body.dark-mode .nph-color {
+            background-color: #61dafb;
+        }
+
+        body.dark-mode .regular-color {
+            background-color: #e06c75;
+        }
+
+        body.dark-mode .scheme-card {
+            background-color: #3e4451;
+        }
+
+        body.dark-mode .scheme-card h4 {
+            border-bottom-color: #4c5366;
+        }
+
+        body.dark-mode .scheme-card h4 i {
+            color: #61dafb;
+        }
+
+        body.dark-mode .scheme-card ul li i {
+            color: #61dafb;
+        }
+
+        body.dark-mode .timing-info {
+            background-color: #2c313a;
+            border-left-color: #61dafb;
+        }
+
+        body.dark-mode .timing-info h4 {
+            color: #61dafb;
+        }
+
+        body.dark-mode .timing-info .citation {
+            color: #abb2bf;
+        }
+
+        body.dark-mode th {
+            background-color: #3e4451;
+        }
+
+        body.dark-mode tr:nth-child(even) {
+            background-color: #353b45;
+        }
+
+        body.dark-mode td, 
+        body.dark-mode th {
+            border-color: #4c5366;
+        }
+
+        body.dark-mode .collapsible {
+            background-color: #3e4451;
+            color: #e4e6eb;
+        }
+
+        body.dark-mode .collapsible:after {
+            color: #abb2bf;
+        }
+
+        body.dark-mode .collapsible:hover {
+            background-color: #4c5366;
+        }
+
+        body.dark-mode .collapse-content-inner {
+            background-color: #3e4451;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background-color: white;
+                font-size: 12pt;
+            }
+
+            .container {
+                max-width: 100%;
+                box-shadow: none;
+                margin: 0;
+                padding: 15px;
+            }
+
+            .tabs-nav, .about-btn, .view-toggle, button {
+                display: none;
+            }
+
+            .tab-content {
+                display: block;
+                page-break-inside: avoid;
+            }
+
+            .results {
+                display: block;
+                background-color: white;
+                border-left: 2px solid #3498db;
+                padding: 10px;
+            }
+
+            .info-box, .timing-info {
+                background-color: white;
+                border: 1px solid #ddd;
+                padding: 10px;
+            }
+
+            .timing-info {
+                border-left: 2px solid #3498db;
+            }
+
+            @page {
+                margin: 0.5cm;
+            }
+        }
+        .footer {
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+            margin-top: 30px;
+        }
+    </style>
 </head>
 <body>
     <div class="container" id="appContainer">
         <header>
             <button class="view-toggle" onclick="toggleView()" title="Alternar visualização">
                 <i class="fas fa-mobile-alt"></i>
-                <span>Mobile</span>
             </button>
             
-            <h1>Calculadora de Insulina</h1>
-            <p class="header-description">Auxílio no cálculo de doses de insulina com base em diferentes métodos</p>
+            <h1>InsulinaCalc</h1>
+            <p class="header-description">Calculadora para doses de insulina baseada em métodos científicos</p>
             
             <button class="about-btn" onclick="openModal()" title="Sobre a calculadora">
                 <i class="fas fa-info-circle"></i>
-                <span>Sobre</span>
             </button>
         </header>
     
@@ -33,29 +1101,26 @@
         <div id="aboutModal" class="modal">
             <div class="modal-content">
                 <span class="close-modal" onclick="closeModal()">&times;</span>
-                <h2 class="modal-title">Sobre a Calculadora de Insulina</h2>
+                <h2 class="modal-title">Sobre o InsulinaCalc</h2>
                 
                 <div class="credits-section">
                     <div class="credits-item">
                         <strong>Desenvolvido por:</strong> Eduardo Candeia Gonçalves
                     </div>
+                </div>
+                
+                <div class="credits-section no-border">
                     <div class="credits-item">
-                        <a href="https://github.com/sindlinger" target="_blank">github.com/sindlinger</a>
+                        <strong>Metodologia de cálculo: </strong> Baseada em protocolos clínicos estabelecidos
+                    </div>
+                    <div class="credits-item">
+                        Esta calculadora implementa métodos específicos de cálculo de doses de insulina conforme orientação de especialistas em endocrinologia.
                     </div>
                 </div>
                 
-                <div class="credits-section">
+                <div class="credits-section no-border">
                     <div class="credits-item">
-                        <strong>Metodologia de cálculo por peso: </strong> <strong>Dr. George Ibiapina</strong>
-                    </div>
-                    <div class="credits-item">
-                        Sinceros agradecimentos ao professor Dr. George Ibiapina pela metodologia de cálculo e orientação científica.
-                    </div>
-                </div>
-                
-                <div class="credits-section" style="border-bottom: none;">
-                    <div class="credits-item">
-                        <strong>Versão:</strong> 1.3.1
+                        <strong>Versão:</strong> 1.0.0
                     </div>
                     <div class="credits-item">
                         Esta aplicação é uma ferramenta educativa e não substitui a orientação médica profissional.
@@ -65,16 +1130,14 @@
         </div>
         
         <ul class="tabs-nav">
-            <li><a href="#peso" class="tab-link active" data-tab="peso"><i class="fas fa-weight"></i> Cálculo por Peso</a></li>
-            <li><a href="#bolus" class="tab-link" data-tab="bolus"><i class="fas fa-syringe"></i> Cálculo de Bolus</a></li>
-            <li><a href="#bomba" class="tab-link" data-tab="bomba"><i class="fas fa-pump-medical"></i> Bomba de Infusão</a></li>
-            <li><a href="#medicalInfo" class="tab-link" data-tab="medicalInfo"><i class="fas fa-book-medical"></i> Guia Médico</a></li>
-            <li><a href="#algoritmo" class="tab-link" data-tab="algoritmo"><i class="fas fa-chart-line"></i> Algoritmos</a></li>
-            <li><a href="#" class="tab-link" onclick="abrirEmergencia()"><i class="fas fa-ambulance"></i> Emergências</a></li>
+            <li><a href="#calculo-peso" class="tab-link active" data-tab="calculo-peso"><i class="fas fa-weight"></i> Cálculo por Peso</a></li>
+            <li><a href="#glargina-lispro" class="tab-link" data-tab="glargina-lispro"><i class="fas fa-syringe"></i> Glargina/Lispro</a></li>
+            <li><a href="#prescricao" class="tab-link" data-tab="prescricao"><i class="fas fa-file-medical"></i> Prescrição</a></li>
+            <li><a href="#guia-info" class="tab-link" data-tab="guia-info"><i class="fas fa-book-medical"></i> Guia de Insulinas</a></li>
         </ul>
         
         <!-- Aba 1: Cálculo por Peso -->
-        <div id="peso" class="tab-content active">
+        <div id="calculo-peso" class="tab-content active">
             <h2>Cálculo baseado no Peso</h2>
             
             <div class="form-group">
@@ -86,23 +1149,22 @@
                 <label for="selectFator">Fator (U/kg):</label>
                 <select id="selectFator">
                     <option value="0.3">0,3 - Muito sensível</option>
-                    <option value="0.5">0,5 - Sensível</option>
+            <div class="form-group hidden" id="fatorPersonalizadoGroup">
                     <option value="0.7" selected>0,7 - Padrão</option>
                     <option value="1.0">1,0 - Resistente</option>
                     <option value="1.5">1,5 - Muito resistente</option>
                     <option value="2.0">2,0 - Extremamente resistente</option>
-                    <option value="-1">Personalizado</option>
+            <div class="form-group hidden" id="fatorPersonalizadoGroup">
                 </select>
             </div>
             
-            <div class="form-group" id="fatorPersonalizadoGroup" style="display: none;">
+            <div class="form-group hidden" id="fatorPersonalizadoGroup">
                 <label for="inputFatorPersonalizado">Fator personalizado:</label>
                 <input type="number" id="inputFatorPersonalizado" placeholder="Digite o fator personalizado" min="0.1" max="10" step="0.1">
             </div>
             
-            <!-- Adicionar após a div dos resultados na aba "peso" (linha 283 aproximadamente) -->
             <div class="admin-route-selector">
-                <label>Via de Administração: <span style="font-size: 13px; color: var(--primary-color);"></span></label>
+                <label>Via de Administração:</label>
                 <div class="route-options">
                     <div class="route-option active" id="route-sc" onclick="selectRoute('sc')">
                         <i class="fas fa-syringe"></i>
@@ -119,7 +1181,6 @@
                 </div>
                 <div class="route-description" id="route-description">
                     Via subcutânea: Administração no tecido subcutâneo, geralmente abdômen, coxas ou braços. Via padrão para insulinoterapia.
-                    <span class="route-impact-info">Esta seleção afetará os resultados do cálculo.</span>
                 </div>
             </div>
             
@@ -201,374 +1262,257 @@
             
             <div class="info-box">
                 <h4>Informações sobre o cálculo:</h4>
-                <p><strong>Dose Total Diária:</strong> Geralmente calculada como 0,5 a 1,0 unidades por kg de peso corporal.</p>
+                <p><strong>Dose Total Diária:</strong> Calculada como 0,3 a 2,0 unidades por kg de peso corporal, dependendo da sensibilidade do paciente.</p>
                 <p><strong>Esquema 70/30:</strong> Divisão em 70% insulina intermediária (NPH) e 30% insulina rápida (Regular).</p>
                 <p><strong>Divisão de cada tipo:</strong> No esquema 70/30, os 70% iniciais são divididos novamente em 70% NPH e 30% Regular. Já os 30% iniciais são divididos em 50% NPH e 50% Regular.</p>
                 <p><strong>Distribuição diária:</strong> Tipicamente 2/3 da dose total pela manhã e 1/3 à noite.</p>
                 <p><strong>Esquema Basal-Bolus:</strong> Alternativa com 50% da dose como insulina basal e 50% como bolus distribuídos nas refeições.</p>
-                <p><strong>Vias de administração:</strong></p>
-                <ul>
-                    <li><strong>Subcutânea (SC):</strong> Via mais comum para uso ambulatorial. Locais: abdômen, coxas, braços e nádegas. Rotação dos locais é essencial.</li>
-                    <li><strong>Intravenosa (IV):</strong> Usada em ambiente hospitalar, especialmente em emergências ou no controle de cetoacidose diabética.</li>
-                    <li><strong>Intramuscular (IM):</strong> Pode ser usada em situações específicas quando a absorção SC está comprometida.</li>
-                </ul>
-                <p>Esta calculadora é uma ferramenta educativa. Ajustes individualizados devem ser feitos com base nos diversos fatores clínicos e resposta do paciente.</p>
-            </div>
-        </div>
-
-        <!-- Seção retrátil para explicação sobre ajustes de via de administração -->
-        <button class="collapsible">Ajustes de Dose por Via de Administração</button>
-        <div class="collapse-content">
-            <div class="collapse-content-inner">
-                <h4>Ajustes de dose baseados na via de administração</h4>
-                <p>A potência e a farmacocinética da insulina variam significativamente dependendo da via de administração. A calculadora aplica automaticamente os seguintes ajustes quando você seleciona uma via diferente:</p>
-                
-                <div class="table-responsive">
-                    <table>
-                        <tr>
-                            <th>Via</th>
-                            <th>Ajuste da Dose</th>
-                            <th>Justificativa</th>
-                        </tr>
-                        <tr>
-                            <td>Subcutânea (SC)</td>
-                            <td>100% (referência)</td>
-                            <td>Via padrão para administração ambulatorial de insulina</td>
-                        </tr>
-                        <tr>
-                            <td>Intravenosa (IV)</td>
-                            <td>80% da dose SC convertida para IV</td>
-                            <td>Maior biodisponibilidade por evitar a barreira subcutânea</td>
-                        </tr>
-                        <tr>
-                            <td>Intramuscular (IM)</td>
-                            <td>85% da dose SC</td>
-                            <td>Absorção intermediária, mais rápida que SC mas não tão imediata quanto IV</td>
-                        </tr>
-                    </table>
-                </div>
-                
-                <h4>Fundamentação científica:</h4>
-                
-                <p><strong>Para ajuste da via intravenosa (80%):</strong></p>
-                <ul>
-                    <li>De acordo com a revisão publicada por Davis e Umpierrez (2017) em "Transition From Intravenous to Subcutaneous Insulin", diversos estudos e protocolos clínicos recomendam usar 80% da dose diária total de insulina subcutânea quando se converte para via intravenosa.</li>
-                    <li>Os autores afirmam: <em>"Despite the lack of consensus, most have suggested that using 80% of the total 24-h IV insulin utilization to calculate the 24-h SQ insulin requirement is an effective percentage to allow glycemic control without precipitating hypoglycemia"</em>.</li>
-                    <li>Esta recomendação é apoiada por múltiplos estudos e protocolos institucionais citados na revisão, especificamente para evitar hipoglicemia ao fazer a transição entre vias de administração.</li>
-                </ul>
-                
-                <p><strong>Para ajuste da via intramuscular (85%):</strong></p>
-                <ul>
-                    <li>A <strong>Endocrine Society</strong> em seu guideline <em>"Management of Hyperglycemia in Hospitalized Patients" (2022)</em> indica que a absorção da insulina administrada por via IM é aproximadamente 15-20% mais rápida que a via SC.</li>
-                    <li>Estudos de farmacocinética como os de <strong>Heinemann et al. (2000)</strong> demonstraram que a insulina administrada por via IM tem um início de ação mais rápido e um pico mais alto que a via SC, justificando uma redução moderada na dose.</li>
-                    <li>A redução de 15% compensa a maior velocidade de absorção, evitando hipoglicemias sem comprometer a eficácia.</li>
-                </ul>
-                
-                <div class="info-box" style="margin-top: 15px;">
-                    <h4>Observações importantes:</h4>
-                    <ul>
-                        <li>Estes ajustes são baseados em recomendações de diretrizes internacionais e podem variar conforme protocolos institucionais específicos.</li>
-                        <li>A via subcutânea é a preferencial para uso ambulatorial e de longo prazo.</li>
-                        <li>A via intravenosa é reservada para ambiente hospitalar, especialmente em situações de emergência como cetoacidose diabética.</li>
-                        <li>A via intramuscular é pouco utilizada na prática clínica atual, restrita a situações específicas onde as outras vias não são possíveis.</li>
-                        <li>O monitoramento da glicemia deve ser mais frequente quando se utiliza vias alternativas (especialmente IV).</li>
-                    </ul>
-                </div>
-                
-                <p class="citation" style="margin-top: 15px;">Referências:</p>
-                <ol class="references-list" style="font-size: 13px; margin-left: 25px;">
-                    <li>Davis GM, Umpierrez GE. (2017). <strong>Transition From Intravenous to Subcutaneous Insulin</strong>. <em>Current Diabetes Reports</em>, 17(5):31. DOI: 10.1007/s11892-017-0855-6.</li>
-                    <li>Endocrine Society Clinical Practice Guideline. (2022). "Management of Hyperglycemia in Hospitalized Patients in Non-Critical Care Setting". <em>The Journal of Clinical Endocrinology & Metabolism</em> 107(2): 379-393.</li>
-                    <li>Avanzini F, Marelli G, Donzelli W, et al. (2011). <strong>Transition From Intravenous to Subcutaneous Insulin: Effectiveness and safety of a standardized protocol and predictors of outcome in patients with acute coronary syndrome</strong>. <em>Diabetes, Metabolic Syndrome and Obesity: Targets and Therapy</em>, 4: 269-275.</li>
-                    <li>Heinemann L, Linkeschova R, Rave K, et al. (2000). "Time-action profile of the long-acting insulin analog insulin glargine (HOE901) in comparison with those of NPH insulin and placebo". <em>Diabetes Care</em> 23(5): 644-649.</li>
-                </ol>
-            </div>
-        </div>
-        <!-- Aba 2: Cálculo de Bolus -->
-        <div id="bolus" class="tab-content">
-            <h2>Cálculo de Bolus</h2>
-            
-            <div class="form-group">
-                <div class="label-with-help">
-                    <label for="inputGlicemiaAtual">Glicemia Atual (mg/dL):</label>
-                    <button type="button" class="help-btn" onclick="mostrarAjuda('glicemia-atual')">
-                        <i class="fas fa-question-circle"></i>
-                    </button>
-                </div>
-                <input type="number" id="inputGlicemiaAtual" placeholder="Digite a glicemia atual" min="40" max="600">
-            </div>
-            
-            <div class="form-group">
-                <div class="label-with-help">
-                    <label for="inputGlicemiaAlvo">Glicemia Alvo (mg/dL):</label>
-                    <button type="button" class="help-btn" onclick="mostrarAjuda('glicemia-alvo')">
-                        <i class="fas fa-question-circle"></i>
-                    </button>
-                </div>
-                <input type="number" id="inputGlicemiaAlvo" placeholder="Digite a glicemia alvo" min="70" max="180" value="100">
-            </div>
-            
-            <div class="form-group">
-                <div class="label-with-help">
-                    <label for="inputCarboidratos">Carboidratos a serem consumidos (g):</label>
-                    <button type="button" class="help-btn" onclick="mostrarAjuda('carboidratos')">
-                        <i class="fas fa-question-circle"></i>
-                    </button>
-                </div>
-                <input type="number" id="inputCarboidratos" placeholder="Digite a quantidade de carboidratos" min="0" max="300" step="0.1">
-            </div>
-            
-            <div class="form-group">
-                <div class="label-with-help">
-                    <label for="inputRazaoIC">Razão Insulina/Carboidrato:</label>
-                    <button type="button" class="help-btn" onclick="mostrarAjuda('razao-ic')">
-                        <i class="fas fa-question-circle"></i>
-                    </button>
-                </div>
-                <input type="number" id="inputRazaoIC" placeholder="g de carboidrato por 1U de insulina" min="1" max="100" step="0.1">
-            </div>
-            
-            <div class="form-group">
-                <div class="label-with-help">
-                    <label for="inputFSI">Fator de Sensibilidade (FSI):</label>
-                    <button type="button" class="help-btn" onclick="mostrarAjuda('fsi')">
-                        <i class="fas fa-question-circle"></i>
-                    </button>
-                </div>
-                <input type="number" id="inputFSI" placeholder="mg/dL reduzidos por 1U de insulina" min="1" max="100" step="0.1">
-            </div>
-            
-            <!-- Seleção de insulina para bolus -->
-            <div class="admin-route-selector">
-                <div class="label-with-help">
-                    <label>Tipo de Insulina para Bolus:</label>
-                    <button type="button" class="help-btn" onclick="mostrarAjuda('tipo-insulina')">
-                        <i class="fas fa-question-circle"></i>
-                    </button>
-                </div>
-                <div class="route-options">
-                    <div class="route-option active" id="insulin-regular" onclick="selectInsulinType('regular')">
-                        <i class="fas fa-vial"></i>
-                        <span>Regular</span>
-                    </div>
-                    <div class="route-option" id="insulin-rapid" onclick="selectInsulinType('rapid')">
-                        <i class="fas fa-bolt"></i>
-                        <span>Ultrarrápida</span>
-                    </div>
-                </div>
-                <div class="route-description" id="insulin-description">
-                    Insulina Regular: Início em 30min, pico em 2-3h, duração 5-8h. Aplicar 30min antes das refeições.
-                </div>
-            </div>
-            
-            <button onclick="calcularBolus()"><i class="fas fa-syringe"></i> Calcular Bolus</button>
-            
-            <div id="resultadosBolus" class="results">
-                <h3>Resultados do Cálculo de Bolus</h3>
-                
-                <div class="result-item">
-                    <span class="result-label">Diferença de Glicemia (atual - alvo):</span> 
-                    <span class="result-value"><span id="diferencaGlicemia">--</span> mg/dL</span>
-                </div>
-                
-                <div class="result-item">
-                    <span class="result-label">Bolus de Correção:</span> 
-                    <span class="result-value"><span id="bolusCorrecao">--</span> U</span>
-                </div>
-                
-                <div class="result-item">
-                    <span class="result-label">Bolus Alimentar:</span> 
-                    <span class="result-value"><span id="bolusAlimentar">--</span> U</span>
-                </div>
-                
-                <div class="result-item">
-                    <span class="result-label">Bolus Total:</span> 
-                    <span class="result-value"><span id="bolusTotalFinal">--</span> U</span>
-                </div>
-                
-                <!-- Timing info for bolus administration -->
-                <div class="timing-info">
-                    <h4><i class="fas fa-clock"></i> Horário de Aplicação:</h4>
-                    <div id="bolus-timing-info">
-                        <strong>Insulina Regular:</strong> 
-                        <ul class="timing-list">
-                            <li><i class="fas fa-angle-right"></i> Aplicar 30 minutos antes da refeição</li>
-                            <li><i class="fas fa-angle-right"></i> Esperar absorção antes de se alimentar para evitar picos glicêmicos</li>
-                        </ul>
-                    </div>
-                    <p class="citation">Fonte: American Diabetes Association. (2022). Standards of Medical Care in Diabetes. Diabetes Care.</p>
-                </div>
-            </div>
-            
-            <div class="info-box">
-                <h4>Como o cálculo é feito:</h4>
-                <p><strong>Bolus de Correção:</strong> Corrige a glicemia elevada</p>
-                <p><em>Fórmula:</em> (Glicemia Atual - Glicemia Alvo) ÷ FSI = Unidades de insulina</p>
-                <p><strong>Bolus Alimentar:</strong> Cobre os carboidratos a serem consumidos</p>
-                <p><em>Fórmula:</em> Quantidade de Carboidratos ÷ Razão IC = Unidades de insulina</p>
-                <p><strong>Bolus Total:</strong> Bolus de Correção + Bolus Alimentar</p>
-                <p><strong>Observação:</strong> Se a glicemia estiver abaixo do alvo, considere reduzir o bolus alimentar ou consumir carboidratos extras.</p>
-                
-                <h4>Diferenças entre insulinas:</h4>
-                <table>
-                    <tr>
-                        <th>Tipo</th>
-                        <th>Início de ação</th>
-                        <th>Pico</th>
-                        <th>Duração</th>
-                        <th>Tempo antes da refeição</th>
-                    </tr>
-                    <tr>
-                        <td>Regular</td>
-                        <td>30 minutos</td>
-                        <td>2-3 horas</td>
-                        <td>5-8 horas</td>
-                        <td>30 minutos</td>
-                    </tr>
-                    <tr>
-                        <td>Ultrarrápida (Lispro, Aspart)</td>
-                        <td>10-15 minutos</td>
-                        <td>1-2 horas</td>
-                        <td>3-5 horas</td>
-                        <td>0-15 minutos</td>
-                    </tr>
-                </table>
             </div>
         </div>
         
-        <!-- Aba 3: Bomba de Infusão -->
-        <div id="bomba" class="tab-content">
-            <h2>Cálculo para Bomba de Infusão</h2>
+        <!-- Aba 2: Glargina/Lispro -->
+        <div id="glargina-lispro" class="tab-content">
+            <h2>Cálculo Glargina/Lispro</h2>
             
             <div class="form-group">
-                <label for="inputPesoBomba">Peso (kg):</label>
-                <input type="number" id="inputPesoBomba" placeholder="Digite o peso em kg" min="0.1" max="300" step="0.1">
+                <label for="inputPesoGL">Peso (kg):</label>
+                <input type="number" id="inputPesoGL" placeholder="Digite o peso em kg" min="0.1" max="300" step="0.1">
             </div>
             
             <div class="form-group">
-                <label for="selectDoseBomba">Dosagem (U/kg/hora):</label>
-                <select id="selectDoseBomba">
-                    <option value="0.02">0,02 - Baixa intensidade</option>
-                    <option value="0.05" selected>0,05 - Intensidade padrão</option>
-                    <option value="0.1">0,10 - Alta intensidade</option>
-                    <option value="-1">Personalizada</option>
+                <label for="selectFatorGL">Fator (U/kg):</label>
+                <select id="selectFatorGL">
+                    <option value="0.3">0,3 - Muito sensível</option>
+                    <option value="0.5">0,5 - Sensível</option>
+                    <option value="0.7" selected>0,7 - Padrão</option>
+                    <option value="1.0">1,0 - Resistente</option>
+                    <option value="1.5">1,5 - Muito resistente</option>
+                    <option value="2.0">2,0 - Extremamente resistente</option>
+            <div class="form-group hidden" id="fatorPersonalizadoGLGroup">
                 </select>
             </div>
             
-            <div class="form-group" id="doseBombaPersonalizadaGroup" style="display: none;">
-                <label for="inputDoseBombaPersonalizada">Dosagem personalizada (U/kg/hora):</label>
-                <input type="number" id="inputDoseBombaPersonalizada" placeholder="Digite a dosagem" min="0.01" max="1" step="0.01">
+            <div class="form-group hidden" id="fatorPersonalizadoGLGroup">
+                <label for="inputFatorPersonalizadoGL">Fator personalizado:</label>
+                <input type="number" id="inputFatorPersonalizadoGL" placeholder="Digite o fator personalizado" min="0.1" max="10" step="0.1">
             </div>
             
-            <div class="form-group">
-                <label for="selectConcentracao">Concentração da Solução:</label>
-                <select id="selectConcentracao">
-                    <option value="1">1 U/mL (diluição 1:1)</option>
-                    <option value="0.1">0,1 U/mL (diluição 1:10)</option>
-                    <option value="0.01">0,01 U/mL (diluição 1:100)</option>
-                </select>
+            <div class="admin-route-selector">
+                <label>Via de Administração:</label>
+                <div class="route-options">
+                    <div class="route-option active" id="route-sc-gl" onclick="selectRouteGL('sc')">
+                        <i class="fas fa-syringe"></i>
+                        <span>Subcutânea</span>
+                    </div>
+                </div>
+                <div class="route-description" id="route-description-gl">
+                    Via subcutânea: Administração no tecido subcutâneo, geralmente abdômen, coxas ou braços. Única via para Glargina e Lispro.
+                </div>
             </div>
             
-            <div class="form-group">
-                <label for="selectInfusor">Tipo de Infusor:</label>
-                <select id="selectInfusor">
-                    <option value="seringa">Bomba de Seringa</option>
-                    <option value="volumetrica">Bomba Volumétrica</option>
-                </select>
+            <button onclick="calcularGlarginaLispro()"><i class="fas fa-calculator"></i> Calcular Doses</button>
+            
+            <div id="resultadosGL" class="results">
+                <h3>Resultados do Esquema Glargina/Lispro</h3>
+                
+                <div class="result-item">
+                    <span class="result-label">Dose Total Diária:</span> 
+                    <span class="result-value"><span id="doseTotalGL">--</span> U</span>
+                </div>
+                
+                <h4 class="section-title">Distribuição por Tipo de Insulina:</h4>
+                <div class="result-item">
+                    <span class="result-label">Glargina (60%):</span> 
+                    <span class="result-value"><span id="doseGlargina">--</span> U</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Lispro Total (40%):</span> 
+                    <span class="result-value"><span id="doseLisproTotal">--</span> U</span>
+                </div>
+                
+                <h4 class="section-title">Distribuição da Lispro nas Refeições:</h4>
+                <div class="result-item">
+                    <span class="result-label">Lispro Café da Manhã (1/3):</span> 
+                    <span class="result-value"><span id="lisproManha">--</span> U</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Lispro Almoço (1/3):</span> 
+                    <span class="result-value"><span id="lisproAlmoco">--</span> U</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Lispro Jantar (1/3):</span> 
+                    <span class="result-value"><span id="lisproJantar">--</span> U</span>
+                </div>
             </div>
             
-            <button onclick="calcularBomba()"><i class="fas fa-pump-medical"></i> Calcular Dose</button>
+            <!-- Diagrama de distribuição das doses -->
+                            <div class="bar-section nph-color glargina-width">Glargina 60%</div>
+                            <div class="bar-section regular-color lispro-width">Lispro 40%</div>
+                    <h4 class="distribution-title">Esquema de Distribuição Glargina/Lispro</h4>
+                    
+                            <div class="bar-section nph-color glargina-width">Glargina 60%</div>
+                            <div class="bar-section regular-color lispro-width">Lispro 40%</div>
+                        <div class="diagram-label">Dose Total:</div>
+                        <div class="diagram-bar">
+                            <div class="bar-section nph-color glargina-bar">Glargina 60%</div>
+                            <div class="bar-section regular-color lispro-bar">Lispro 40%</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Distribuição Lispro -->
+                    <div class="diagram-row">
+                        <div class="diagram-label">Distribuição Lispro:</div>
+                        <div class="diagram-bar">
+                            <div class="bar-section regular-color cafe-bar">Café 1/3</div>
+                            <div class="bar-section regular-color almoco-bar">Almoço 1/3</div>
+                            <div class="bar-section regular-color jantar-bar">Jantar 1/3</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Legenda -->
+                    <div class="diagram-legend">
+                        <div class="legend-item">
+                            <div class="legend-color nph-color"></div>
+                            <span>Glargina (Basal)</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color regular-color"></div>
+                            <span>Lispro (Bolus)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
             
-            <div id="resultadosBomba" class="results">
-                <h3>Resultados para Infusão Contínua</h3>
-                
-                <div class="result-item">
-                    <span class="result-label">Dose horária total:</span> 
-                    <span class="result-value"><span id="doseHorariaBomba">--</span> U/h</span>
-                </div>
-                
-                <div class="result-item">
-                    <span class="result-label">Volume a infundir:</span> 
-                    <span class="result-value"><span id="volumeInfusao">--</span> mL/h</span>
-                </div>
-                
-                <div class="result-item">
-                    <span class="result-label">Velocidade de infusão:</span> 
-                    <span class="result-value"><span id="velocidadeInfusao">--</span> mL/h</span>
-                </div>
-                
-                <h4 class="section-title">Dose em 24 horas:</h4>
-                
-                <div class="result-item">
-                    <span class="result-label">Dose total em 24h:</span> 
-                    <span class="result-value"><span id="doseDia">--</span> U</span>
-                </div>
-                
-                <div class="result-item">
-                    <span class="result-label">Volume total em 24h:</span> 
-                    <span class="result-value"><span id="volumeDia">--</span> mL</span>
-                </div>
-                
-                <div class="timing-info">
-                    <h4><i class="fas fa-check-circle"></i> Monitoramento:</h4>
-                    <ul class="timing-list">
-                        <li><i class="fas fa-angle-right"></i> <strong>Frequência de Verificação de Glicemia:</strong> A cada 1-2 horas até estabilização, depois a cada 4 horas</li>
-                        <li><i class="fas fa-angle-right"></i> <strong>Ajuste de Dose:</strong> Incrementos/decrementos de 0,01 U/kg/h conforme necessário</li>
-                        <li><i class="fas fa-angle-right"></i> <strong>Objetivo Glicêmico:</strong> Manter glicemia entre 140-180 mg/dL para pacientes críticos</li>
-                    </ul>
-                    <p class="citation">Fonte: American Diabetes Association. (2022). Standards of Medical Care in Diabetes. Diabetes Care, 45(Supplement 1).</p>
-                </div>
+            <!-- Horários de Aplicação -->
+            <div class="timing-info">
+                <h4><i class="fas fa-clock"></i> Horários Recomendados de Aplicação:</h4>
+                <ul class="timing-list">
+                    <li><i class="fas fa-circle"></i> <strong>Insulina Glargina (basal):</strong></li>
+                    <li class="indent"><i class="fas fa-angle-right"></i> Uma vez ao dia, no mesmo horário (preferencialmente antes de dormir, entre 21:00-22:00h)</li>
+                    <li class="indent"><i class="fas fa-angle-right"></i> A regularidade no horário de aplicação é essencial para manter níveis constantes</li>
+                    
+                    <li><i class="fas fa-circle"></i> <strong>Insulina Lispro (bolus):</strong></li>
+                    <li class="indent"><i class="fas fa-angle-right"></i> Café da manhã: 0-15 minutos antes de iniciar a refeição (entre 06:00-08:00h)</li>
+                    <li class="indent"><i class="fas fa-angle-right"></i> Almoço: 0-15 minutos antes de iniciar a refeição (entre 12:00-13:00h)</li>
+                    <li class="indent"><i class="fas fa-angle-right"></i> Jantar: 0-15 minutos antes de iniciar a refeição (entre 18:00-20:00h)</li>
+                </ul>
+                <p class="citation">Fonte: Sociedade Brasileira de Diabetes. Diretrizes da Sociedade Brasileira de Diabetes 2021-2022.</p>
             </div>
             
             <div class="info-box">
-                <h4>Informações sobre Bomba de Infusão:</h4>
-                <p><strong>Indicações para infusão IV de insulina:</strong></p>
+                <h4>Informações sobre o esquema Glargina/Lispro:</h4>
+                <p><strong>Características do Esquema:</strong> Este esquema utiliza insulina glargina como basal (60% da dose total) e insulina lispro como bolus prandial (40% da dose total).</p>
+                <p><strong>Vantagens:</strong></p>
                 <ul>
-                    <li>Pacientes em estado crítico</li>
-                    <li>Cetoacidose diabética</li>
-                    <li>Estado hiperglicêmico hiperosmolar</li>
-                    <li>Perioperatório de cirurgias de grande porte</li>
-                    <li>Nutrição parenteral total</li>
-                    <li>Uso de corticosteroides em altas doses</li>
+                    <li>Perfil mais fisiológico, mimetizando a secreção natural de insulina</li>
+                    <li>Menor risco de hipoglicemias, especialmente noturnas</li>
+                    <li>Cobertura mais previsível e estável ao longo do dia</li>
+                    <li>Flexibilidade de horários de refeições</li>
                 </ul>
+                <p><strong>Glargina:</strong> Insulina de ação prolongada, sem pico definido, com duração de até 24 horas. Mantém níveis basais constantes.</p>
+                <p><strong>Lispro:</strong> Insulina de ação ultrarrápida, início em 10-15 minutos, pico em 1-2 horas, duração 3-5 horas. Ideal para cobertura de refeições.</p>
+            </div>
+        </div>
+        
+        <!-- Aba 3: Prescrição -->
+        <div id="prescricao" class="tab-content">
+            <h2>Prescrição Médica</h2>
+            
+            <div class="form-group">
+                <label for="selectTipoPrescrição">Selecione o tipo de esquema:</label>
+                <select id="selectTipoPrescrição">
+                    <option value="esquema1">Esquema Convencional (NPH/Regular)</option>
+                    <option value="esquema2">Esquema Glargina/Lispro</option>
+                </select>
+            </div>
+            
+            <div id="dadosPrescrição" class="form-group">
+                <p>Clique em um dos esquemas calculados anteriormente para gerar automaticamente a prescrição ou insira os valores manualmente abaixo:</p>
+            </div>
+            
+            <div id="prescricao-esquema1" class="prescricao-esquema">
+                <h4>Esquema Convencional (NPH/Regular)</h4>
                 
-                <p><strong>Diluição da solução:</strong></p>
+                <div class="form-group">
+                    <label for="nphManha">NPH Manhã (UI):</label>
+                    <input type="number" id="nphManha" min="0" step="1" placeholder="UI">
+                </div>
+                
+                <div class="form-group">
+                    <label for="regularManha">Regular Manhã (UI):</label>
+                    <input type="number" id="regularManha" min="0" step="1" placeholder="UI">
+                </div>
+                
+                <div class="form-group">
+                    <label for="nphNoite">NPH Noite (UI):</label>
+                    <input type="number" id="nphNoite" min="0" step="1" placeholder="UI">
+                </div>
+                
+                <div class="form-group">
+                    <label for="regularNoite">Regular Noite (UI):</label>
+                    <input type="number" id="regularNoite" min="0" step="1" placeholder="UI">
+                </div>
+            </div>
+            
+            <div id="prescricao-esquema2" class="prescricao-esquema">
+                <h4>Esquema Glargina/Lispro</h4>
+                
+                <div class="form-group">
+                    <label for="glargina">Glargina (UI):</label>
+                    <input type="number" id="glargina" min="0" step="1" placeholder="UI">
+                </div>
+                
+                <div class="form-group">
+                    <label for="lisproManhaPrescricao">Lispro Café da Manhã (UI):</label>
+                    <input type="number" id="lisproManhaPrescricao" min="0" step="1" placeholder="UI">
+                </div>
+                
+                <div class="form-group">
+                    <label for="lisproAlmocoPrescricao">Lispro Almoço (UI):</label>
+                    <input type="number" id="lisproAlmocoPrescricao" min="0" step="1" placeholder="UI">
+                </div>
+                
+                <div class="form-group">
+                    <label for="lisproJantarPrescricao">Lispro Jantar (UI):</label>
+                    <input type="number" id="lisproJantarPrescricao" min="0" step="1" placeholder="UI">
+                </div>
+            </div>
+            
+            <button onclick="gerarPrescricao()"><i class="fas fa-file-prescription"></i> Gerar Prescrição</button>
+            
+            <div id="resultadoPrescricao" class="results">
+                <h3>Prescrição Médica</h3>
+                
+                <div id="prescricaoTexto" class="prescricao-texto">
+                    <!-- Modelo da prescrição será inserido aqui pelo JavaScript -->
+                </div>
+                
+                <button onclick="copiarPrescricao()" class="btn-copiar"><i class="fas fa-copy"></i> Copiar Prescrição</button>
+                <button onclick="imprimirPrescricao()" class="btn-imprimir"><i class="fas fa-print"></i> Imprimir</button>
+            </div>            
+            <div class="info-box">
+                <h4>Orientações para prescrição:</h4>
+                <p><strong>Forma farmacêutica:</strong> Solução injetável</p>
+                <p><strong>Apresentações:</strong></p>
                 <ul>
-                    <li><strong>1:1 (1 U/mL)</strong> - Padrão para a maioria dos pacientes adultos</li>
-                    <li><strong>1:10 (0,1 U/mL)</strong> - Para pacientes muito sensíveis ou com necessidade de infusão precisa</li>
-                    <li><strong>1:100 (0,01 U/mL)</strong> - Para pacientes pediátricos ou necessidades de doses mínimas</li>
+                    <li>Insulina NPH: Frasco-ampola com 10 mL (100 UI/mL)</li>
+                    <li>Insulina Regular: Frasco-ampola com 10 mL (100 UI/mL)</li>
+                    <li>Insulina Glargina: Frasco-ampola com 10 mL ou caneta descartável com 3 mL (100 UI/mL)</li>
+                    <li>Insulina Lispro: Frasco-ampola com 10 mL ou caneta descartável com 3 mL (100 UI/mL)</li>
                 </ul>
-                
-                <p><strong>Como preparar:</strong></p>
-                <ul>
-                    <li><strong>1:1</strong> - 100 unidades (1 mL) de insulina regular em 99 mL de solução salina = 100 mL total (1 U/mL)</li>
-                    <li><strong>1:10</strong> - 10 unidades (0,1 mL) de insulina regular em 99,9 mL de solução salina = 100 mL total (0,1 U/mL)</li>
-                    <li><strong>1:100</strong> - 1 unidade (0,01 mL) de insulina regular em 99,99 mL de solução salina = 100 mL total (0,01 U/mL)</li>
-                </ul>
-                
                 <p><strong>Observações importantes:</strong></p>
                 <ul>
-                    <li>Usar apenas insulina regular humana para infusão intravenosa</li>
-                    <li>Trocar o sistema e a solução a cada 24 horas</li>
-                    <li>Avaliar a necessidade de reposição de potássio</li>
-                    <li>Administrar dextrose quando a glicemia atinge 250 mg/dL em cetoacidose e 300 mg/dL em hiperosmolar</li>
+                    <li>As unidades de insulina são sempre arredondadas para evitar erros de dosagem</li>
+                    <li>Prescreva as seringas compatíveis com as doses calculadas (0,3 mL, 0,5 mL ou 1,0 mL)</li>
+                    <li>Para pacientes com necessidade de doses precisas, considere o uso de canetas de insulina</li>
+                    <li>Recomende o rodízio dos locais de aplicação para evitar lipodistrofia</li>
                 </ul>
-                
-                <p><strong>Transição da infusão IV para SC:</strong></p>
-                <ul>
-                    <li>Calcular a dose total de insulina nas últimas 6 horas</li>
-                    <li>Multiplicar por 4 para obter a dose diária estimada</li>
-                    <li>Dividir 50% para basal e 50% para bolus</li>
-                    <li>Iniciar insulina SC 1-2 horas antes de suspender a infusão</li>
-                </ul>
-                
-                <p class="citation">Referências: Sociedade Brasileira de Diabetes. (2022). Diretrizes da Sociedade Brasileira de Diabetes 2021-2022.</p>
             </div>
         </div>
         
-        <!-- Aba 4: Guia Médico -->
-        <div id="medicalInfo" class="tab-content">
-            <h2>Guia Médico - Insulinoterapia</h2>
+        <!-- Aba 4: Guia de Insulinas -->
+        <div id="guia-info" class="tab-content">
+            <h2>Guia de Insulinas</h2>
             
             <button class="collapsible">Tipos de Insulina e Farmacocinética</button>
             <div class="collapse-content">
@@ -633,63 +1577,59 @@
             <button class="collapsible">Esquemas de Tratamento</button>
             <div class="collapse-content">
                 <div class="collapse-content-inner">
-                    <h4>1. Esquema Convencional (70/30 ou 2 doses)</h4>
+                    <h4>1. Esquema Convencional (NPH/Regular)</h4>
                     <p>Mais simples, menos flexível, geralmente 2 injeções por dia (manhã e noite).</p>
                     <ul>
                         <li><strong>2/3 da dose pela manhã:</strong> 
                             <ul>
-                                <li>50% Intermediária (NPH) + 50% Rápida (Regular) antes do café</li>
+                                <li>70% NPH + 30% Regular antes do café</li>
                                 <li><strong>Horário:</strong> 30 minutos antes do café da manhã (06:00-08:00h)</li>
                             </ul>
                         </li>
                         <li><strong>1/3 da dose à noite:</strong> 
                             <ul>
-                                <li>50% Intermediária (NPH) + 50% Rápida (Regular) antes do jantar</li>
+                                <li>50% NPH + 50% Regular antes do jantar</li>
                                 <li><strong>Horário:</strong> 30 minutos antes do jantar (18:00-20:00h)</li>
                             </ul>
                         </li>
                     </ul>
                     <p><strong>Indicações:</strong> Pacientes com rotina regular, idosos, dificuldade de adesão a esquemas complexos.</p>
                     
-                    <h4>2. Esquema Basal-Bolus (múltiplas doses)</h4>
-                    <p>Mais fisiológico, flexível, geralmente 4 injeções por dia.</p>
+                    <h4>2. Esquema Glargina/Lispro</h4>
+                    <p>Esquema com insulina basal de longa duração e bolus de ação ultrarrápida, proporcionando maior flexibilidade.</p>
+                    <ul>
+                        <li><strong>Basal (60% da dose total):</strong> 
+                            <ul>
+                                <li>Insulina Glargina 1x/dia</li>
+                                <li><strong>Horário:</strong> Mesmo horário todos os dias, preferencialmente antes de dormir</li>
+                            </ul>
+                        </li>
+                        <li><strong>Bolus (40% da dose total):</strong> Insulina Lispro antes das refeições
+                            <ul>
+                                <li>1/3 no café da manhã</li>
+                                <li>1/3 no almoço</li>
+                                <li>1/3 no jantar</li>
+                                <li><strong>Horário:</strong> 0-15 minutos antes das refeições</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <p><strong>Indicações:</strong> DM1, gestantes, rotina variável, melhor controle glicêmico, pacientes com hipoglicemias noturnas frequentes.</p>
+                    
+                    <h4>3. Esquema Basal-Bolus Clássico</h4>
+                    <p>Divisão da dose total em 50% basal e 50% bolus, com flexibilidade na distribuição das doses de bolus.</p>
                     <ul>
                         <li><strong>Basal (50% da dose total):</strong> 
                             <ul>
-                                <li>Insulina de ação longa 1x/dia (Glargina, Degludeca) ou NPH 2x/dia</li>
-                                <li><strong>Horário (Glargina/Degludeca):</strong> Mesmo horário todos os dias, preferencialmente antes de dormir</li>
-                                <li><strong>Horário (NPH):</strong> Antes do café da manhã e ao deitar</li>
+                                <li>Insulina basal (Glargina, Detemir, Degludeca) 1x/dia ou NPH 2x/dia</li>
                             </ul>
                         </li>
-                        <li><strong>Bolus (50% da dose total):</strong> Insulina de ação rápida antes das refeições
+                        <li><strong>Bolus (50% da dose total):</strong> 
                             <ul>
-                                <li>40% no café da manhã</li>
-                                <li>30% no almoço</li>
-                                <li>30% no jantar</li>
-                                <li><strong>Horário (Regular):</strong> 30 minutos antes das refeições</li>
-                                <li><strong>Horário (Ultrarrápida):</strong> 0-15 minutos antes das refeições</li>
+                                <li>Distribuição típica: 40% café, 30% almoço, 30% jantar</li>
                             </ul>
                         </li>
                     </ul>
-                    <p><strong>Indicações:</strong> DM1, gestantes, rotina variável, melhor controle glicêmico.</p>
-                    
-                    <h4>3. Esquema Misto Adaptado</h4>
-                    <p>Flexibilidade intermediária.</p>
-                    <ul>
-                        <li><strong>Basal:</strong> 
-                            <ul>
-                                <li>Insulina de ação longa 1x/dia</li>
-                                <li><strong>Horário:</strong> Antes de dormir (21:00-23:00h)</li>
-                            </ul>
-                        </li>
-                        <li><strong>Correções:</strong> 
-                            <ul>
-                                <li>Insulina de ação rápida de acordo com as glicemias capilares</li>
-                                <li><strong>Horário:</strong> Conforme necessidade, respeitando o tempo de ação da insulina anterior</li>
-                            </ul>
-                        </li>
-                    </ul>
-                    <p><strong>Indicações:</strong> Pacientes com dificuldade para múltiplas doses mas que precisam de melhor controle.</p>
+                    <p><strong>Indicações:</strong> DM1, DM2 com falência avançada das células beta, pacientes com necessidades de ajustes frequentes.</p>
                     
                     <p class="citation">Fonte: Sociedade Brasileira de Diabetes. (2022). Diretrizes da Sociedade Brasileira de Diabetes 2021-2022.</p>
                 </div>
@@ -701,9 +1641,10 @@
                     <h4>Monitoramento ideal para ajuste:</h4>
                     <ul>
                         <li>Glicemia de jejum (ajusta basal noturna)</li>
-                        <li>Glicemia pré-almoço (ajusta basal matinal)</li>
-                        <li>Glicemia pré-jantar (ajusta basal vespertina)</li>
-                        <li>Glicemia 2h pós-refeições (ajusta bolus)</li>
+                        <li>Glicemia pré-almoço (ajusta bolus matinal)</li>
+                        <li>Glicemia pré-jantar (ajusta bolus do almoço)</li>
+                        <li>Glicemia 2h pós-refeições (avalia eficácia do bolus)</li>
+                        <li>Glicemia ao deitar (ajusta bolus do jantar)</li>
                     </ul>
                     
                     <h4>Regras para ajuste de dose:</h4>
@@ -711,7 +1652,7 @@
                         <li><strong>Ajustes lentos e pequenos:</strong> 10-20% da dose a cada 2-3 dias</li>
                         <li><strong>Hipoglicemias:</strong> Reduzir dose da insulina correspondente ao período em 20%</li>
                         <li><strong>Hiperglicemia persistente:</strong> Aumentar insulina correspondente ao período em 10-20%</li>
-                        <li><strong>Fenômeno do alvorecer:</strong> Hiperglicemia matinal por aumento de hormônios contrarreguladores; pode requerer ajuste na NPH noturna ou Glargina</li>
+                        <li><strong>Fenômeno do alvorecer:</strong> Hiperglicemia matinal por aumento de hormônios contrarreguladores; pode requerer ajuste na insulina basal</li>
                     </ul>
                     
                     <h4>Alvo glicêmico:</h4>
@@ -802,208 +1743,28 @@
                         <li>Aumento importante da resistência à insulina</li>
                         <li>Pode requerer 30-40% a mais de insulina</li>
                         <li>Maior necessidade de bolus à tarde se corticoide matinal</li>
-                        <li><strong>Horário:</strong> Ajustar o horário do bolus para coincidir com o pico do corticoide</li>
                     </ul>
                     
                     <h4>Gravidez:</h4>
                     <ul>
-                        <li>Controle rigoroso: jejum <95 mg/dL, 1h pós-prandial <140 mg/dL, 2h <120 mg/dL</li>
+                        <li>Controle rigoroso: jejum &lt;95 mg/dL, 1h pós-prandial &lt;140 mg/dL, 2h &lt;120 mg/dL</li>
                         <li>Esquema basal-bolus preferencial</li>
                         <li>Necessidade crescente de insulina ao longo da gestação</li>
-                        <li><strong>Monitoramento:</strong> Pelo menos 6 vezes ao dia, incluindo madrugada</li>
                     </ul>
                     
                     <p class="citation">Fonte: American Diabetes Association. (2022). Standards of Medical Care in Diabetes. Diabetes Care, 45(Supplement 1).</p>
                 </div>
             </div>
             
-            <button class="collapsible">Pearls para Prescrição e Acompanhamento</button>
-            <div class="collapse-content">
-                <div class="collapse-content-inner">
-                    <ul>
-                        <li>Informe ao paciente que em média são necessários 3 dias para que um ajuste de dose basal se estabilize e mostre resultados;</li>
-                        <li>Considerar o momento alimentar em relação ao pico da insulina: Regular deve ser aplicada 30 min antes das refeições;</li>
-                        <li>Pacientes com neuropatia autonômica podem não perceber sintomas adrenérgicos de hipoglicemia - monitoramento mais frequente;</li>
-                        <li>Uma simples regra prática: para cada 30 mg/dL acima do alvo, adicione 2U de insulina de correção;</li>
-                        <li>Ao iniciar corticoterapia, aumente a dose de insulina em 20% e monitore para ajustes adicionais;</li>
-                        <li>O efeito cumulativo da insulina NPH pode causar hipoglicemias tardias - atenção aos esquemas BID;</li>
-                        <li>Exercícios podem aumentar a sensibilidade à insulina por até 48h - oriente redução de dose para atividades não rotineiras;</li>
-                        <li>Infecções e estresse agudo podem aumentar a necessidade de insulina em 20-50%;</li>
-                        <li>Bolus prandial: aplique antes das refeições. Bolus de correção: pode ser aplicado a qualquer momento;</li>
-                        <li>Na ausência de automonitoramento, prefira esquemas menos intensivos e mais previsíveis.</li>
-                    </ul>
-                    
-                    <h4>Horários específicos a observar:</h4>
-                    <ul>
-                        <li><strong>Período pré-café da manhã (6-8h):</strong> Avalia eficácia da insulina basal noturna</li>
-                        <li><strong>Período pré-almoço (11-12h):</strong> Avalia eficácia do bolus matinal</li>
-                        <li><strong>Período pré-jantar (18-19h):</strong> Avalia eficácia da insulina basal matinal (se NPH em duas doses)</li>
-                        <li><strong>Período ao deitar (22-23h):</strong> Avalia eficácia do bolus do jantar</li>
-                        <li><strong>Período da madrugada (2-3h):</strong> Detecta hipoglicemias noturnas assintomáticas</li>
-                    </ul>
-                    
-                    <p class="citation">Fonte: Sociedade Brasileira de Diabetes. (2022). Diretrizes da Sociedade Brasileira de Diabetes 2021-2022.</p>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Aba 5: Algoritmos -->
-        <div id="algoritmo" class="tab-content">
-            <h2>Algoritmos e Metodologia de Cálculo</h2>
-            <p>Esta seção detalha os algoritmos e fórmulas utilizados na calculadora para revisão técnica e validação.</p>
-            
-            <div class="medical-notes">
-                <h3>Representação do Esquema de Distribuição de Insulina</h3>
-                
-                <!-- Diagrama melhorado em barras horizontais -->
-                <div class="diagram-container">
-                    <div class="distribution-diagram">
-                        <h4 style="text-align: center; margin-bottom: 20px;">Esquema de Distribuição da Dose Total (70/30)</h4>
-                        
-                        <!-- Dose Total -->
-                        <div class="diagram-row">
-                            <div class="diagram-label">Dose Total:</div>
-                            <div class="diagram-bar">
-                                <div class="bar-section nph-color" style="width:70%;">Dia 70%</div>
-                                <div class="bar-section regular-color" style="width:30%;">Noite 30%</div>
-                            </div>
-                        </div>
-                        
-                        <!-- Dose Diurna -->
-                        <div class="diagram-row">
-                            <div class="diagram-label">Dose Diurna (70%):</div>
-                            <div class="diagram-bar">
-                                <div class="bar-section nph-color" style="width:70%;">NPH (70%)</div>
-                                <div class="bar-section regular-color" style="width:30%;">Regular (30%)</div>
-                            </div>
-                        </div>
-                        
-                        <!-- Dose Noturna -->
-                        <div class="diagram-row">
-                            <div class="diagram-label">Dose Noturna (30%):</div>
-                            <div class="diagram-bar">
-                                <div class="bar-section nph-color" style="width:50%;">NPH (50%)</div>
-                                <div class="bar-section regular-color" style="width:50%;">Regular (50%)</div>
-                            </div>
-                        </div>
-                        
-                        <!-- Esquema Basal-Bolus -->
-                        <div style="margin-top: 30px;">
-                            <h4 style="text-align: center; margin-bottom: 20px;">Esquema Basal-Bolus (50/50)</h4>
-                            
-                            <!-- Dose Total -->
-                            <div class="diagram-row">
-                                <div class="diagram-label">Dose Total:</div>
-                                <div class="diagram-bar">
-                                    <div class="bar-section nph-color" style="width:50%;">Basal 50%</div>
-                                    <div class="bar-section regular-color" style="width:50%;">Bolus 50%</div>
-                                </div>
-                            </div>
-                            
-                            <!-- Distribuição Bolus -->
-                            <div class="diagram-row">
-                                <div class="diagram-label">Distribuição Bolus:</div>
-                                <div class="diagram-bar">
-                                    <div class="bar-section regular-color" style="width:40%; background-color: #ffa8b4;">Café 40%</div>
-                                    <div class="bar-section regular-color" style="width:30%; background-color: #ffbcc5;">Almoço 30%</div>
-                                    <div class="bar-section regular-color" style="width:30%; background-color: #ffd0d6;">Jantar 30%</div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Legenda -->
-                        <div class="diagram-legend">
-                            <div class="legend-item">
-                                <div class="legend-color nph-color"></div>
-                                <span>Intermediária/Basal</span>
-                            </div>
-                            <div class="legend-item">
-                                <div class="legend-color regular-color"></div>
-                                <span>Rápida/Bolus</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <h4>Explicação do Diagrama:</h4>
-                <p>O diagrama representa visualmente a distribuição da dose total calculada:</p>
-                <ol>
-                    <li>A dose total é dividida em:
-                        <ul>
-                            <li>70% para dose diurna e 30% para dose noturna</li>
-                        </ul>
-                    </li>
-                    <li>A dose diurna (70% da dose total) é distribuída em:
-                        <ul>
-                            <li>70% NPH e 30% Regular</li>
-                        </ul>
-                    </li>
-                    <li>A dose noturna (30% da dose total) é distribuída em:
-                        <ul>
-                            <li>50% NPH e 50% Regular</li>
-                        </ul>
-                    </li>
-                    <li>No esquema Basal-Bolus, a divisão permanece em 50% da dose total para basal e 50% para bolus
-                        <ul>
-                            <li>Bolus: 40% no café da manhã, 30% no almoço e 30% no jantar</li>
-                        </ul>
-                    </li>
-                </ol>
-            </div>
-
-            <div class="info-box" style="margin-top: 20px;">
-                <h3>Informações Importantes</h3>
-                <p><strong>1. Esquemas de Insulinoterapia</strong></p>
-                <p>O esquema 70/30 (2 doses diárias) e o esquema basal-bolus (múltiplas doses) têm indicações diferentes. A escolha depende do perfil do paciente, capacidade de automonitoramento, rotina e objetivo glicêmico.</p>
-                
-                <p><strong>2. Horários de Administração</strong></p>
-                <p>Seguir corretamente os horários de aplicação é essencial para um controle glicêmico adequado:
+            <div class="info-box">
+                <h4>Sugestões para insulinoterapia eficiente:</h4>
                 <ul>
-                    <li>Insulina regular: aplicar 30 minutos antes das refeições</li>
-                    <li>Insulina ultrarrápida: aplicar 0-15 minutos antes das refeições</li>
-                    <li>Insulina NPH: aplicar antes do café da manhã e ao deitar</li>
-                    <li>Insulina basal (Glargina/Detemir): aplicar no mesmo horário diariamente</li>
+                    <li>Considere o momento alimentar em relação ao pico da insulina: Regular deve ser aplicada 30 min antes das refeições, enquanto Lispro 0-15 min;</li>
+                    <li>Uma regra prática: para cada 30 mg/dL acima do alvo, adicione 2U de insulina de correção;</li>
+                    <li>Ao iniciar corticoterapia, aumente a dose de insulina em 20% e monitore para ajustes adicionais;</li>
+                    <li>Exercícios podem aumentar a sensibilidade à insulina por até 48h - oriente redução de dose para atividades não rotineiras;</li>
+                    <li>Na ausência de automonitoramento frequente, prefira esquemas menos intensivos e mais previsíveis.</li>
                 </ul>
-                </p>
-                
-                <p><strong>3. Vias de Administração</strong></p>
-                <p>A via de administração influencia diretamente na velocidade de absorção e duração do efeito:
-                <ul>
-                    <li>Subcutânea (SC): via padrão para uso ambulatorial, absorção mais lenta</li>
-                    <li>Intravenosa (IV): uso hospitalar, início imediato (apenas insulina regular)</li>
-                    <li>Intramuscular (IM): absorção intermediária, usada em situações de emergência</li>
-                </ul>
-                </p>
-                
-                <p><strong>4. Fatores que Afetam a Dose de Insulina</strong></p>
-                <p>Além do peso, considere: idade, função renal, resistência insulínica, atividade física, uso de medicamentos (corticoides), presença de infecção/estresse e variação da dieta.</p>
-                
-                <p><strong>5. Educação do Paciente</strong></p>
-                <p>Ensine o paciente sobre técnica de aplicação, rodízio de locais, reconhecimento de hipoglicemia e ajustes em situações especiais (exercício, doença aguda).</p>
-                
-                <p><strong>6. Monitoramento</strong></p>
-                <p>O ajuste de doses deve ser feito com base em padrões glicêmicos, não em valores isolados. Analise tendências por pelo menos 3 dias consecutivos antes de modificar o esquema.</p>
-                
-                <p><strong>7. Transição de Esquemas</strong></p>
-                <p>Ao migrar de um esquema para outro, considere sobreposição para evitar hiperglicemia ou hipoglicemia durante a transição.</p>
-            </div>
-        </div>
-        
-        <!-- Modal de Emergência -->
-        <div id="modalEmergencia" class="modal">
-            <div class="modal-content" style="max-width: 400px;">
-                <span class="close-modal" onclick="fecharModalEmergencia()">&times;</span>
-                <h2 class="modal-title">Acesso à Área de Emergência</h2>
-                
-                <div id="login-emergencia">
-                    <p>Esta área contém protocolos e calculadoras para situações de emergência endocrinológica.</p>
-                    <div class="form-group">
-                        <label for="senhaEmergencia">Senha de Acesso:</label>
-                        <input type="password" id="senhaEmergencia" placeholder="Digite a senha">
-                    </div>
-                    <button onclick="verificarSenha()"><i class="fas fa-lock-open"></i> Acessar</button>
-                    <p id="erro-senha" style="color: red; display: none;">Senha incorreta. Tente novamente.</p>
-                </div>
             </div>
         </div>
         
@@ -1014,15 +1775,8 @@
                 <h2 class="modal-title">Referências Bibliográficas</h2>
                 
                 <div class="references-section">
-                    <h3>Contribuição Técnica</h3>
-                    <ol class="references-list">
-                        <li><strong>Dr. George Ibiapina</strong> - Metodologia de cálculo por peso utilizada na primeira aba desta calculadora.</li>
-                    </ol>
-                </div>
-                
-                <div class="references-section">
                     <h3>Diretrizes e Consensos</h3>
-                    <ol class="references-list" start="2">
+                    <ol class="references-list">
                         <li>Sociedade Brasileira de Diabetes. (2022). <strong>Diretrizes da Sociedade Brasileira de Diabetes 2021-2022</strong>.</li>
                         <li>American Diabetes Association. (2022). <strong>Standards of Medical Care in Diabetes</strong>. <em>Diabetes Care</em>, 45(Supplement 1).</li>
                         <li>American Diabetes Association Professional Practice Committee. (2022). <strong>16. Diabetes Care in the Hospital: Standards of Medical Care in Diabetes-2022</strong>. <em>Diabetes Care</em>, 45(Supplement_1), S244-S253.</li>
@@ -1031,8 +1785,7 @@
                 
                 <div class="references-section">
                     <h3>Livros e Manuais</h3>
-                    <ol class="references-list" start="5">
-                        <li>Grossi, S. A. A., & Pascali, P. M. (2009). <strong>Cuidados de Enfermagem em Diabetes Mellitus</strong>. Manual de Enfermagem. Sociedade Brasileira de Diabetes.</li>
+                    <ol class="references-list" start="4">
                         <li>Vilar, L. (Ed.). (2021). <strong>Endocrinologia Clínica</strong>. 7ª Ed. Guanabara Koogan.</li>
                         <li>Oliveira, J. E. P., Montenegro Junior, R. M., & Vencio, S. (2017). <strong>Diretrizes da Sociedade Brasileira de Diabetes 2017-2018</strong>. Editora Clannad.</li>
                     </ol>
@@ -1040,40 +1793,521 @@
                 
                 <div class="references-section">
                     <h3>Artigos e Publicações</h3>
-                    <ol class="references-list" start="8">
-                        <li>Walsh, J., & Roberts, R. (2012). <strong>Pumping Insulin: Everything You Need to Know for Success with an Insulin Pump</strong>. Torrey Pines Press.</li>
+                    <ol class="references-list" start="6">
                         <li>Davidson, P. C., Hebblewhite, H. R., Steed, R. D., & Bode, B. W. (2008). Analysis of guidelines for basal-bolus insulin dosing: Basal insulin, correction factor, and carbohydrate-to-insulin ratio. <em>Endocrine Practice</em>, 14(9), 1095-1101.</li>
-                        <li>Moghissi, E. S., Korytkowski, M. T., DiNardo, M., Einhorn, D., Hellman, R., Hirsch, I. B., ... & Umpierrez, G. E. (2009). American Association of Clinical Endocrinologists and American Diabetes Association consensus statement on inpatient glycemic control. <em>Diabetes care</em>, 32(6), 1119-1131.</li>
-                    </ol>
+        <footer class="footer">
+            <button class="reference-btn" type="button" onclick="openReferencesModal()">
                 </div>
             </div>
         </div>
         
-        <footer style="padding: 20px; text-align: center; border-top: 1px solid var(--border-color); margin-top: 30px;">
+        <footer class="footer">
             <button id="referencesBtn" class="reference-btn" onclick="openReferencesModal()">
                 <i class="fas fa-book"></i> Referências Bibliográficas
             </button>
         </footer>
     </div>
-    <!-- Modal de Ajuda -->
-    <div id="ajudaModal" class="modal">
-        <div class="modal-content" style="max-width: 600px;">
-            <span class="close-modal" onclick="fecharAjuda()">&times;</span>
-            <h2 class="modal-title" id="ajudaTitulo">Título da Ajuda</h2>
-            <div id="ajudaConteudo" class="help-content">
-                <!-- O conteúdo será preenchido dinamicamente pelo JavaScript -->
-            </div>
-        </div>
-    </div>
-    <!-- Importação dos arquivos JavaScript -->
-    <script src="js/utils.js"></script>
-    <script src="js/tabs.js"></script>
-    <script src="js/calculadoras.js"></script>
-    <!-- Sistema de prescrição unificado -->
-    <script src="js/prescricao.js"></script>
-    <script src="js/integracao-prescricao.js"></script>
-    <!-- Outros scripts -->
-    <script src="js/modals.js"></script>
-    <script src="js/main.js"></script>
+
+    <script>
+        // Variáveis globais
+        let selectedRoute = 'sc';
+        let selectedRouteGL = 'sc';
+        let selectedInsulinType = 'regular';
+        
+        // Função para alternar entre abas
+        document.querySelectorAll('.tab-link').forEach(tab => {
+            tab.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remove a classe active de todas as abas e conteúdos
+                document.querySelectorAll('.tab-link').forEach(item => {
+                    item.classList.remove('active');
+                });
+                document.querySelectorAll('.tab-content').forEach(item => {
+                    item.classList.remove('active');
+                });
+                
+                // Adiciona a classe active na aba clicada
+                this.classList.add('active');
+                
+                // Mostra o conteúdo correspondente
+                const tabId = this.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+        
+        // Função para abrir e fechar modal
+        function openModal() {
+            document.getElementById('aboutModal').style.display = 'block';
+        }
+        
+        function closeModal() {
+            document.getElementById('aboutModal').style.display = 'none';
+        }
+        
+        // Função para fechar modal clicando fora
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        }
+        
+        // Função para selecionar via de administração
+        function selectRoute(route) {
+            selectedRoute = route;
+            
+            // Remove a classe active de todas as opções
+            document.querySelectorAll('#calculo-peso .route-option').forEach(option => {
+                option.classList.remove('active');
+            });
+            
+            // Adiciona a classe active na opção selecionada
+            document.getElementById('route-' + route).classList.add('active');
+            
+            // Atualiza a descrição da via
+            let description = '';
+            switch(route) {
+                case 'sc':
+                    description = 'Via subcutânea: Administração no tecido subcutâneo, geralmente abdômen, coxas ou braços. Via padrão para insulinoterapia.';
+                    break;
+                case 'iv':
+                    description = 'Via intravenosa: Administração direta na corrente sanguínea. Uso restrito a ambiente hospitalar e situações de emergência.';
+                    break;
+                case 'im':
+                    description = 'Via intramuscular: Administração no tecido muscular. Absorção mais rápida que SC, utilizada em situações específicas.';
+                    break;
+            }
+            document.getElementById('route-description').textContent = description;
+        }
+        
+        // Função para selecionar via de administração Glargina/Lispro
+        function selectRouteGL(route) {
+            selectedRouteGL = route;
+            
+            // Remove a classe active de todas as opções
+            document.querySelectorAll('#glargina-lispro .route-option').forEach(option => {
+                option.classList.remove('active');
+            });
+            
+            // Adiciona a classe active na opção selecionada
+            document.getElementById('route-' + route + '-gl').classList.add('active');
+            
+            // Atualiza a descrição da via
+            let description = 'Via subcutânea: Administração no tecido subcutâneo, geralmente abdômen, coxas ou braços. Única via para Glargina e Lispro.';
+            document.getElementById('route-description-gl').textContent = description;
+        }
+        
+        // Função para exibir/ocultar campos de fator personalizado
+        document.getElementById('selectFator').addEventListener('change', function() {
+            const fatorPersonalizadoGroup = document.getElementById('fatorPersonalizadoGroup');
+            if (this.value === '-1') {
+                fatorPersonalizadoGroup.style.display = 'block';
+            } else {
+                fatorPersonalizadoGroup.style.display = 'none';
+            }
+        });
+        
+        document.getElementById('selectFatorGL').addEventListener('change', function() {
+            const fatorPersonalizadoGLGroup = document.getElementById('fatorPersonalizadoGLGroup');
+            if (this.value === '-1') {
+                fatorPersonalizadoGLGroup.style.display = 'block';
+            } else {
+                fatorPersonalizadoGLGroup.style.display = 'none';
+            }
+        });
+        
+        // Função para alternar entre tipos de prescrição
+        document.getElementById('selectTipoPrescrição').addEventListener('change', function() {
+            const esquema1 = document.getElementById('prescricao-esquema1');
+            const esquema2 = document.getElementById('prescricao-esquema2');
+            
+            if (this.value === 'esquema1') {
+                esquema1.style.display = 'block';
+                esquema2.style.display = 'none';
+            } else {
+                esquema1.style.display = 'none';
+                esquema2.style.display = 'block';
+            }
+        });
+        
+        // Função para cálculo baseado em peso
+        function calcularPeso() {
+            // Obter valores do formulário
+            const peso = parseFloat(document.getElementById('inputPeso').value);
+            let fator;
+            
+            if (document.getElementById('selectFator').value === '-1') {
+                fator = parseFloat(document.getElementById('inputFatorPersonalizado').value);
+            } else {
+                fator = parseFloat(document.getElementById('selectFator').value);
+            }
+            
+            // Validação
+            if (isNaN(peso) || peso <= 0) {
+                alert('Por favor, informe um peso válido.');
+                return;
+            }
+            
+            if (isNaN(fator) || fator <= 0) {
+                alert('Por favor, informe um fator válido.');
+                return;
+            }
+            
+            // Aplicar ajuste baseado na via de administração
+            let fatorAjustado = fator;
+            if (selectedRoute === 'iv') {
+                fatorAjustado = fator * 0.8; // 80% da dose SC para IV
+            } else if (selectedRoute === 'im') {
+                fatorAjustado = fator * 0.85; // 85% da dose SC para IM
+            }
+            
+            // Cálculo da dose total diária
+            let doseTotal = peso * fatorAjustado;
+            
+            // Arredondamento das doses
+            doseTotal = Math.round(doseTotal);
+            
+            // Cálculo do esquema 70/30
+            const doseManha = Math.round(doseTotal * 0.7); // 70% da dose total para manhã
+            const doseNoite = Math.round(doseTotal * 0.3); // 30% da dose total para noite
+            
+            const intermediariaManha = Math.round(doseManha * 0.7); // 70% da dose da manhã é NPH
+            const rapidaManha = Math.round(doseManha * 0.3); // 30% da dose da manhã é Regular
+            
+            const intermediariaNoite = Math.round(doseNoite * 0.5); // 50% da dose da noite é NPH
+            const rapidaNoite = Math.round(doseNoite * 0.5); // 50% da dose da noite é Regular
+            
+            // Cálculo do esquema Basal-Bolus
+            const doseBasal = Math.round(doseTotal * 0.5); // 50% da dose total para basal
+            const bolusTotal = Math.round(doseTotal * 0.5); // 50% da dose total para bolus
+            
+            const bolusCafe = Math.round(bolusTotal * 0.4); // 40% do bolus total para café
+            const bolusAlmoco = Math.round(bolusTotal * 0.3); // 30% do bolus total para almoço
+            const bolusJantar = Math.round(bolusTotal * 0.3); // 30% do bolus total para jantar
+            
+            // Exibir resultados
+            document.getElementById('doseTotalPeso').textContent = doseTotal;
+            document.getElementById('doseManha').textContent = doseManha;
+            document.getElementById('intermediariaManha').textContent = intermediariaManha;
+            document.getElementById('rapidaManha').textContent = rapidaManha;
+            document.getElementById('doseNoite').textContent = doseNoite;
+            document.getElementById('intermediariaNoite').textContent = intermediariaNoite;
+            document.getElementById('rapidaNoite').textContent = rapidaNoite;
+            document.getElementById('doseBasal').textContent = doseBasal;
+            document.getElementById('bolusTotal').textContent = bolusTotal;
+            document.getElementById('bolusCafe').textContent = bolusCafe;
+            document.getElementById('bolusAlmoco').textContent = bolusAlmoco;
+            document.getElementById('bolusJantar').textContent = bolusJantar;
+            
+            // Mostrar resultados
+            document.getElementById('resultadosPeso').classList.add('show');
+        }
+        
+        // Função para cálculo Glargina/Lispro
+        function calcularGlarginaLispro() {
+            // Obter valores do formulário
+            const peso = parseFloat(document.getElementById('inputPesoGL').value);
+            let fator;
+            
+            if (document.getElementById('selectFatorGL').value === '-1') {
+                fator = parseFloat(document.getElementById('inputFatorPersonalizadoGL').value);
+            } else {
+                fator = parseFloat(document.getElementById('selectFatorGL').value);
+            }
+            
+            // Validação
+            if (isNaN(peso) || peso <= 0) {
+                alert('Por favor, informe um peso válido.');
+                return;
+            }
+            
+            if (isNaN(fator) || fator <= 0) {
+                alert('Por favor, informe um fator válido.');
+                return;
+            }
+            
+            // Aplicar ajuste baseado na via de administração (apenas SC para Glargina/Lispro)
+            let fatorAjustado = fator;
+            
+            // Cálculo da dose total diária
+            let doseTotal = Math.round(peso * fatorAjustado);
+            
+            // Cálculo Glargina/Lispro
+            const doseGlargina = Math.round(doseTotal * 0.6); // 60% da dose total para Glargina
+            const doseLisproTotal = Math.round(doseTotal * 0.4); // 40% da dose total para Lispro
+            
+            // Distribuição da Lispro nas refeições (1/3 para cada)
+            const lisproManha = Math.round(doseLisproTotal / 3);
+            const lisproAlmoco = Math.round(doseLisproTotal / 3);
+            const lisproJantar = doseLisproTotal - lisproManha - lisproAlmoco; // Garante que a soma seja exata
+            
+            // Exibir resultados
+            document.getElementById('doseTotalGL').textContent = doseTotal;
+            document.getElementById('doseGlargina').textContent = doseGlargina;
+            document.getElementById('doseLisproTotal').textContent = doseLisproTotal;
+            document.getElementById('lisproManha').textContent = lisproManha;
+            document.getElementById('lisproAlmoco').textContent = lisproAlmoco;
+            document.getElementById('lisproJantar').textContent = lisproJantar;
+            
+            // Mostrar resultados
+            document.getElementById('resultadosGL').classList.add('show');
+        }
+        
+        // Função para gerar prescrição
+        function gerarPrescricao() {
+            const tipoEsquema = document.getElementById('selectTipoPrescrição').value;
+            let prescricaoTexto = '';
+            
+            if (tipoEsquema === 'esquema1') {
+                // Esquema NPH/Regular
+                const nphManha = document.getElementById('nphManha').value || '0';
+                const regularManha = document.getElementById('regularManha').value || '0';
+                const nphNoite = document.getElementById('nphNoite').value || '0';
+                const regularNoite = document.getElementById('regularNoite').value || '0';
+                
+                prescricaoTexto = `
+                <h4>RECEITUÁRIO MÉDICO</h4>
+                <p style="margin-bottom: 20px;">Data: ${new Date().toLocaleDateString('pt-BR')}</p>
+                
+                <ol>
+                    <li style="margin-bottom: 15px;">
+                        <strong>Insulina NPH Humana</strong><br>
+                        Apresentação: Frasco-ampola 10ml (100 UI/ml)<br>
+                        Posologia: Aplicar ${nphManha} unidades pela manhã (30 minutos antes do café) e ${nphNoite} unidades à noite (30 minutos antes do jantar), por via subcutânea.
+                    </li>
+                    
+                    <li style="margin-bottom: 15px;">
+                        <strong>Insulina Regular Humana</strong><br>
+                        Apresentação: Frasco-ampola 10ml (100 UI/ml)<br>
+                        Posologia: Aplicar ${regularManha} unidades pela manhã (30 minutos antes do café) e ${regularNoite} unidades à noite (30 minutos antes do jantar), por via subcutânea.
+                    </li>
+                    
+                    <li style="margin-bottom: 15px;">
+                        <strong>Seringas para insulina</strong><br>
+                        100 unidades com agulha 8mm<br>
+                        Quantidade: 60 unidades
+                    </li>
+                </ol>
+                
+                <div style="margin-top: 30px; border-top: 1px solid #ddd; padding-top: 10px;">
+                    <p><strong>Orientações:</strong></p>
+                    <ul>
+                        <li>Rodizie os locais de aplicação (abdômen, coxas, braços).</li>
+                        <li>Aplique a insulina NPH e Regular na mesma seringa, aspirando primeiro a Regular.</li>
+                        <li>Monitore a glicemia antes das principais refeições e ao deitar.</li>
+                        <li>Em caso de hipoglicemia, ingerir 15g de carboidratos (3 colheres de açúcar ou 150ml de suco).</li>
+                    </ul>
+                </div>
+                
+                <p style="margin-top: 40px; text-align: center; border-top: 1px solid #ddd; padding-top: 20px;">
+                    ________________________________<br>
+                    Carimbo e Assinatura do Médico
+                </p>`;
+            } else {
+                // Esquema Glargina/Lispro
+                const glargina = document.getElementById('glargina').value || '0';
+                const lisproManha = document.getElementById('lisproManhaPrescricao').value || '0';
+                const lisproAlmoco = document.getElementById('lisproAlmocoPrescricao').value || '0';
+                const lisproJantar = document.getElementById('lisproJantarPrescricao').value || '0';
+                
+                prescricaoTexto = `
+                <h4>RECEITUÁRIO MÉDICO</h4>
+                <p style="margin-bottom: 20px;">Data: ${new Date().toLocaleDateString('pt-BR')}</p>
+                
+                <ol>
+                    <li style="margin-bottom: 15px;">
+                        <strong>Insulina Glargina</strong><br>
+                        Apresentação: Frasco-ampola 10ml (100 UI/ml) ou caneta 3ml (100 UI/ml)<br>
+                        Posologia: Aplicar ${glargina} unidades uma vez ao dia, antes de dormir, por via subcutânea.
+                    </li>
+                    
+                    <li style="margin-bottom: 15px;">
+                        <strong>Insulina Lispro</strong><br>
+                        Apresentação: Frasco-ampola 10ml (100 UI/ml) ou caneta 3ml (100 UI/ml)<br>
+                        Posologia: Aplicar ${lisproManha} unidades antes do café da manhã, ${lisproAlmoco} unidades antes do almoço e ${lisproJantar} unidades antes do jantar, por via subcutânea (0-15 minutos antes das refeições).
+                    </li>
+                    
+                    <li style="margin-bottom: 15px;">
+                        <strong>Seringas para insulina</strong><br>
+                        100 unidades com agulha 8mm<br>
+                        Quantidade: 60 unidades
+                    </li>
+                </ol>
+                
+                <div style="margin-top: 30px; border-top: 1px solid #ddd; padding-top: 10px;">
+                    <p><strong>Orientações:</strong></p>
+                    <ul>
+                        <li>A insulina Glargina deve ser aplicada sempre no mesmo horário, preferencialmente antes de dormir.</li>
+                        <li>A insulina Lispro deve ser aplicada 0-15 minutos antes das refeições.</li>
+                        <li>Rodizie os locais de aplicação (abdômen, coxas, braços).</li>
+                        <li>Monitore a glicemia antes das principais refeições e ao deitar.</li>
+                        <li>Em caso de hipoglicemia, ingerir 15g de carboidratos (3 colheres de açúcar ou 150ml de suco).</li>
+                    </ul>
+                </div>
+                
+                <p style="margin-top: 40px; text-align: center; border-top: 1px solid #ddd; padding-top: 20px;">
+                    ________________________________<br>
+                    Carimbo e Assinatura do Médico
+                </p>`;
+            }
+            
+            // Exibir a prescrição
+            document.getElementById('prescricaoTexto').innerHTML = prescricaoTexto;
+            document.getElementById('resultadoPrescricao').classList.add('show');
+        }
+        
+        // Função para copiar prescrição
+        function copiarPrescricao() {
+            const prescricaoTexto = document.getElementById('prescricaoTexto').innerText;
+            
+            // Criar elemento temporário
+            const tempElement = document.createElement('textarea');
+            tempElement.value = prescricaoTexto;
+            document.body.appendChild(tempElement);
+            
+            // Selecionar e copiar
+            tempElement.select();
+            document.execCommand('copy');
+            
+            // Remover elemento temporário
+            document.body.removeChild(tempElement);
+            
+            // Feedback para o usuário
+            alert('Prescrição copiada para a área de transferência!');
+        }
+        
+        // Função para imprimir prescrição
+        function imprimirPrescricao() {
+            const conteudoOriginal = document.body.innerHTML;
+            const conteudoImpressao = document.getElementById('prescricaoTexto').innerHTML;
+            
+            // Substituir conteúdo da página
+            document.body.innerHTML = `
+            <div style="padding: 20px; max-width: 800px; margin: 0 auto; font-family: Arial, sans-serif;">
+                ${conteudoImpressao}
+            </div>`;
+            
+            // Imprimir
+            window.print();
+            
+            // Restaurar conteúdo original
+            document.body.innerHTML = conteudoOriginal;
+            
+            // Recarregar eventos e funcionalidades
+            carregarFuncoes();
+        }
+        
+        // Função para alternar visualização (mobile/desktop)
+        function toggleView() {
+            const container = document.getElementById('appContainer');
+            container.classList.toggle('mobile-view');
+            
+            const toggleBtn = document.querySelector('.view-toggle');
+            if (container.classList.contains('mobile-view')) {
+                toggleBtn.innerHTML = '<i class="fas fa-desktop"></i>';
+                toggleBtn.querySelector('i').style.marginRight = '0';
+            } else {
+                toggleBtn.innerHTML = '<i class="fas fa-mobile-alt"></i>';
+                toggleBtn.querySelector('i').style.marginRight = '0';
+            }
+        }
+        
+        // Função para abrir modal de referências
+        function openReferencesModal() {
+            document.getElementById('referencesModal').style.display = 'block';
+        }
+        
+        // Função para fechar modal de referências
+        function closeReferencesModal() {
+            document.getElementById('referencesModal').style.display = 'none';
+        }
+        
+        // Funcionalidade para botões collapsible
+        document.addEventListener('DOMContentLoaded', function() {
+            const coll = document.getElementsByClassName('collapsible');
+            for (let i = 0; i < coll.length; i++) {
+                coll[i].addEventListener('click', function() {
+                    this.classList.toggle('active');
+                    const content = this.nextElementSibling;
+                    if (content.style.maxHeight) {
+                        content.style.maxHeight = null;
+                    } else {
+                        content.style.maxHeight = content.scrollHeight + 'px';
+                    }
+                });
+            }
+        });
+        
+        // Função para carregar todas as funcionalidades (após imprimir)
+        function carregarFuncoes() {
+            // Funcionalidade para botões collapsible
+            const coll = document.getElementsByClassName('collapsible');
+            for (let i = 0; i < coll.length; i++) {
+                coll[i].addEventListener('click', function() {
+                    this.classList.toggle('active');
+                    const content = this.nextElementSibling;
+                    if (content.style.maxHeight) {
+                        content.style.maxHeight = null;
+                    } else {
+                        content.style.maxHeight = content.scrollHeight + 'px';
+                    }
+                });
+            }
+            
+            // Recarregar event listeners de navegação por abas
+            document.querySelectorAll('.tab-link').forEach(tab => {
+                tab.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    document.querySelectorAll('.tab-link').forEach(item => {
+                        item.classList.remove('active');
+                    });
+                    document.querySelectorAll('.tab-content').forEach(item => {
+                        item.classList.remove('active');
+                    });
+                    
+                    this.classList.add('active');
+                    
+                    const tabId = this.getAttribute('data-tab');
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+            
+            // Recarregar event listeners dos formulários
+            document.getElementById('selectFator').addEventListener('change', function() {
+                const fatorPersonalizadoGroup = document.getElementById('fatorPersonalizadoGroup');
+                if (this.value === '-1') {
+                    fatorPersonalizadoGroup.style.display = 'block';
+                } else {
+                    fatorPersonalizadoGroup.style.display = 'none';
+                }
+            });
+            
+            document.getElementById('selectFatorGL').addEventListener('change', function() {
+                const fatorPersonalizadoGLGroup = document.getElementById('fatorPersonalizadoGLGroup');
+                if (this.value === '-1') {
+                    fatorPersonalizadoGLGroup.style.display = 'block';
+                } else {
+                    fatorPersonalizadoGLGroup.style.display = 'none';
+                }
+            });
+            
+            document.getElementById('selectTipoPrescrição').addEventListener('change', function() {
+                const esquema1 = document.getElementById('prescricao-esquema1');
+                const esquema2 = document.getElementById('prescricao-esquema2');
+                
+                if (this.value === 'esquema1') {
+                    esquema1.style.display = 'block';
+                    esquema2.style.display = 'none';
+                } else {
+                    esquema1.style.display = 'none';
+                    esquema2.style.display = 'block';
+                }
+            });
+        }
+        
+        // Inicializar funcionalidades ao carregar a página
+        document.addEventListener('DOMContentLoaded', carregarFuncoes);
+    </script>
 </body>
 </html>
