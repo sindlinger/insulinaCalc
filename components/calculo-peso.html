@@ -1,105 +1,106 @@
-<!-- Aba 1: Cálculo por Peso -->
-        <div id="calculo-peso" class="tab-content active">
-            <h2>Cálculo baseado no Peso</h2>
-            
-            <div class="form-group">
-                <label for="inputPeso">Peso (kg):</label>
-                <input type="number" id="inputPeso" placeholder="Digite o peso em kg" min="0.1" max="300" step="0.1">
-            </div>
-            
-            <div class="form-group">
-                <label for="selectFator">Fator (U/kg):</label>
-                <select id="selectFator">
-                    <option value="0.3">0,3 - Muito sensível</option>
-                    <option value="0.5">0,5 - Sensível</option>
-                    <option value="0.7" selected>0,7 - Padrão</option>
-                    <option value="1.0">1,0 - Resistente</option>
-                    <option value="1.5">1,5 - Muito resistente</option>
-                    <option value="2.0">2,0 - Extremamente resistente</option>
-                    <option value="-1">Personalizado</option>
-                </select>
-            </div>
-            
-            <div class="form-group hidden" id="fatorPersonalizadoGroup">
-                <label for="inputFatorPersonalizado">Fator personalizado:</label>
-                <input type="number" id="inputFatorPersonalizado" placeholder="Digite o fator personalizado" min="0.1" max="10" step="0.1">
-            </div>
-            
-            <div class="admin-route-selector">
-                <label>Via de Administração:</label>
-                <div class="route-options">
-                    <div class="route-option active" id="route-sc" onclick="selectRoute('sc')">
-                        <i class="fas fa-syringe"></i>
-                        <span>Subcutânea</span>
-                    </div>
-                    <div class="route-option" id="route-iv" onclick="selectRoute('iv')">
-                        <i class="fas fa-pump-medical"></i>
-                        <span>Intravenosa</span>
-                    </div>
-                    <div class="route-option" id="route-im" onclick="selectRoute('im')">
-                        <i class="fas fa-prescription-bottle"></i>
-                        <span>Intramuscular</span>
-                    </div>
-                </div>
-                <div class="route-description" id="route-description">
-                    Via subcutânea: Administração no tecido subcutâneo, geralmente abdômen, coxas ou braços. Via padrão para insulinoterapia.
-                </div>
-            </div>
-            
-            <button onclick="calcularPeso()"><i class="fas fa-calculator"></i> Calcular Doses</button>
-            
-            <div id="resultadosPeso" class="results">
-                <h3>Resultados</h3>
-                
-                <div class="result-item">
-                    <span class="result-label">Dose Total Diária:</span> 
-                    <span class="result-value"><span id="doseTotalPeso">--</span> U</span>
-                </div>
-                
-                <h4 class="section-title">Distribuição Dia/Noite:</h4>
-                <div class="result-item">
-                    <span class="result-label">Dose Diurna (70%):</span> 
-                    <span class="result-value"><span id="doseManha">--</span> U</span>
-                </div>
-                <div class="result-item indent">
-                    <span class="result-label">NPH Manhã (70%):</span> 
-                    <span class="result-value"><span id="intermediariaManha">--</span> U</span>
-                </div>
-                <div class="result-item indent">
-                    <span class="result-label">Regular Manhã (30%):</span> 
-                    <span class="result-value"><span id="rapidaManha">--</span> U</span>
-                </div>
-                
-                <div class="result-item">
-                    <span class="result-label">Dose Noturna (30%):</span> 
-                    <span class="result-value"><span id="doseNoite">--</span> U</span>
-                </div>
-                <div class="result-item indent">
-                    <span class="result-label">NPH Noite (50%):</span> 
-                    <span class="result-value"><span id="intermediariaNoite">--</span> U</span>
-                </div>
-                <div class="result-item indent">
-                    <span class="result-label">Regular Noite (50%):</span> 
-                    <span class="result-value"><span id="rapidaNoite">--</span> U</span>
-                </div>
-            </div>
-            
-            <!-- Horários de Aplicação -->
-            <div class="timing-info">
-                <h4><i class="fas fa-clock"></i> Horários Recomendados de Aplicação:</h4>
-                <ul class="timing-list">
-                    <li><i class="fas fa-circle"></i> <strong>Esquema NPH/Regular (2 doses):</strong></li>
-                    <li class="indent"><i class="fas fa-angle-right"></i> Dose matinal: 30 minutos antes do café da manhã (entre 06:00-08:00h)</li>
-                    <li class="indent"><i class="fas fa-angle-right"></i> Dose noturna: 30 minutos antes do jantar (entre 18:00-20:00h)</li>
-                </ul>
-                <p class="citation">Fonte: Sociedade Brasileira de Diabetes. Diretrizes da Sociedade Brasileira de Diabetes 2021-2022.</p>
-            </div>
-            
-            <div class="info-box">
-                <h4>Informações sobre o cálculo:</h4>
-                <p><strong>Dose Total Diária:</strong> Calculada como 0,3 a 2,0 unidades por kg de peso corporal, dependendo da sensibilidade do paciente.</p>
-                <p><strong>Esquema NPH/Regular:</strong> Divisão em 70% insulina intermediária (NPH) e 30% insulina rápida (Regular).</p>
-                <p><strong>Divisão de cada tipo:</strong> No esquema 70/30, os 70% iniciais são divididos novamente em 70% NPH e 30% Regular. Já os 30% iniciais são divididos em 50% NPH e 50% Regular.</p>
-                <p><strong>Distribuição diária:</strong> Tipicamente 2/3 da dose total pela manhã e 1/3 à noite.</p>
-            </div>
+<h2>Esquema NPH/Regular (70/30)</h2>
+
+<div class="form-group">
+    <label for="inputPeso">Peso (kg):</label>
+    <input type="number" id="inputPeso" placeholder="Digite o peso em kg" min="0.1" max="300" step="0.1">
+</div>
+
+<div class="form-group">
+    <label for="selectFator">Fator (U/kg):</label>
+    <select id="selectFator">
+        <option value="0.3">0,3 - Muito sensível</option>
+        <option value="0.5">0,5 - Sensível</option>
+        <option value="0.7" selected>0,7 - Padrão</option>
+        <option value="1.0">1,0 - Resistente</option>
+        <option value="1.5">1,5 - Muito resistente</option>
+        <option value="2.0">2,0 - Extremamente resistente</option>
+        <option value="-1">Personalizado</option>
+    </select>
+</div>
+
+<div class="form-group hidden" id="fatorPersonalizadoGroup">
+    <label for="inputFatorPersonalizado">Fator personalizado:</label>
+    <input type="number" id="inputFatorPersonalizado" placeholder="Digite o fator personalizado" min="0.1" max="10" step="0.1">
+</div>
+
+<div class="admin-route-selector">
+    <label>Via de Administração:</label>
+    <div class="route-options">
+        <div class="route-option active" id="route-sc" onclick="selectRoute('sc')">
+            <i class="fas fa-syringe"></i>
+            <span>Subcutânea</span>
         </div>
+        <div class="route-option" id="route-iv" onclick="selectRoute('iv')">
+            <i class="fas fa-pump-medical"></i>
+            <span>Intravenosa</span>
+        </div>
+        <div class="route-option" id="route-im" onclick="selectRoute('im')">
+            <i class="fas fa-prescription-bottle"></i>
+            <span>Intramuscular</span>
+        </div>
+    </div>
+    <div class="route-description" id="route-description">
+        Via subcutânea: Administração no tecido subcutâneo, geralmente abdômen, coxas ou braços. Via padrão para insulinoterapia.
+    </div>
+</div>
+
+<button onclick="calcularPeso()"><i class="fas fa-calculator"></i> Calcular Doses</button>
+
+<div id="resultadosPeso" class="results">
+    <h3>Resultados</h3>
+    
+    <div class="result-item">
+        <span class="result-label">Dose Total Diária:</span> 
+        <span class="result-value"><span id="doseTotalPeso">--</span> U</span>
+    </div>
+    
+    <h4 class="section-title">Distribuição Dia/Noite:</h4>
+    <div class="result-item">
+        <span class="result-label">Dose Diurna (70%):</span> 
+        <span class="result-value"><span id="doseManha">--</span> U</span>
+    </div>
+    <div class="result-item indent">
+        <span class="result-label">NPH Manhã (70%):</span> 
+        <span class="result-value"><span id="intermediariaManha">--</span> U</span>
+    </div>
+    <div class="result-item indent">
+        <span class="result-label">Regular Manhã (30%):</span> 
+        <span class="result-value"><span id="rapidaManha">--</span> U</span>
+    </div>
+    
+    <div class="result-item">
+        <span class="result-label">Dose Noturna (30%):</span> 
+        <span class="result-value"><span id="doseNoite">--</span> U</span>
+    </div>
+    <div class="result-item indent">
+        <span class="result-label">NPH Noite (50%):</span> 
+        <span class="result-value"><span id="intermediariaNoite">--</span> U</span>
+    </div>
+    <div class="result-item indent">
+        <span class="result-label">Regular Noite (50%):</span> 
+        <span class="result-value"><span id="rapidaNoite">--</span> U</span>
+    </div>
+    
+    <button onclick="exportarParaPrescricao('esquema1')" class="btn-exportar-prescricao">
+        <i class="fas fa-file-prescription"></i> Exportar para Prescrição
+    </button>
+</div>
+
+<!-- Horários de Aplicação -->
+<div class="timing-info">
+    <h4><i class="fas fa-clock"></i> Horários Recomendados de Aplicação:</h4>
+    <ul class="timing-list">
+        <li><i class="fas fa-circle"></i> <strong>Esquema NPH/Regular (2 doses):</strong></li>
+        <li class="indent"><i class="fas fa-angle-right"></i> Dose matinal: 30 minutos antes do café da manhã (entre 06:00-08:00h)</li>
+        <li class="indent"><i class="fas fa-angle-right"></i> Dose noturna: 30 minutos antes do jantar (entre 18:00-20:00h)</li>
+    </ul>
+    <p class="citation">Fonte: Sociedade Brasileira de Diabetes. Diretrizes da Sociedade Brasileira de Diabetes 2021-2022.</p>
+</div>
+
+<div class="info-box">
+    <h4>Informações sobre o cálculo:</h4>
+    <p><strong>Dose Total Diária:</strong> Calculada como 0,3 a 2,0 unidades por kg de peso corporal, dependendo da sensibilidade do paciente.</p>
+    <p><strong>Esquema NPH/Regular:</strong> Divisão em 70% insulina intermediária (NPH) e 30% insulina rápida (Regular).</p>
+    <p><strong>Divisão de cada tipo:</strong> No esquema 70/30, os 70% iniciais são divididos novamente em 70% NPH e 30% Regular. Já os 30% iniciais são divididos em 50% NPH e 50% Regular.</p>
+    <p><strong>Distribuição diária:</strong> Tipicamente 2/3 da dose total pela manhã e 1/3 à noite.</p>
+</div>

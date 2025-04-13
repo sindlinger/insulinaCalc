@@ -485,6 +485,30 @@ function gerarPrescricao() {
 }
 
 /**
+ * Exporta os resultados calculados diretamente para a prescrição
+ * @param {string} esquema - Tipo de esquema ('esquema1' para NPH/Regular ou 'esquema2' para Glargina/Lispro)
+ */
+function exportarParaPrescricao(esquema) {
+    // Selecionar aba prescrição
+    document.querySelector(`.tab-link[data-tab="prescricao"]`).click();
+    
+    // Definir tipo de esquema
+    document.getElementById('selectTipoPrescrição').value = esquema;
+    
+    // Simular mudança para mostrar/ocultar formulários corretos
+    if (esquema === 'esquema1') {
+        document.getElementById('prescricao-esquema1').classList.remove('hidden');
+        document.getElementById('prescricao-esquema2').classList.add('hidden');
+    } else {
+        document.getElementById('prescricao-esquema1').classList.add('hidden');
+        document.getElementById('prescricao-esquema2').classList.remove('hidden');
+    }
+    
+    // Gerar prescrição automaticamente
+    gerarPrescricao();
+}
+
+/**
  * Copia o texto da prescrição para a área de transferência
  */
 function copiarPrescricao() {
@@ -505,7 +529,6 @@ function copiarPrescricao() {
     // Feedback para o usuário
     alert('Prescrição copiada para a área de transferência!');
 }
-
 /**
  * Imprime a prescrição médica
  */
