@@ -343,11 +343,25 @@ function calcularGlarginaLispro() {
 }
 
 /**
- * Gera prescrição médica com base no esquema selecionado
+
+ * Gera prescrição médica com base no esquema selecionado e opções adicionais
+ */
+/**
+ * Gera prescrição médica com base no esquema selecionado e opções adicionais
  */
 function gerarPrescricao() {
     const tipoEsquema = document.getElementById('selectTipoPrescrição').value;
+    const tipoPrescritor = document.getElementById('selectPrescritor').value;
+    const tipoAcesso = document.getElementById('selectAcesso').value;
+    const tipoDetalhamento = document.getElementById('selectDetalhamento').value;
+    
     let prescricaoTexto = '';
+    const dataAtual = new Date().toLocaleDateString('pt-BR');
+    
+    // Cabeçalho da prescrição
+    prescricaoTexto = `
+    <h4>RECEITUÁRIO ${tipoPrescritor === 'medico' ? 'MÉDICO' : 'DE ENFERMAGEM'}</h4>
+    <p style="margin-bottom: 20px;">Data: ${dataAtual}</p>`;
     
     if (tipoEsquema === 'esquema1') {
         // Esquema NPH/Regular
@@ -356,13 +370,22 @@ function gerarPrescricao() {
         const nphNoite = document.getElementById('nphNoite').value || '0';
         const regularNoite = document.getElementById('regularNoite').value || '0';
         
-        prescricaoTexto = `
-        <h4>RECEITUÁRIO MÉDICO</h4>
-        <p style="margin-bottom: 20px;">Data: ${new Date().toLocaleDateString('pt-BR')}</p>
+        // Ajuste para diluição se necessário
+        let diluicao = ''; 
+        let detalheDiluicao = '';
         
+        if (tipoAcesso === 'pediatrico') {
+            diluicao = ' diluída na razão 1:10 (10 UI/ml)';
+            detalheDiluicao = '<li><strong>Preparo da diluição (para 10ml):</strong> Aspire 10 unidades de insulina e complete com 90ml de Solução Fisiológica 0,9% para obter concentração final de 10 UI/ml.</li>';
+        } else if (tipoAcesso === 'microgotas') {
+            diluicao = ' diluída na razão 1:100 (1 UI/ml)';
+            detalheDiluicao = '<li><strong>Preparo da diluição (para 10ml):</strong> Aspire 1 unidade de insulina e complete com 99ml de Solução Fisiológica 0,9% para obter concentração final de 1 UI/ml.</li>';
+        }
+        
+        prescricaoTexto += `
         <ol>
             <li style="margin-bottom: 15px;">
-                <strong>Insulina NPH Humana</strong><br>
+                <strong>Insulina NPH Humana${diluicao}</strong><br>
                 Apresentação: Frasco-ampola 10ml (100 UI/ml)<br>
                 Posologia: 
                 <ul>
@@ -372,26 +395,131 @@ function gerarPrescricao() {
             </li>
             
             <li style="margin-bottom: 15px;">
-                <strong>Insulina Regular Humana</strong><br>
+                <strong>Insulina Regular Humana${diluicao}</strong><br>
                 Apresentação: Frasco-ampola 10ml (100 UI/ml)<br>
                 Posologia: 
                 <ul>
                     <li>Manhã: ${regularManha} unidades, via subcutânea, 30 minutos antes do café da manhã</li>
                     <li>Noite: ${regularNoite} unidades, via subcutânea, 30 minutos antes do jantar</li>
                 </ul>
+            </li>`;
+            
+        // Determinar tipo de seringa
+        const maiorDose = Math.max(
+            parseInt(nphManha) + parseInt(regularManha),
+            parseInt(nphNoite) + parseInt(regularNoite)
+        );
+        
+        let tipoSeringa = "100 unidades";
+        if (maiorDose <= 30) {
+            tipoSeringa = "30 unidades";
+        } else if (maiorDose <= 50) {
+            tipoSeringa = "50 unidades";
+        }
+        
+        prescricaoTexto += `
+            <li style="margin-bottom: 15px;">
+                <strong>Seringas para insulina</strong><br>
+                ${tipoSeringa} com agulha 8mm<br>
+                Quantidade: 60 unidades
+            </li>
+        </ol>`;
+            
+    } else {
+        // Esquema Glargina/Lispro
+        const glargina = document.getElementById('glargina').value || '0';
+        const lisproManha = document.getElementById('lisproManhaPrescricao').value || '0';
+        const lisproAlmoco = document.getElementById('lisproAlmocoPrescricao').value || '0';
+        const lisproJantar = document.getElementById('lisproJantarPrescricao').value || '0';
+        
+        // Ajuste para diluição se necessário
+        let diluicaoGlargina = ''; 
+        let diluicaoLispro = '';
+        let detalheDiluicao = '';
+        
+        if (tipoAcesso === 'pediatrico') {
+            diluicaoGlargina = ' diluída na razão 1:10 (10 UI/ml)';
+            diluicaoLispro = ' diluída na razão 1:10 (10 UI/ml)';
+            detalheDiluicao = '<li><strong>Preparo da diluição (para 10ml):</strong> Aspire 10 unidades de insulina e complete com 90ml de Solução Fisiológica 0,9% para obter concentração final de 10 UI/ml.</li>';
+        } else if (tipoAcesso === 'microgotas') {
+            diluicaoGlargina = ' diluída na razão 1:100 (1 UI/ml)';
+            diluicaoLispro = ' diluída na razão 1:100 (1 UI/ml)';
+            detalheDiluicao = '<li><strong>Preparo da diluição (para 10ml):</strong> Aspire 1 unidade de insulina e complete com 99ml de Solução Fisiológica 0,9% para obter concentração final de 1 UI/ml.</li>';
+        }
+        
+        prescricaoTexto += `
+        <ol>
+            <li style="margin-bottom: 15px;">
+                <strong>Insulina Glargina${diluicaoGlargina}</strong><br>
+                Apresentação: Frasco-ampola 10ml (100 UI/ml) ou caneta 3ml (100 UI/ml)<br>
+                Posologia: ${glargina} unidades, via subcutânea, uma vez ao dia, sempre no mesmo horário (preferencialmente entre 21-22h)
             </li>
             
             <li style="margin-bottom: 15px;">
-                <strong>Seringas para insulina</strong><br>
-                100 unidades com agulha 8mm<br>
-                Quantidade: 60 unidades
-            </li>
-        </ol>
+                <strong>Insulina Lispro${diluicaoLispro}</strong><br>
+                Apresentação: Frasco-ampola 10ml (100 UI/ml) ou caneta 3ml (100 UI/ml)<br>
+                Posologia: 
+                <ul>
+                    <li>Café da manhã: ${lisproManha} unidades, via subcutânea, 0-15 minutos antes de iniciar a refeição</li>
+                    <li>Almoço: ${lisproAlmoco} unidades, via subcutânea, 0-15 minutos antes de iniciar a refeição</li>
+                    <li>Jantar: ${lisproJantar} unidades, via subcutânea, 0-15 minutos antes de iniciar a refeição</li>
+                </ul>
+            </li>`;
+            
+        // Determinar tipo de seringa
+        const maiorDose = Math.max(
+            parseInt(glargina),
+            parseInt(lisproManha),
+            parseInt(lisproAlmoco),
+            parseInt(lisproJantar)
+        );
         
+        let tipoSeringa = "100 unidades";
+        if (maiorDose <= 30) {
+            tipoSeringa = "30 unidades";
+        } else if (maiorDose <= 50) {
+            tipoSeringa = "50 unidades";
+        }
+        
+        prescricaoTexto += `
+            <li style="margin-bottom: 15px;">
+                <strong>Seringas para insulina</strong><br>
+                ${tipoSeringa} com agulha 8mm${tipoAcesso === 'pediatrico' ? ' ou canetas com incrementos de 0.5U' : ''}<br>
+                Quantidade: 60 unidades (ou 5 refis de 3ml se canetas)
+            </li>
+        </ol>`;
+    }
+    
+    // Adicionar detalhes conforme o nível de detalhamento selecionado
+    if (tipoDetalhamento === 'basico') {
+        prescricaoTexto += `
+        <div style="margin-top: 15px;">
+            <p><strong>Orientações básicas:</strong></p>
+            <ul>
+                <li>Monitorar a glicemia regularmente.</li>
+                <li>Em caso de hipoglicemia, ingerir carboidratos simples.</li>
+                <li>Retornar em 30 dias para reavaliação.</li>
+            </ul>
+        </div>`;
+    } else if (tipoDetalhamento === 'completo' || tipoDetalhamento === 'especializado') {
+        prescricaoTexto += `
         <div style="margin-top: 30px; border-top: 1px solid #ddd; padding-top: 10px;">
             <p><strong>Detalhes sobre preparação e aplicação:</strong></p>
-            <ul>
+            <ul>`;
+                
+        if (tipoEsquema === 'esquema1') {
+            prescricaoTexto += `
                 <li><strong>Preparação da dose:</strong> Aspirar primeiro a insulina Regular e depois a NPH na mesma seringa, para evitar contaminação.</li>
+                ${detalheDiluicao}`;
+        } else {
+            prescricaoTexto += `
+                <li><strong>Insulina Glargina:</strong> Aplicar sempre no mesmo horário para manter um nível basal constante.</li>
+                <li><strong>Insulina Lispro:</strong> Por ser de ação ultrarrápida, deve ser aplicada muito próximo ao início da refeição (0-15 minutos antes).</li>
+                <li><strong>IMPORTANTE:</strong> NUNCA misturar Glargina com outras insulinas na mesma seringa.</li>
+                ${detalheDiluicao}`;
+        }
+        
+        prescricaoTexto += `
                 <li><strong>Locais de aplicação:</strong> Realizar rodízio entre abdômen (absorção mais rápida), face externa das coxas, região posterior dos braços e região superior lateral das nádegas.</li>
                 <li><strong>Técnica de aplicação:</strong> Limpar o local com álcool, pinçar a pele, introduzir a agulha a 90°, aspirar para verificar se não atingiu vaso sanguíneo, injetar lentamente e aguardar 5 segundos antes de retirar a agulha.</li>
                 <li><strong>Armazenamento:</strong> Frascos em uso podem ser mantidos em temperatura ambiente (até 25°C) por até 30 dias. Frascos fechados devem ser refrigerados (2-8°C).</li>
@@ -406,84 +534,51 @@ function gerarPrescricao() {
                 <li>Não alterar as doses sem orientação médica.</li>
                 <li>Retornar para reavaliação em 30 dias com registro das glicemias.</li>
             </ul>
-        </div>
+        </div>`;
         
-        <p style="margin-top: 40px; text-align: center; border-top: 1px solid #ddd; padding-top: 20px;">
-            ________________________________<br>
-            Carimbo e Assinatura do Médico
-        </p>`;
-    } else {
-        // Esquema Glargina/Lispro
-        const glargina = document.getElementById('glargina').value || '0';
-        const lisproManha = document.getElementById('lisproManhaPrescricao').value || '0';
-        const lisproAlmoco = document.getElementById('lisproAlmocoPrescricao').value || '0';
-        const lisproJantar = document.getElementById('lisproJantarPrescricao').value || '0';
-        
-        prescricaoTexto = `
-        <h4>RECEITUÁRIO MÉDICO</h4>
-        <p style="margin-bottom: 20px;">Data: ${new Date().toLocaleDateString('pt-BR')}</p>
-        
-        <ol>
-            <li style="margin-bottom: 15px;">
-                <strong>Insulina Glargina</strong><br>
-                Apresentação: Frasco-ampola 10ml (100 UI/ml) ou caneta 3ml (100 UI/ml)<br>
-                Posologia: ${glargina} unidades, via subcutânea, uma vez ao dia, sempre no mesmo horário (preferencialmente entre 21-22h)
-            </li>
+        // Adicionar justificativas técnicas para nível especializado
+        if (tipoDetalhamento === 'especializado') {
+            prescricaoTexto += `
+            <div style="margin-top: 15px; border-top: 1px solid #ddd; padding-top: 10px;">
+                <p><strong>Justificativas técnicas (para equipe de saúde):</strong></p>
+                <ul>`;
+                    
+            if (tipoEsquema === 'esquema1') {
+                prescricaoTexto += `
+                    <li>O esquema NPH/Regular visa cobrir tanto a glicemia basal (através da NPH) quanto as excursões prandiais (através da Regular).</li>
+                    <li>A divisão 70/30 matinal favorece uma maior cobertura durante o dia, período de maior atividade e ingestão alimentar.</li>
+                    <li>A divisão 50/50 noturna visa reduzir o risco de hipoglicemia noturna, pois utiliza menos insulina intermediária.</li>
+                    <li>Conforme ADA (2022), a aplicação de insulina Regular deve ser realizada 30 minutos antes das refeições para coincidir seu pico de ação com a elevação glicêmica pós-prandial.</li>`;
+            } else {
+                prescricaoTexto += `
+                    <li>O esquema Glargina/Lispro proporciona um perfil mais fisiológico, com insulina basal constante (Glargina) e bolus prandiais (Lispro).</li>
+                    <li>A proporção 60/40 é baseada na distribuição fisiológica da secreção endógena de insulina.</li>
+                    <li>A Glargina administrada à noite favorece a supressão da gliconeogênese hepática, reduzindo a hiperglicemia de jejum.</li>
+                    <li>A Lispro pode ser administrada imediatamente antes das refeições devido ao seu rápido início de ação (10-15min), melhorando a aderência ao tratamento.</li>
+                    <li>Segundo estudo SWITCH 1 e 2, este esquema apresenta menor risco de hipoglicemias noturnas comparado ao esquema NPH/Regular.</li>`;
+            }
             
-            <li style="margin-bottom: 15px;">
-                <strong>Insulina Lispro</strong><br>
-                Apresentação: Frasco-ampola 10ml (100 UI/ml) ou caneta 3ml (100 UI/ml)<br>
-                Posologia: 
-                <ul>
-                    <li>Café da manhã: ${lisproManha} unidades, via subcutânea, 0-15 minutos antes de iniciar a refeição</li>
-                    <li>Almoço: ${lisproAlmoco} unidades, via subcutânea, 0-15 minutos antes de iniciar a refeição</li>
-                    <li>Jantar: ${lisproJantar} unidades, via subcutânea, 0-15 minutos antes de iniciar a refeição</li>
+            prescricaoTexto += `
                 </ul>
-            </li>
-            
-            <li style="margin-bottom: 15px;">
-                <strong>Seringas para insulina</strong><br>
-                100 unidades com agulha 8mm (ou canetas para aplicação)<br>
-                Quantidade: 60 unidades (ou 5 refis de 3ml se canetas)
-            </li>
-        </ol>
-        
-        <div style="margin-top: 30px; border-top: 1px solid #ddd; padding-top: 10px;">
-            <p><strong>Detalhes sobre preparação e aplicação:</strong></p>
-            <ul>
-                <li><strong>Insulina Glargina:</strong> Aplicar sempre no mesmo horário para manter um nível basal constante.</li>
-                <li><strong>Insulina Lispro:</strong> Por ser de ação ultrarrápida, deve ser aplicada muito próximo ao início da refeição (0-15 minutos antes).</li>
-                <li><strong>Locais de aplicação:</strong> Glargina preferencialmente nas coxas ou nádegas (absorção mais lenta). Lispro preferencialmente no abdômen (absorção mais rápida).</li>
-                <li><strong>Técnica de aplicação:</strong> Limpar o local com álcool, pinçar a pele, introduzir a agulha a 90°, aspirar para verificar se não atingiu vaso sanguíneo, injetar lentamente e aguardar 5 segundos antes de retirar a agulha.</li>
-                <li><strong>Armazenamento:</strong> Frascos/canetas em uso podem ser mantidos em temperatura ambiente (até 25°C) por até 28 dias. Produtos fechados devem ser refrigerados (2-8°C).</li>
-                <li><strong>IMPORTANTE:</strong> NUNCA misturar Glargina com outras insulinas na mesma seringa.</li>
-            </ul>
-        </div>
-        
-        <div style="margin-top: 15px;">
-            <p><strong>Orientações adicionais:</strong></p>
-            <ul>
-                <li>Monitorar a glicemia antes das principais refeições e ao deitar.</li>
-                <li>Em caso de hipoglicemia (glicemia <70 mg/dL), ingerir 15g de carboidratos (3 colheres de açúcar ou 150ml de suco).</li>
-                <li>A dose de Lispro pode ser ajustada conforme o conteúdo de carboidratos da refeição.</li>
-                <li>Retornar para reavaliação em 30 dias com registro das glicemias.</li>
-            </ul>
-        </div>
-        
-        <p style="margin-top: 40px; text-align: center; border-top: 1px solid #ddd; padding-top: 20px;">
-            ________________________________<br>
-            Carimbo e Assinatura do Médico
-        </p>`;
+            </div>`;
+        }
     }
+    
+    prescricaoTexto += `
+    <p style="margin-top: 40px; text-align: center; border-top: 1px solid #ddd; padding-top: 20px;">
+        ________________________________<br>
+        ${tipoPrescritor === 'medico' ? 'Carimbo e Assinatura do Médico' : 'Carimbo e Assinatura do Enfermeiro'}<br>
+        CRM/COREN: _________________
+    </p>`;
     
     // Exibir a prescrição
     document.getElementById('prescricaoTexto').innerHTML = prescricaoTexto;
     document.getElementById('resultadoPrescricao').classList.add('show');
-    
+
     // Mudar para a aba de prescrição
     document.querySelector(`.tab-link[data-tab="prescricao"]`).click();
-}
 
+}
 /**
  * Exporta os resultados calculados diretamente para a prescrição
  * @param {string} esquema - Tipo de esquema ('esquema1' para NPH/Regular ou 'esquema2' para Glargina/Lispro)

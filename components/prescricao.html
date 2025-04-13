@@ -1,96 +1,175 @@
-<!-- Aba 3: Prescrição -->
-        <div id="prescricao" class="tab-content">
-            <h2>Prescrição Médica</h2>
-            
-            <div class="form-group">
-                <label for="selectTipoPrescrição">Selecione o tipo de esquema:</label>
-                <select id="selectTipoPrescrição">
-                    <option value="esquema1">Esquema Convencional (NPH/Regular)</option>
-                    <option value="esquema2">Esquema Glargina/Lispro</option>
-                </select>
-            </div>
-            
-            <div id="dadosPrescrição" class="form-group">
-                <p>Clique em um dos esquemas calculados anteriormente para gerar automaticamente a prescrição ou insira os valores manualmente abaixo:</p>
-            </div>
-            
-            <div id="prescricao-esquema1" class="prescricao-esquema">
-                <h4>Esquema Convencional (NPH/Regular)</h4>
-                
-                <div class="form-group">
-                    <label for="nphManha">NPH Manhã (UI):</label>
-                    <input type="number" id="nphManha" min="0" step="1" placeholder="UI">
-                </div>
-                
-                <div class="form-group">
-                    <label for="regularManha">Regular Manhã (UI):</label>
-                    <input type="number" id="regularManha" min="0" step="1" placeholder="UI">
-                </div>
-                
-                <div class="form-group">
-                    <label for="nphNoite">NPH Noite (UI):</label>
-                    <input type="number" id="nphNoite" min="0" step="1" placeholder="UI">
-                </div>
-                
-                <div class="form-group">
-                    <label for="regularNoite">Regular Noite (UI):</label>
-                    <input type="number" id="regularNoite" min="0" step="1" placeholder="UI">
-                </div>
-            </div>
-            
-            <div id="prescricao-esquema2" class="prescricao-esquema hidden">
-                <h4>Esquema Glargina/Lispro</h4>
-                
-                <div class="form-group">
-                    <label for="glargina">Glargina (UI):</label>
-                    <input type="number" id="glargina" min="0" step="1" placeholder="UI">
-                </div>
-                
-                <div class="form-group">
-                    <label for="lisproManhaPrescricao">Lispro Café da Manhã (UI):</label>
-                    <input type="number" id="lisproManhaPrescricao" min="0" step="1" placeholder="UI">
-                </div>
-                
-                <div class="form-group">
-                    <label for="lisproAlmocoPrescricao">Lispro Almoço (UI):</label>
-                    <input type="number" id="lisproAlmocoPrescricao" min="0" step="1" placeholder="UI">
-                </div>
-                
-                <div class="form-group">
-                    <label for="lisproJantarPrescricao">Lispro Jantar (UI):</label>
-                    <input type="number" id="lisproJantarPrescricao" min="0" step="1" placeholder="UI">
-                </div>
-            </div>
-            
-            <button onclick="gerarPrescricao()"><i class="fas fa-file-prescription"></i> Gerar Prescrição</button>
-            
-            <div id="resultadoPrescricao" class="results">
-                <h3>Prescrição Médica</h3>
-                
-                <div id="prescricaoTexto" class="prescricao-texto">
-                    <!-- Modelo da prescrição será inserido aqui pelo JavaScript -->
-                </div>
-                
-                <button onclick="copiarPrescricao()" class="btn-copiar" style="margin-top: 15px;"><i class="fas fa-copy"></i> Copiar Prescrição</button>
-                <button onclick="imprimirPrescricao()" class="btn-imprimir" style="margin-top: 15px; margin-left: 10px;"><i class="fas fa-print"></i> Imprimir</button>
-            </div>
-            
-            <div class="info-box">
-                <h4>Orientações para prescrição:</h4>
-                <p><strong>Forma farmacêutica:</strong> Solução injetável</p>
-                <p><strong>Apresentações:</strong></p>
-                <ul>
-                    <li>Insulina NPH: Frasco-ampola com 10 mL (100 UI/mL)</li>
-                    <li>Insulina Regular: Frasco-ampola com 10 mL (100 UI/mL)</li>
-                    <li>Insulina Glargina: Frasco-ampola com 10 mL ou caneta descartável com 3 mL (100 UI/mL)</li>
-                    <li>Insulina Lispro: Frasco-ampola com 10 mL ou caneta descartável com 3 mL (100 UI/mL)</li>
-                </ul>
-                <p><strong>Observações importantes:</strong></p>
-                <ul>
-                    <li>As unidades de insulina são sempre arredondadas para evitar erros de dosagem</li>
-                    <li>Prescreva as seringas compatíveis com as doses calculadas (0,3 mL, 0,5 mL ou 1,0 mL)</li>
-                    <li>Para pacientes com necessidade de doses precisas, considere o uso de canetas de insulina</li>
-                    <li>Recomende o rodízio dos locais de aplicação para evitar lipodistrofia</li>
-                </ul>
-            </div>
-        </div>
+<h2>Prescrição Médica de Insulina</h2>
+
+<div class="info-box">
+    <p><i class="fas fa-info-circle"></i> <strong>Nota:</strong> Utilize o botão "Exportar para Prescrição" nas calculadoras para gerar automaticamente a prescrição com base nos valores calculados.</p>
+</div>
+
+<div class="form-group">
+    <label for="selectTipoPrescrição">Selecione o tipo de esquema:</label>
+    <select id="selectTipoPrescrição">
+        <option value="esquema1">Esquema NPH/Regular (70/30)</option>
+        <option value="esquema2">Esquema Glargina/Lispro (60/40)</option>
+    </select>
+</div>
+
+<!-- Esquema NPH/Regular -->
+<div id="prescricao-esquema1" class="prescricao-esquema">
+    <h4>Esquema NPH/Regular (70/30)</h4>
+    
+    <div class="form-group">
+        <label for="nphManha">NPH Manhã (UI):</label>
+        <input type="number" id="nphManha" min="0" step="1" placeholder="UI">
+    </div>
+    
+    <div class="form-group">
+        <label for="regularManha">Regular Manhã (UI):</label>
+        <input type="number" id="regularManha" min="0" step="1" placeholder="UI">
+    </div>
+    
+    <div class="form-group">
+        <label for="nphNoite">NPH Noite (UI):</label>
+        <input type="number" id="nphNoite" min="0" step="1" placeholder="UI">
+    </div>
+    
+    <div class="form-group">
+        <label for="regularNoite">Regular Noite (UI):</label>
+        <input type="number" id="regularNoite" min="0" step="1" placeholder="UI">
+    </div>
+</div>
+
+<!-- Esquema Glargina/Lispro -->
+<div id="prescricao-esquema2" class="prescricao-esquema hidden">
+    <h4>Esquema Glargina/Lispro (60/40)</h4>
+    
+    <div class="form-group">
+        <label for="glargina">Glargina (UI):</label>
+        <input type="number" id="glargina" min="0" step="1" placeholder="UI">
+    </div>
+    
+    <div class="form-group">
+        <label for="lisproManhaPrescricao">Lispro Café da Manhã (UI):</label>
+        <input type="number" id="lisproManhaPrescricao" min="0" step="1" placeholder="UI">
+    </div>
+    
+    <div class="form-group">
+        <label for="lisproAlmocoPrescricao">Lispro Almoço (UI):</label>
+        <input type="number" id="lisproAlmocoPrescricao" min="0" step="1" placeholder="UI">
+    </div>
+    
+    <div class="form-group">
+        <label for="lisproJantarPrescricao">Lispro Jantar (UI):</label>
+        <input type="number" id="lisproJantarPrescricao" min="0" step="1" placeholder="UI">
+    </div>
+</div>
+
+<!-- Opções da receita -->
+<div class="form-group">
+    <label for="selectPrescritor">Prescritor:</label>
+    <select id="selectPrescritor">
+        <option value="medico">Médico</option>
+        <option value="enfermeiro">Enfermeiro</option>
+    </select>
+</div>
+
+<div class="form-group">
+    <label for="selectAcesso">Acesso e necessidade de diluição:</label>
+    <select id="selectAcesso">
+        <option value="padrao">Padrão - Sem necessidade de diluição</option>
+        <option value="pediatrico">Pediátrico - Necessidade de diluição 1:10</option>
+        <option value="microgotas">Doses muito baixas - Diluição 1:100</option>
+    </select>
+</div>
+
+<div class="form-group">
+    <label for="selectDetalhamento">Nível de detalhamento da prescrição:</label>
+    <select id="selectDetalhamento">
+        <option value="basico">Básico - Informações essenciais</option>
+        <option value="completo" selected>Completo - Com todas as orientações</option>
+        <option value="especializado">Especializado - Com justificativas técnicas</option>
+    </select>
+</div>
+
+<button onclick="gerarPrescricao()"><i class="fas fa-file-prescription"></i> Gerar Prescrição</button>
+
+<div id="resultadoPrescricao" class="results">
+    <h3>Prescrição Médica</h3>
+    
+    <div id="prescricaoTexto" class="prescricao-texto">
+        <!-- Modelo da prescrição será inserido aqui pelo JavaScript -->
+    </div>
+    
+    <div class="btn-group">
+        <button onclick="copiarPrescricao()" class="btn-copiar"><i class="fas fa-copy"></i> Copiar Prescrição</button>
+        <button onclick="imprimirPrescricao()" class="btn-imprimir"><i class="fas fa-print"></i> Imprimir</button>
+    </div>
+</div>
+
+<!-- Informações técnicas sobre prescrição -->
+<div class="info-box">
+    <h4>Detalhes técnicos sobre a prescrição de insulina:</h4>
+    
+    <h5 class="mt-15">1. Diluições conforme diretrizes clínicas</h5>
+    <div class="table-responsive">
+        <table>
+            <tr>
+                <th>Tipo de diluição</th>
+                <th>Razão</th>
+                <th>Preparo (para 100ml)</th>
+                <th>Indicação</th>
+            </tr>
+            <tr>
+                <td>Padrão</td>
+                <td>1:1 (100 UI/ml)</td>
+                <td>Nenhuma diluição necessária</td>
+                <td>Uso padrão adulto</td>
+            </tr>
+            <tr>
+                <td>Pediátrica</td>
+                <td>1:10 (10 UI/ml)</td>
+                <td>10 UI de insulina + 90ml de SF 0,9%</td>
+                <td>Pacientes pediátricos, doses entre 0,5-5 UI</td>
+            </tr>
+            <tr>
+                <td>Microgotas</td>
+                <td>1:100 (1 UI/ml)</td>
+                <td>1 UI de insulina + 99ml de SF 0,9%</td>
+                <td>Doses muito pequenas (<0,5 UI)</td>
+            </tr>
+        </table>
+    </div>
+    <p class="citation">Fonte: American Diabetes Association. (2022). <i>Diabetes Care in the Hospital</i>. Standards of Medical Care in Diabetes.</p>
+    
+    <h5 class="mt-15">2. Técnica de preparo para misturas de insulina</h5>
+    <p>Para mistura de NPH e Regular na mesma seringa:</p>
+    <ol>
+        <li>Aspire primeiro a insulina Regular, depois a NPH</li>
+        <li>Nunca insira insulina Regular no frasco de NPH</li>
+        <li>A ordem correta impede a contaminação da insulina Regular com NPH</li>
+        <li>Aplique imediatamente após o preparo, não armazene seringas pré-preparadas</li>
+    </ol>
+    
+    <h5 class="mt-15">3. Incompatibilidades importantes</h5>
+    <ul>
+        <li><strong>Glargina e Lispro:</strong> NUNCA misturar na mesma seringa, pois a Glargina tem pH ácido que inativa a Lispro</li>
+        <li><strong>Insulinas análogas:</strong> Conforme a ISPAD (International Society for Pediatric and Adolescent Diabetes), análogos de longa duração não devem ser misturados com outras insulinas</li>
+        <li><strong>Preparações prontas:</strong> Existem misturas comerciais de NPH/Regular nas proporções 70/30, 75/25 e 50/50 que podem ser prescritas como alternativa</li>
+    </ul>
+    
+    <h5 class="mt-15">4. Orientações para prescrição</h5>
+    <ul>
+        <li>Sempre especificar nome completo da insulina, incluindo tipo e fabricante</li>
+        <li>Expressar doses em unidades internacionais (UI ou U)</li>
+        <li>Prescrever dispositivos de aplicação compatíveis com as doses (seringas de 30U, 50U ou 100U)</li>
+        <li>Para doses pediátricas, considerar prescrição de seringas de 30U com escala de 0,5U</li>
+        <li>Especificar rodízio de locais de aplicação para evitar lipodistrofias</li>
+    </ul>
+    
+    <h5 class="mt-15">5. Aspectos legais da prescrição</h5>
+    <p>Segundo a Portaria nº 2.583 do Ministério da Saúde, a prescrição de insumos para controle do diabetes segue os seguintes critérios:</p>
+    <ul>
+        <li>Médicos podem prescrever todos os tipos de insulina e insumos</li>
+        <li>Enfermeiros podem prescrever insumos e medicamentos estabelecidos em programas de saúde pública e protocolos institucionais (inclusive insulina em alguns contextos)</li>
+        <li>A prescrição deve ser legível, sem rasuras, contendo identificação completa do prescritor</li>
+        <li>A receita tem validade de 180 dias para dispensação em farmácias do SUS</li>
+    </ul>
+</div>
