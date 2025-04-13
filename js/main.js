@@ -163,7 +163,7 @@ function initCollapsibleSections() {
 
 /**
  * Seleciona a via de administração para cálculo por peso
- * @param {string} route - Via de administração (sc, iv, im)
+ * @param {string} route - Via de administração (sc)
  */
 function selectRoute(route) {
     selectedRoute = route;
@@ -177,18 +177,7 @@ function selectRoute(route) {
     document.getElementById('route-' + route).classList.add('active');
     
     // Atualiza a descrição da via
-    let description = '';
-    switch(route) {
-        case 'sc':
-            description = 'Via subcutânea: Administração no tecido subcutâneo, geralmente abdômen, coxas ou braços. Via padrão para insulinoterapia.';
-            break;
-        case 'iv':
-            description = 'Via intravenosa: Administração direta na corrente sanguínea. Uso restrito a ambiente hospitalar e situações de emergência.';
-            break;
-        case 'im':
-            description = 'Via intramuscular: Administração no tecido muscular. Absorção mais rápida que SC, utilizada em situações específicas.';
-            break;
-    }
+    let description = 'Via subcutânea: Administração no tecido subcutâneo, geralmente abdômen, coxas ou braços. Via padrão para insulinoterapia.';
     document.getElementById('route-description').textContent = description;
 }
 
@@ -349,9 +338,11 @@ function calcularGlarginaLispro() {
 /**
  * Gera prescrição médica com base no esquema selecionado e opções adicionais
  */
+/**
+ * Gera prescrição médica com base no esquema selecionado e opções adicionais
+ */
 function gerarPrescricao() {
     const tipoEsquema = document.getElementById('selectTipoPrescrição').value;
-    const tipoPrescritor = document.getElementById('selectPrescritor').value;
     const tipoAcesso = document.getElementById('selectAcesso').value;
     const tipoDetalhamento = document.getElementById('selectDetalhamento').value;
     
@@ -360,7 +351,7 @@ function gerarPrescricao() {
     
     // Cabeçalho da prescrição
     prescricaoTexto = `
-    <h4>RECEITUÁRIO ${tipoPrescritor === 'medico' ? 'MÉDICO' : 'DE ENFERMAGEM'}</h4>
+    <h4>RECEITUÁRIO MÉDICO</h4>
     <p style="margin-bottom: 20px;">Data: ${dataAtual}</p>`;
     
     if (tipoEsquema === 'esquema1') {
@@ -567,8 +558,8 @@ function gerarPrescricao() {
     prescricaoTexto += `
     <p style="margin-top: 40px; text-align: center; border-top: 1px solid #ddd; padding-top: 20px;">
         ________________________________<br>
-        ${tipoPrescritor === 'medico' ? 'Carimbo e Assinatura do Médico' : 'Carimbo e Assinatura do Enfermeiro'}<br>
-        CRM/COREN: _________________
+        Carimbo e Assinatura do Médico<br>
+        CRM: _________________
     </p>`;
     
     // Exibir a prescrição
@@ -577,7 +568,6 @@ function gerarPrescricao() {
 
     // Mudar para a aba de prescrição
     document.querySelector(`.tab-link[data-tab="prescricao"]`).click();
-
 }
 /**
  * Exporta os resultados calculados diretamente para a prescrição
