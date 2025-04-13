@@ -1,0 +1,96 @@
+<!-- Aba 3: Prescrição -->
+        <div id="prescricao" class="tab-content">
+            <h2>Prescrição Médica</h2>
+            
+            <div class="form-group">
+                <label for="selectTipoPrescrição">Selecione o tipo de esquema:</label>
+                <select id="selectTipoPrescrição">
+                    <option value="esquema1">Esquema Convencional (NPH/Regular)</option>
+                    <option value="esquema2">Esquema Glargina/Lispro</option>
+                </select>
+            </div>
+            
+            <div id="dadosPrescrição" class="form-group">
+                <p>Clique em um dos esquemas calculados anteriormente para gerar automaticamente a prescrição ou insira os valores manualmente abaixo:</p>
+            </div>
+            
+            <div id="prescricao-esquema1" class="prescricao-esquema">
+                <h4>Esquema Convencional (NPH/Regular)</h4>
+                
+                <div class="form-group">
+                    <label for="nphManha">NPH Manhã (UI):</label>
+                    <input type="number" id="nphManha" min="0" step="1" placeholder="UI">
+                </div>
+                
+                <div class="form-group">
+                    <label for="regularManha">Regular Manhã (UI):</label>
+                    <input type="number" id="regularManha" min="0" step="1" placeholder="UI">
+                </div>
+                
+                <div class="form-group">
+                    <label for="nphNoite">NPH Noite (UI):</label>
+                    <input type="number" id="nphNoite" min="0" step="1" placeholder="UI">
+                </div>
+                
+                <div class="form-group">
+                    <label for="regularNoite">Regular Noite (UI):</label>
+                    <input type="number" id="regularNoite" min="0" step="1" placeholder="UI">
+                </div>
+            </div>
+            
+            <div id="prescricao-esquema2" class="prescricao-esquema hidden">
+                <h4>Esquema Glargina/Lispro</h4>
+                
+                <div class="form-group">
+                    <label for="glargina">Glargina (UI):</label>
+                    <input type="number" id="glargina" min="0" step="1" placeholder="UI">
+                </div>
+                
+                <div class="form-group">
+                    <label for="lisproManhaPrescricao">Lispro Café da Manhã (UI):</label>
+                    <input type="number" id="lisproManhaPrescricao" min="0" step="1" placeholder="UI">
+                </div>
+                
+                <div class="form-group">
+                    <label for="lisproAlmocoPrescricao">Lispro Almoço (UI):</label>
+                    <input type="number" id="lisproAlmocoPrescricao" min="0" step="1" placeholder="UI">
+                </div>
+                
+                <div class="form-group">
+                    <label for="lisproJantarPrescricao">Lispro Jantar (UI):</label>
+                    <input type="number" id="lisproJantarPrescricao" min="0" step="1" placeholder="UI">
+                </div>
+            </div>
+            
+            <button onclick="gerarPrescricao()"><i class="fas fa-file-prescription"></i> Gerar Prescrição</button>
+            
+            <div id="resultadoPrescricao" class="results">
+                <h3>Prescrição Médica</h3>
+                
+                <div id="prescricaoTexto" class="prescricao-texto">
+                    <!-- Modelo da prescrição será inserido aqui pelo JavaScript -->
+                </div>
+                
+                <button onclick="copiarPrescricao()" class="btn-copiar" style="margin-top: 15px;"><i class="fas fa-copy"></i> Copiar Prescrição</button>
+                <button onclick="imprimirPrescricao()" class="btn-imprimir" style="margin-top: 15px; margin-left: 10px;"><i class="fas fa-print"></i> Imprimir</button>
+            </div>
+            
+            <div class="info-box">
+                <h4>Orientações para prescrição:</h4>
+                <p><strong>Forma farmacêutica:</strong> Solução injetável</p>
+                <p><strong>Apresentações:</strong></p>
+                <ul>
+                    <li>Insulina NPH: Frasco-ampola com 10 mL (100 UI/mL)</li>
+                    <li>Insulina Regular: Frasco-ampola com 10 mL (100 UI/mL)</li>
+                    <li>Insulina Glargina: Frasco-ampola com 10 mL ou caneta descartável com 3 mL (100 UI/mL)</li>
+                    <li>Insulina Lispro: Frasco-ampola com 10 mL ou caneta descartável com 3 mL (100 UI/mL)</li>
+                </ul>
+                <p><strong>Observações importantes:</strong></p>
+                <ul>
+                    <li>As unidades de insulina são sempre arredondadas para evitar erros de dosagem</li>
+                    <li>Prescreva as seringas compatíveis com as doses calculadas (0,3 mL, 0,5 mL ou 1,0 mL)</li>
+                    <li>Para pacientes com necessidade de doses precisas, considere o uso de canetas de insulina</li>
+                    <li>Recomende o rodízio dos locais de aplicação para evitar lipodistrofia</li>
+                </ul>
+            </div>
+        </div>

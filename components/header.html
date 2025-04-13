@@ -1,0 +1,47 @@
+<header>
+    <button class="view-toggle" onclick="toggleView()" title="Alternar visualização">
+        <i class="fas fa-mobile-alt"></i>
+    </button>
+    
+    <h1>InsulinaCalc</h1>
+    <p class="header-description">Calculadora para doses de insulina baseada em métodos científicos</p>
+    
+    <button class="about-btn" onclick="openModal()" title="Sobre a calculadora">
+        <i class="fas fa-info-circle"></i>
+    </button>
+</header>
+
+<!-- Modal Sobre -->
+<div id="aboutModal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal" onclick="closeModal()">&times;</span>
+        <h2 class="modal-title">Sobre o InsulinaCalc</h2>
+        
+        <div class="credits-section">
+            <div class="credits-item">
+                <strong>Desenvolvido por:</strong> Eduardo Candeia Gonçalves
+            </div>
+            <div class="credits-item">
+                <a href="mailto:sindlinger@gmail.com">sindlinger@gmail.com</a>
+            </div>
+        </div>
+        
+        <div class="credits-section">
+            <div class="credits-item">
+                <strong>Orientação Científica:</strong> Dr. George Ibiapina
+            </div>
+            <div class="credits-item">
+                Agradecimento especial ao Dr. George Ibiapina pela orientação científica e metodologias de cálculo implementadas nesta aplicação, contribuindo de forma fundamental para a precisão e eficácia clínica desta ferramenta.
+            </div>
+        </div>
+        
+        <div class="credits-section no-border-bottom">
+            <div class="credits-item">
+                <strong>Versão:</strong> 1.0.0
+            </div>
+            <div class="credits-item">
+                Esta aplicação é uma ferramenta educativa e não substitui a orientação médica profissional.
+            </div>
+        </div>
+    </div>
+</div>

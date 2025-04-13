@@ -4,12 +4,162 @@
  * Este arquivo contém todas as funções necessárias para o funcionamento
  * da calculadora de insulina, incluindo os cálculos, manipulação da interface
  * e geração de prescrições médicas.
+ * 
+ * Desenvolvido por: Eduardo Candeia Gonçalves
  */
 
 // Variáveis globais
 let selectedRoute = 'sc';
 let selectedRouteGL = 'sc';
-let selectedInsulinType = 'regular';
+
+// Funções de inicialização
+document.addEventListener('DOMContentLoaded', function() {
+    // Carregar componentes
+    loadComponent('header-container', 'components/header.html');
+    loadComponent('calculo-peso-container', 'components/calculo-peso.html');
+    loadComponent('glargina-lispro-container', 'components/glargina-lispro.html');
+    loadComponent('prescricao-container', 'components/prescricao.html');
+    loadComponent('guia-info-container', 'components/guia-info-1.html');
+    loadComponentAfter('guia-info-container', 'components/guia-info-2.html');
+    loadComponent('footer-container', 'components/footer.html', function() {
+        // Inicializar event listeners após carregar todos os componentes
+        initEventListeners();
+        
+        // Inicializar collapsible sections
+        initCollapsibleSections();
+        
+        // Verificar se há parâmetros na URL
+        checkURLParams();
+    });
+});
+
+// Função para carregar componentes
+function loadComponent(containerId, url, callback) {
+    fetch(url)
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById(containerId).innerHTML = html;
+            if (callback) callback();
+        })
+        .catch(error => {
+            console.error(`Erro ao carregar ${url}:`, error);
+        });
+}
+
+// Função para adicionar conteúdo após um elemento
+function loadComponentAfter(containerId, url, callback) {
+    fetch(url)
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById(containerId).innerHTML += html;
+            if (callback) callback();
+        })
+        .catch(error => {
+            console.error(`Erro ao carregar ${url}:`, error);
+        });
+}
+
+/**
+ * Inicializa todos os event listeners necessários para a aplicação
+ */
+function initEventListeners() {
+    // Event listeners para navegação por abas
+    document.querySelectorAll('.tab-link').forEach(tab => {
+        tab.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Remove a classe active de todas as abas e conteúdos
+            document.querySelectorAll('.tab-link').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-content').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Adiciona a classe active na aba clicada
+            this.classList.add('active');
+            
+            // Mostra o conteúdo correspondente
+            const tabId = this.getAttribute('data-tab');
+            document.getElementById(tabId + '-container').classList.add('active');
+            
+            // Atualiza a URL com o ID da aba
+            history.replaceState(null, null, '#' + tabId);
+        });
+    });
+    
+    // Event listeners para campos de fatores personalizados
+    if (document.getElementById('selectFator')) {
+        document.getElementById('selectFator').addEventListener('change', function() {
+            const fatorPersonalizadoGroup = document.getElementById('fatorPersonalizadoGroup');
+            if (this.value === '-1') {
+                fatorPersonalizadoGroup.classList.remove('hidden');
+            } else {
+                fatorPersonalizadoGroup.classList.add('hidden');
+            }
+        });
+    }
+    
+    if (document.getElementById('selectFatorGL')) {
+        document.getElementById('selectFatorGL').addEventListener('change', function() {
+            const fatorPersonalizadoGLGroup = document.getElementById('fatorPersonalizadoGLGroup');
+            if (this.value === '-1') {
+                fatorPersonalizadoGLGroup.classList.remove('hidden');
+            } else {
+                fatorPersonalizadoGLGroup.classList.add('hidden');
+            }
+        });
+    }
+    
+    // Event listener para mudança de tipo de prescrição
+    if (document.getElementById('selectTipoPrescrição')) {
+        document.getElementById('selectTipoPrescrição').addEventListener('change', function() {
+            const esquema1 = document.getElementById('prescricao-esquema1');
+            const esquema2 = document.getElementById('prescricao-esquema2');
+            
+            if (this.value === 'esquema1') {
+                esquema1.classList.remove('hidden');
+                esquema2.classList.add('hidden');
+            } else {
+                esquema1.classList.add('hidden');
+                esquema2.classList.remove('hidden');
+            }
+        });
+    }
+}
+
+/**
+ * Verifica se há parâmetros na URL para abrir aba específica
+ */
+function checkURLParams() {
+    const hash = window.location.hash;
+    if (hash) {
+        const tabId = hash.substring(1);
+        const tabLink = document.querySelector(`.tab-link[data-tab="${tabId}"]`);
+        
+        if (tabLink) {
+            tabLink.click();
+        }
+    }
+}
+
+/**
+ * Inicializa as seções colapsáveis (collapsible)
+ */
+function initCollapsibleSections() {
+    const coll = document.getElementsByClassName('collapsible');
+    for (let i = 0; i < coll.length; i++) {
+        coll[i].addEventListener('click', function() {
+            this.classList.toggle('active');
+            const content = this.nextElementSibling;
+            if (content.style.maxHeight) {
+                content.style.maxHeight = null;
+            } else {
+                content.style.maxHeight = content.scrollHeight + 'px';
+            }
+        });
+    }
+}
 
 /**
  * Seleciona a via de administração para cálculo por peso
@@ -19,7 +169,7 @@ function selectRoute(route) {
     selectedRoute = route;
     
     // Remove a classe active de todas as opções
-    document.querySelectorAll('#calculo-peso .route-option').forEach(option => {
+    document.querySelectorAll('#calculo-peso-container .route-option').forEach(option => {
         option.classList.remove('active');
     });
     
@@ -50,7 +200,7 @@ function selectRouteGL(route) {
     selectedRouteGL = route;
     
     // Remove a classe active de todas as opções
-    document.querySelectorAll('#glargina-lispro .route-option').forEach(option => {
+    document.querySelectorAll('#glargina-lispro-container .route-option').forEach(option => {
         option.classList.remove('active');
     });
     
@@ -61,18 +211,6 @@ function selectRouteGL(route) {
     let description = 'Via subcutânea: Administração no tecido subcutâneo, geralmente abdômen, coxas ou braços. Única via para Glargina e Lispro.';
     document.getElementById('route-description-gl').textContent = description;
 }
-
-// Funções de inicialização
-document.addEventListener('DOMContentLoaded', function() {
-    // Inicializar event listeners
-    initEventListeners();
-    
-    // Inicializar collapsible sections
-    initCollapsibleSections();
-    
-    // Verificar se há parâmetros na URL
-    checkURLParams();
-});
 
 /**
  * Calcula doses de insulina baseadas no peso
@@ -123,14 +261,6 @@ function calcularPeso() {
     const intermediariaNoite = Math.round(doseNoite * 0.5); // 50% da dose da noite é NPH
     const rapidaNoite = Math.round(doseNoite * 0.5); // 50% da dose da noite é Regular
     
-    // Cálculo do esquema Basal-Bolus
-    const doseBasal = Math.round(doseTotal * 0.5); // 50% da dose total para basal
-    const bolusTotal = Math.round(doseTotal * 0.5); // 50% da dose total para bolus
-    
-    const bolusCafe = Math.round(bolusTotal * 0.4); // 40% do bolus total para café
-    const bolusAlmoco = Math.round(bolusTotal * 0.3); // 30% do bolus total para almoço
-    const bolusJantar = Math.round(bolusTotal * 0.3); // 30% do bolus total para jantar
-    
     // Exibir resultados
     document.getElementById('doseTotalPeso').textContent = doseTotal;
     document.getElementById('doseManha').textContent = doseManha;
@@ -139,11 +269,6 @@ function calcularPeso() {
     document.getElementById('doseNoite').textContent = doseNoite;
     document.getElementById('intermediariaNoite').textContent = intermediariaNoite;
     document.getElementById('rapidaNoite').textContent = rapidaNoite;
-    document.getElementById('doseBasal').textContent = doseBasal;
-    document.getElementById('bolusTotal').textContent = bolusTotal;
-    document.getElementById('bolusCafe').textContent = bolusCafe;
-    document.getElementById('bolusAlmoco').textContent = bolusAlmoco;
-    document.getElementById('bolusJantar').textContent = bolusJantar;
     
     // Preencher automaticamente os campos de prescrição
     document.getElementById('nphManha').value = intermediariaManha;
@@ -206,86 +331,15 @@ function calcularGlarginaLispro() {
     document.getElementById('lisproAlmocoPrescricao').value = lisproAlmoco;
     document.getElementById('lisproJantarPrescricao').value = lisproJantar;
     
+    // Atualizar seletor de prescrição
+    document.getElementById('selectTipoPrescrição').value = 'esquema2';
+    const esquema1 = document.getElementById('prescricao-esquema1');
+    const esquema2 = document.getElementById('prescricao-esquema2');
+    esquema1.classList.add('hidden');
+    esquema2.classList.remove('hidden');
+    
     // Mostrar resultados
     document.getElementById('resultadosGL').classList.add('show');
-}
-
-/**
- * Inicializa todos os event listeners necessários para a aplicação
- */
-function initEventListeners() {
-    // Event listeners para navegação por abas
-    document.querySelectorAll('.tab-link').forEach(tab => {
-        tab.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            // Remove a classe active de todas as abas e conteúdos
-            document.querySelectorAll('.tab-link').forEach(item => {
-                item.classList.remove('active');
-            });
-            document.querySelectorAll('.tab-content').forEach(item => {
-                item.classList.remove('active');
-            });
-            
-            // Adiciona a classe active na aba clicada
-            this.classList.add('active');
-            
-            // Mostra o conteúdo correspondente
-            const tabId = this.getAttribute('data-tab');
-            document.getElementById(tabId).classList.add('active');
-            
-            // Atualiza a URL com o ID da aba
-            history.replaceState(null, null, '#' + tabId);
-        });
-    });
-    
-    // Event listeners para campos de fatores personalizados
-    document.getElementById('selectFator').addEventListener('change', function() {
-        const fatorPersonalizadoGroup = document.getElementById('fatorPersonalizadoGroup');
-        if (this.value === '-1') {
-            fatorPersonalizadoGroup.style.display = 'block';
-        } else {
-            fatorPersonalizadoGroup.style.display = 'none';
-        }
-    });
-    
-    document.getElementById('selectFatorGL').addEventListener('change', function() {
-        const fatorPersonalizadoGLGroup = document.getElementById('fatorPersonalizadoGLGroup');
-        if (this.value === '-1') {
-            fatorPersonalizadoGLGroup.style.display = 'block';
-        } else {
-            fatorPersonalizadoGLGroup.style.display = 'none';
-        }
-    });
-    
-    // Event listener para mudança de tipo de prescrição
-    document.getElementById('selectTipoPrescrição').addEventListener('change', function() {
-        const esquema1 = document.getElementById('prescricao-esquema1');
-        const esquema2 = document.getElementById('prescricao-esquema2');
-        
-        if (this.value === 'esquema1') {
-            esquema1.style.display = 'block';
-            esquema2.style.display = 'none';
-        } else {
-            esquema1.style.display = 'none';
-            esquema2.style.display = 'block';
-        }
-    });
-}
-
-/**
- * Verifica se há parâmetros na URL para abrir aba específica
- */
-function checkURLParams() {
-    const hash = window.location.hash;
-    if (hash) {
-        const tabId = hash.substring(1);
-        const tabLink = document.querySelector(`.tab-link[data-tab="${tabId}"]`);
-        
-        if (tabLink) {
-            tabLink.click();
-        }
-    }
 }
 
 /**
@@ -425,6 +479,9 @@ function gerarPrescricao() {
     // Exibir a prescrição
     document.getElementById('prescricaoTexto').innerHTML = prescricaoTexto;
     document.getElementById('resultadoPrescricao').classList.add('show');
+    
+    // Mudar para a aba de prescrição
+    document.querySelector(`.tab-link[data-tab="prescricao"]`).click();
 }
 
 /**
@@ -458,7 +515,7 @@ function imprimirPrescricao() {
     
     // Substituir conteúdo da página
     document.body.innerHTML = `
-    <div style="padding: 20px; max-width: 800px; margin: 0 auto; font-family: Arial, sans-serif;">
+    <div class="print-container">
         ${conteudoImpressao}
     </div>`;
     
@@ -476,7 +533,7 @@ function imprimirPrescricao() {
  * Alterna entre visualização desktop e mobile
  */
 function toggleView() {
-    const container = document.getElementById('appContainer');
+    const container = document.getElementById('app-container');
     container.classList.toggle('mobile-view');
     
     const toggleBtn = document.querySelector('.view-toggle');
@@ -487,6 +544,20 @@ function toggleView() {
         toggleBtn.innerHTML = '<i class="fas fa-mobile-alt"></i>';
         toggleBtn.querySelector('i').style.marginRight = '0';
     }
+}
+
+/**
+ * Abre o modal de informações
+ */
+function openModal() {
+    document.getElementById('aboutModal').style.display = 'block';
+}
+
+/**
+ * Fecha o modal de informações
+ */
+function closeModal() {
+    document.getElementById('aboutModal').style.display = 'none';
 }
 
 /**
@@ -507,27 +578,13 @@ function closeReferencesModal() {
  * Recarrega todas as funcionalidades após impressão
  */
 function carregarFuncoes() {
-    // Inicializar event listeners
-    initEventListeners();
-    
-    // Inicializar collapsible sections
-    initCollapsibleSections();
+    // Recarregar componentes
+    location.reload();
 }
 
-/**
- * Inicializa as seções colapsáveis (collapsible)
- */
-function initCollapsibleSections() {
-    const coll = document.getElementsByClassName('collapsible');
-    for (let i = 0; i < coll.length; i++) {
-        coll[i].addEventListener('click', function() {
-            this.classList.toggle('active');
-            const content = this.nextElementSibling;
-            if (content.style.maxHeight) {
-                content.style.maxHeight = null;
-            } else {
-                content.style.maxHeight = content.scrollHeight + 'px';
-            }
-        });
+// Fechar modais ao clicar fora deles
+window.onclick = function(event) {
+    if (event.target.classList.contains('modal')) {
+        event.target.style.display = 'none';
     }
-}
+};

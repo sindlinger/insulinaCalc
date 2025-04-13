@@ -1,0 +1,143 @@
+<!-- Aba 2: Glargina/Lispro -->
+        <div id="glargina-lispro" class="tab-content">
+            <h2>Cálculo Glargina/Lispro</h2>
+            
+            <div class="form-group">
+                <label for="inputPesoGL">Peso (kg):</label>
+                <input type="number" id="inputPesoGL" placeholder="Digite o peso em kg" min="0.1" max="300" step="0.1">
+            </div>
+            
+            <div class="form-group">
+                <label for="selectFatorGL">Fator (U/kg):</label>
+                <select id="selectFatorGL">
+                    <option value="0.3">0,3 - Muito sensível</option>
+                    <option value="0.5">0,5 - Sensível</option>
+                    <option value="0.7" selected>0,7 - Padrão</option>
+                    <option value="1.0">1,0 - Resistente</option>
+                    <option value="1.5">1,5 - Muito resistente</option>
+                    <option value="2.0">2,0 - Extremamente resistente</option>
+                    <option value="-1">Personalizado</option>
+                </select>
+            </div>
+            
+            <div class="form-group hidden" id="fatorPersonalizadoGLGroup">
+                <label for="inputFatorPersonalizadoGL">Fator personalizado:</label>
+                <input type="number" id="inputFatorPersonalizadoGL" placeholder="Digite o fator personalizado" min="0.1" max="10" step="0.1">
+            </div>
+            
+            <div class="admin-route-selector">
+                <label>Via de Administração:</label>
+                <div class="route-options">
+                    <div class="route-option active" id="route-sc-gl" onclick="selectRouteGL('sc')">
+                        <i class="fas fa-syringe"></i>
+                        <span>Subcutânea</span>
+                    </div>
+                </div>
+                <div class="route-description" id="route-description-gl">
+                    Via subcutânea: Administração no tecido subcutâneo, geralmente abdômen, coxas ou braços. Única via para Glargina e Lispro.
+                </div>
+            </div>
+            
+            <button onclick="calcularGlarginaLispro()"><i class="fas fa-calculator"></i> Calcular Doses</button>
+            
+            <div id="resultadosGL" class="results">
+                <h3>Resultados do Esquema Glargina/Lispro</h3>
+                
+                <div class="result-item">
+                    <span class="result-label">Dose Total Diária:</span> 
+                    <span class="result-value"><span id="doseTotalGL">--</span> U</span>
+                </div>
+                
+                <h4 class="section-title">Distribuição por Tipo de Insulina:</h4>
+                <div class="result-item">
+                    <span class="result-label">Glargina (60%):</span> 
+                    <span class="result-value"><span id="doseGlargina">--</span> U</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Lispro Total (40%):</span> 
+                    <span class="result-value"><span id="doseLisproTotal">--</span> U</span>
+                </div>
+                
+                <h4 class="section-title">Distribuição da Lispro nas Refeições:</h4>
+                <div class="result-item">
+                    <span class="result-label">Lispro Café da Manhã (1/3):</span> 
+                    <span class="result-value"><span id="lisproManha">--</span> U</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Lispro Almoço (1/3):</span> 
+                    <span class="result-value"><span id="lisproAlmoco">--</span> U</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Lispro Jantar (1/3):</span> 
+                    <span class="result-value"><span id="lisproJantar">--</span> U</span>
+                </div>
+            </div>
+            
+            <!-- Diagrama de distribuição das doses -->
+            <div class="diagram-container">
+                <div class="distribution-diagram">
+                    <h4 style="text-align: center; margin-bottom: 20px;">Esquema de Distribuição Glargina/Lispro</h4>
+                    
+                    <!-- Dose Total -->
+                    <div class="diagram-row">
+                        <div class="diagram-label">Dose Total:</div>
+                        <div class="diagram-bar">
+                            <div class="bar-section nph-color" style="width:60%;">Glargina 60%</div>
+                            <div class="bar-section regular-color" style="width:40%;">Lispro 40%</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Distribuição Lispro -->
+                    <div class="diagram-row">
+                        <div class="diagram-label">Distribuição Lispro:</div>
+                        <div class="diagram-bar">
+                            <div class="bar-section regular-color" style="width:33.33%; background-color: #e63946;">Café 1/3</div>
+                            <div class="bar-section regular-color" style="width:33.33%; background-color: #f94144;">Almoço 1/3</div>
+                            <div class="bar-section regular-color" style="width:33.34%; background-color: #ff6b6b;">Jantar 1/3</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Legenda -->
+                    <div class="diagram-legend">
+                        <div class="legend-item">
+                            <div class="legend-color nph-color"></div>
+                            <span>Glargina (Basal)</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color regular-color"></div>
+                            <span>Lispro (Bolus)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Horários de Aplicação -->
+            <div class="timing-info">
+                <h4><i class="fas fa-clock"></i> Horários Recomendados de Aplicação:</h4>
+                <ul class="timing-list">
+                    <li><i class="fas fa-circle"></i> <strong>Insulina Glargina (basal):</strong></li>
+                    <li class="indent"><i class="fas fa-angle-right"></i> Uma vez ao dia, no mesmo horário (preferencialmente antes de dormir, entre 21:00-22:00h)</li>
+                    <li class="indent"><i class="fas fa-angle-right"></i> A regularidade no horário de aplicação é essencial para manter níveis constantes</li>
+                    
+                    <li><i class="fas fa-circle"></i> <strong>Insulina Lispro (bolus):</strong></li>
+                    <li class="indent"><i class="fas fa-angle-right"></i> Café da manhã: 0-15 minutos antes de iniciar a refeição (entre 06:00-08:00h)</li>
+                    <li class="indent"><i class="fas fa-angle-right"></i> Almoço: 0-15 minutos antes de iniciar a refeição (entre 12:00-13:00h)</li>
+                    <li class="indent"><i class="fas fa-angle-right"></i> Jantar: 0-15 minutos antes de iniciar a refeição (entre 18:00-20:00h)</li>
+                </ul>
+                <p class="citation">Fonte: Sociedade Brasileira de Diabetes. Diretrizes da Sociedade Brasileira de Diabetes 2021-2022.</p>
+            </div>
+            
+            <div class="info-box">
+                <h4>Informações sobre o esquema Glargina/Lispro:</h4>
+                <p><strong>Características do Esquema:</strong> Este esquema utiliza insulina glargina como basal (60% da dose total) e insulina lispro como bolus prandial (40% da dose total).</p>
+                <p><strong>Vantagens:</strong></p>
+                <ul>
+                    <li>Perfil mais fisiológico, mimetizando a secreção natural de insulina</li>
+                    <li>Menor risco de hipoglicemias, especialmente noturnas</li>
+                    <li>Cobertura mais previsível e estável ao longo do dia</li>
+                    <li>Flexibilidade de horários de refeições</li>
+                </ul>
+                <p><strong>Glargina:</strong> Insulina de ação prolongada, sem pico definido, com duração de até 24 horas. Mantém níveis basais constantes.</p>
+                <p><strong>Lispro:</strong> Insulina de ação ultrarrápida, início em 10-15 minutos, pico em 1-2 horas, duração 3-5 horas. Ideal para cobertura de refeições.</p>
+            </div>
+        </div>
